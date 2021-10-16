@@ -15,7 +15,7 @@ public class ProfileStorage implements ProfileStorageInterface{
         return profileList;
     }
 
-    public void AddNewProfile(Profile profile) {
+    public void addProfile(Profile profile) {
         profileList.add(profile);
         currentId++;
     }

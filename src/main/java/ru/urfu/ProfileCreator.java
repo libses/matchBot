@@ -1,11 +1,13 @@
 package ru.urfu;
 
 public class ProfileCreator {
-    private ProfileStorageInterface profiles;
+    private final ProfileStorageInterface profiles;
 
     public Profile CreateProfile(){
         int id = profiles.getCurrentId() + 1;
-        return new Profile(id);
+        Profile profile = new Profile(id);
+        profiles.addProfile(profile);
+        return profile;
     }
     public ProfileCreator(ProfileStorageInterface profiles){
         this.profiles = profiles;

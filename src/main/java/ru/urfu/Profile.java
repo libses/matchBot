@@ -3,6 +3,16 @@ package ru.urfu;
 public class Profile {
     private final int id;
 
+    private Coordinates cords;
+
+    public Coordinates getCords() {
+        return cords;
+    }
+
+    public void setCords(Coordinates cords) {
+        this.cords = cords;
+    }
+
     private MatchData matchData;
 
     public MatchData getMatchData() {

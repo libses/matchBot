@@ -3,6 +3,26 @@ package ru.urfu;
 public class Profile {
     private final int id;
 
+    private String telegramID;
+
+    private String vkID;
+
+    public String getTelegramID() {
+        return telegramID;
+    }
+
+    public void setTelegramID(String telegramID) {
+        this.telegramID = telegramID;
+    }
+
+    public String getVkID() {
+        return vkID;
+    }
+
+    public void setVkID(String vkID) {
+        this.vkID = vkID;
+    }
+
     private Coordinates cords;
 
     public Coordinates getCords() {

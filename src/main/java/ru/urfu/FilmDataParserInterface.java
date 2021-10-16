@@ -1,5 +1,5 @@
 package ru.urfu;
 
 public interface FilmDataParserInterface {
-    FilmYearGenreMatchData Parse(String data);
+    FilmYearGenreMatchData Parse(String data) throws Exception;
 }

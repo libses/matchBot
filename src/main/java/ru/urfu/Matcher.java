@@ -14,4 +14,8 @@ public class Matcher {
     public void SendMessage(){
 
     }
+
+    public void Sleep(){
+
+    }
 }

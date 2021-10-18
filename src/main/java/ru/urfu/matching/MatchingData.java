@@ -1,4 +1,7 @@
-package ru.urfu;
+package ru.urfu.matching;
+
+import ru.urfu.APIs.FilmYearGenreMatchData;
+import ru.urfu.APIs.MusicMatchingData;
 
 /**
  * Класс, хранящий музыкальные и кинопредпочтения

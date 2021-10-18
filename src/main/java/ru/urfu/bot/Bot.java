@@ -1,4 +1,4 @@
-package ru.urfu;
+package ru.urfu.bot;
 
 
 import com.pengrad.telegrambot.TelegramBot;
@@ -8,7 +8,6 @@ import com.pengrad.telegrambot.request.SendPhoto;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.IntStream;
 
 public class Bot implements Runnable {
     TelegramBot bot = new TelegramBot("2058884544:AAF2Ayxfm3SeZBrSR5sOebOCoeqwlo3FgC8");

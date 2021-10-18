@@ -1,4 +1,4 @@
-package ru.urfu;
+package ru.urfu.profile;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Класс хранилище профилей, реализованный в виде ArrayList для рандомной селекции.
  */
 
-public class ProfileStorage implements ProfileStorageInterface{
+public class ProfileStorage implements ProfileStorageInterface {
     private int currentId = 0;
 
     public int getCurrentId() {

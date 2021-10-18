@@ -1,4 +1,4 @@
-package ru.urfu;
+package ru.urfu.APIs;
 
 /**
  * Нереализованный класс музыкальных предпочтений

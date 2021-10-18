@@ -1,4 +1,7 @@
-package ru.urfu;
+package ru.urfu.profile;
+
+import com.pengrad.telegrambot.model.Location;
+import ru.urfu.matching.MatchData;
 
 import java.util.ArrayList;
 
@@ -31,13 +34,13 @@ public class Profile {
         this.vkID = vkID;
     }
 
-    private Coordinates cords;
+    private Location cords;
 
-    public Coordinates getCords() {
+    public Location getCords() {
         return cords;
     }
 
-    public void setCords(Coordinates cords) {
+    public void setCords(Location cords) {
         this.cords = cords;
     }
 
@@ -75,6 +78,7 @@ public class Profile {
         this.id = id;
         this.likedBy = new ArrayList<>();
     }
+
     private String photoLink;
 
     public String getPhotoLink() {

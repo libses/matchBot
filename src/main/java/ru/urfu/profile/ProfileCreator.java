@@ -1,4 +1,6 @@
-package ru.urfu;
+package ru.urfu.profile;
+
+import com.pengrad.telegrambot.model.Location;
 
 /**
  * Класс, позволяющий создавать профиль.
@@ -39,7 +41,7 @@ public class ProfileCreator {
         throw new Exception("not implemented");
     }
 
-    public Coordinates askForCords() throws Exception {
+    public Location askForCords() throws Exception {
         throw new Exception("not implemented");
     }
 

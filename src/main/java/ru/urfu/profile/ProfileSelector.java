@@ -1,4 +1,4 @@
-package ru.urfu;
+package ru.urfu.profile;
 
 import java.util.Random;
 

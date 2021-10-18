@@ -1,4 +1,7 @@
-package ru.urfu;
+package ru.urfu.matching;
+
+import ru.urfu.profile.Profile;
+import ru.urfu.profile.ProfileSelector;
 
 public class Matcher {
     private Profile ownersProfile;

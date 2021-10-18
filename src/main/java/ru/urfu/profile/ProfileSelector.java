@@ -9,6 +9,7 @@ import java.util.Random;
 public class ProfileSelector {
     private final Random random = new Random();
     private ProfileStorage profiles;
+
     public Profile getSimilarProfile(Profile first) throws Exception {
         throw new Exception("Not implemented");
     }

@@ -1,92 +1,94 @@
 package ru.urfu.profile;
 
-import com.pengrad.telegrambot.model.Location;
 import ru.urfu.matching.MatchData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import org.telegram.telegrambots.meta.api.objects.Location;
 
 public class Profile {
-    private final int id;
+    private final UUID ID;
 
-    private String telegramID;
+    private static final Set<UUID> usedIDs = new HashSet<>();
 
-    private String vkID;
-
+    private final ArrayList<Profile> likedBy;
     public ArrayList<Profile> getLikedBy() {
         return likedBy;
     }
 
-    private final ArrayList<Profile> likedBy;
-
+    private String telegramID;
     public String getTelegramID() {
         return telegramID;
     }
-
     public void setTelegramID(String telegramID) {
         this.telegramID = telegramID;
     }
 
+    private String vkID;
     public String getVkID() {
         return vkID;
     }
-
     public void setVkID(String vkID) {
         this.vkID = vkID;
     }
 
-    private Location cords;
-
-    public Location getCords() {
-        return cords;
+    private Location location;
+    public Location getLocation() {
+        return location;
     }
-
-    public void setCords(Location cords) {
-        this.cords = cords;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     private MatchData matchData;
-
     public MatchData getMatchData() {
         return matchData;
     }
-
     public void setMatchData(MatchData matchData) {
         this.matchData = matchData;
     }
 
     private String name;
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
 
+    private Gender gender;
+    public Gender getGender(){return this.gender;}
+    public void setGender(Gender gender){this.gender = gender;}
+
+    private String description;
     public String getDescription() {
         return description;
     }
-
     public void setDescription(String description) {
         this.description = description;
     }
 
-    private String description;
+    public Profile(UUID id) throws Exception {
+        if(usedIDs.contains(id))
+            throw new Exception("Пользователь с таким id уже существует");
 
-    public Profile(int id) {
-        this.id = id;
+        this.ID = id;
         this.likedBy = new ArrayList<>();
     }
 
     private String photoLink;
-
     public String getPhotoLink() {
         return photoLink;
     }
-
     public void setPhotoLink(String photoLink) {
         this.photoLink = photoLink;
+    }
+
+    public static boolean isUsedId(UUID id){
+        return usedIDs.contains(id);
     }
 
 }

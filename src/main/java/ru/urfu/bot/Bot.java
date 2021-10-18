@@ -1,57 +1,81 @@
 package ru.urfu.bot;
 
 
-import com.pengrad.telegrambot.TelegramBot;
-import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.request.GetUpdates;
-import com.pengrad.telegrambot.request.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+import org.telegram.telegrambots.meta.generics.BotOptions;
+import org.telegram.telegrambots.meta.generics.LongPollingBot;
 
-import java.util.List;
+import java.io.*;
 import java.util.Scanner;
 
-public class Bot implements Runnable {
-    TelegramBot bot = new TelegramBot("2058884544:AAF2Ayxfm3SeZBrSR5sOebOCoeqwlo3FgC8");
-    final int limit = 1000;
-    int offset = 0;
-    final int timeout = 1000;
-    GetUpdates getUpdates = new GetUpdates().limit(limit).offset(offset).timeout(timeout);
-    List<Update> updates;
-    private volatile boolean updating = true;
+public class Bot implements LongPollingBot {
 
+    private final String token;
+    private final String userName;
 
-    public void updateHandler() {
-        while (updating) {
-            for (var update : updates
-            ) {
-                if (update.message().photo().length != 0) {
-                    var send
-                            = new SendPhoto(update.message().chat().id(), update.message().photo()[0].fileId());
-                    bot.execute(send);
-                }
-                offset += updates.size();
-                updates = bot.execute(getUpdates).updates();
-            }
+    public Bot(String token, String userName) {
+        this.token = token;
+        this.userName = userName;
+    }
+
+    public static Bot create() throws IOException {
+        String token;
+        String userName;
+
+        try {
+            var reader = new FileReader("botConfig.txt");
+            var scanner = new Scanner(reader);
+            token = scanner.nextLine().split("=")[1];
+            userName = scanner.nextLine().split("=")[1];
+
+            scanner.close();
+            reader.close();
+
+        } catch (FileNotFoundException e) {
+            new File("", "botConfig.txt");
+            var writer = new FileWriter("botConfig.txt", true);
+            var scanner = new Scanner(System.in);
+
+            System.out.println("Введите токен бота:");
+
+            token = scanner.nextLine();
+            writer.write("botToken=" + token + '\n');
+
+            System.out.println("Введите username бота:");
+
+            userName = scanner.nextLine();
+            writer.write("botUserName=" + userName);
+
+            scanner.close();
+            writer.close();
         }
 
+        return new Bot(token, userName);
     }
 
-    public void run() {
-        updates = bot.execute(getUpdates).updates();
-        offset = updates.stream().map(Update::updateId).max(Integer::compareTo).get() + 1;
-        new Thread(this::updateHandler).start();
+    @Override
+    public void onUpdateReceived(Update update) {
+
     }
 
-    public void shutdown() {
-        updating = false;
-        bot.shutdown();
+    @Override
+    public BotOptions getOptions() {
+        return null;
     }
 
-    public static void main(String[] args) {
-        Bot bot = new Bot();
-        bot.run();
+    @Override
+    public void clearWebhook() throws TelegramApiRequestException {
 
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-        bot.shutdown();
+    }
+
+    @Override
+    public String getBotUsername() {
+        return userName;
+    }
+
+    @Override
+    public String getBotToken() {
+        return token;
     }
 }

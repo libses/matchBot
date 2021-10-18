@@ -1,11 +1,19 @@
 package ru.urfu;
 
+import java.util.ArrayList;
+
 public class Profile {
     private final int id;
 
     private String telegramID;
 
     private String vkID;
+
+    public ArrayList<Profile> getLikedBy() {
+        return likedBy;
+    }
+
+    private final ArrayList<Profile> likedBy;
 
     public String getTelegramID() {
         return telegramID;
@@ -65,6 +73,7 @@ public class Profile {
 
     public Profile(int id) {
         this.id = id;
+        this.likedBy = new ArrayList<>();
     }
     private String photoLink;
 

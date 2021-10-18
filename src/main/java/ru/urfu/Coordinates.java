@@ -1,5 +1,9 @@
 package ru.urfu;
 
+/**
+ * Класс координат, используемый для установления геотегов с полями <b>X</b> и <b>Y</b>
+ */
+
 public class Coordinates {
     private double X;
     private double Y;

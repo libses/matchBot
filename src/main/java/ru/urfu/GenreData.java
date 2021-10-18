@@ -1,5 +1,10 @@
 package ru.urfu;
 
+/**
+ * Класс, в котором хранятся средние оценки пользователя фильмам разных жанров
+ */
+
+
 public class GenreData {
     private double anime;
     private double biography;

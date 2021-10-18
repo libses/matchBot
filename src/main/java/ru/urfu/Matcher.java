@@ -1,21 +1,27 @@
 package ru.urfu;
 
 public class Matcher {
-    private Profile currentProfile;
+    private Profile ownersProfile;
     private ProfileSelector selector;
+    private Profile current;
 
-    public void Like(){
-
+    public void LikeRandom(){
+        current.getLikedBy().add(ownersProfile);
+        //notify client part
+        current = selector.GetRandomProfile();
     }
 
-    public void Dislike(){
-
+    public void DislikeRandom(){
+        //notify
+        current = selector.GetRandomProfile();
     }
-    public void SendMessage(){
-
+    public void SendMessageRandom(){
+        //notify
+        current = selector.GetRandomProfile();
     }
 
-    public void Sleep(){
-
+    public void SleepRandom(){
+        //notify
+        current = selector.GetRandomProfile();
     }
 }

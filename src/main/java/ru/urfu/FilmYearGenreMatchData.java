@@ -1,5 +1,9 @@
 package ru.urfu;
 
+/**
+ * Класс информации о фильме.
+ */
+
 public class FilmYearGenreMatchData {
     private double year;
     private double russian;

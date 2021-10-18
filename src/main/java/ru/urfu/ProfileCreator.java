@@ -1,5 +1,9 @@
 package ru.urfu;
 
+/**
+ * Класс, позволяющий создавать профиль.
+ */
+
 public class ProfileCreator {
     private final ProfileStorageInterface profiles;
 
@@ -12,6 +16,12 @@ public class ProfileCreator {
     public ProfileCreator(ProfileStorageInterface profiles){
         this.profiles = profiles;
     }
+
+    /**
+     * Спрашиваем всё о человеке и записываем в соответсвующие свойства
+     * @return возвращает готовый профиль
+     * @throws Exception кидает ошибку
+     */
     public Profile CreateFullProfile() throws Exception {
         Profile profile = CreateProfile();
         profile.setCords(AskForCords());

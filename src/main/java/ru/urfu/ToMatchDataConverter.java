@@ -1,5 +1,9 @@
 package ru.urfu;
 
+
+/**
+ * Конвертер из сырых данных в MatchData
+ */
 public class ToMatchDataConverter implements DataToMatchDataConverter{
 
     @Override

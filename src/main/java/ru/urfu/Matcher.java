@@ -5,23 +5,23 @@ public class Matcher {
     private ProfileSelector selector;
     private Profile current;
 
-    public void LikeRandom(){
+    public void likeRandom(){
         current.getLikedBy().add(ownersProfile);
         //notify client part
-        current = selector.GetRandomProfile();
+        current = selector.getRandomProfile();
     }
 
-    public void DislikeRandom(){
+    public void dislikeRandom(){
         //notify
-        current = selector.GetRandomProfile();
+        current = selector.getRandomProfile();
     }
-    public void SendMessageRandom(){
+    public void sendMessageRandom(){
         //notify
-        current = selector.GetRandomProfile();
+        current = selector.getRandomProfile();
     }
 
-    public void SleepRandom(){
+    public void sleepRandom(){
         //notify
-        current = selector.GetRandomProfile();
+        current = selector.getRandomProfile();
     }
 }

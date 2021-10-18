@@ -24,26 +24,26 @@ public class ProfileCreator {
      */
     public Profile CreateFullProfile() throws Exception {
         Profile profile = CreateProfile();
-        profile.setCords(AskForCords());
-        profile.setDescription(AskForDescription());
-        profile.setName(AskForName());
-        profile.setPhotoLink(AskForPhoto());
+        profile.setCords(askForCords());
+        profile.setDescription(askForDescription());
+        profile.setName(askForName());
+        profile.setPhotoLink(askForPhoto());
         return profile;
     }
 
-    public String AskForPhoto() throws Exception{
+    public String askForPhoto() throws Exception{
         throw new Exception("not implemented");
     }
 
-    public String AskForName() throws Exception {
+    public String askForName() throws Exception {
         throw new Exception("not implemented");
     }
 
-    public Coordinates AskForCords() throws Exception {
+    public Coordinates askForCords() throws Exception {
         throw new Exception("not implemented");
     }
 
-    public String AskForDescription() throws Exception {
+    public String askForDescription() throws Exception {
         throw new Exception("not implemented");
     }
 

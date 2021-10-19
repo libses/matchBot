@@ -13,7 +13,7 @@ public class ProfileStorage implements ProfileStorageInterface {
         return currentId;
     }
 
-    private ArrayList<Profile> profileList;
+    private ArrayList<Profile> profileList = new ArrayList<>();
 
     public ArrayList<Profile> getProfileList() {
         return profileList;

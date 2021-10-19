@@ -8,8 +8,29 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.telegram.telegrambots.meta.api.objects.Location;
+import ru.urfu.matching.Matcher;
 
 public class Profile {
+    private ProfileSelector selector;
+
+    private Matcher matcher;
+
+    public ProfileSelector getSelector() {
+        return selector;
+    }
+
+    public void setSelector(ProfileSelector selector) {
+        this.selector = selector;
+    }
+
+    public Matcher getMatcher() {
+        return matcher;
+    }
+
+    public void setMatcher(Matcher matcher) {
+        this.matcher = matcher;
+    }
+
     private final UUID ID;
 
     private static final Set<UUID> usedIDs = new HashSet<>();
@@ -89,6 +110,11 @@ public class Profile {
 
     public static boolean isUsedId(UUID id){
         return usedIDs.contains(id);
+    }
+
+    public void printProfile(){
+        System.out.println("Profile name is: " + name);
+        System.out.println("Profile gender is: " + gender);
     }
 
 }

@@ -6,7 +6,17 @@ import ru.urfu.profile.ProfileSelector;
 public class Matcher {
     private Profile ownersProfile;
     private ProfileSelector selector;
+
+    public Profile getCurrent() {
+        return current;
+    }
+
     private Profile current;
+
+    public Matcher(Profile ownersProfile, ProfileSelector selector) {
+        this.ownersProfile = ownersProfile;
+        this.selector = selector;
+    }
 
     public void likeRandom(){
         current.getLikedBy().add(ownersProfile);

@@ -16,5 +16,7 @@ public class ProfileSelector {
     public Profile getRandomProfile() {
         return profiles.getProfileList().get(random.nextInt(profiles.getProfileList().size()));
     }
-
+    public ProfileSelector(ProfileStorage profiles) {
+        this.profiles = profiles;
+    }
 }

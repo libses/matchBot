@@ -8,15 +8,20 @@ import java.util.Random;
  */
 public class ProfileSelector {
     private final Random random = new Random();
-    private ProfileStorage profiles;
+    private final ProfileData profiles;
 
     public Profile getSimilarProfile(Profile first) throws Exception {
         throw new Exception("Not implemented");
     }
+
     public Profile getRandomProfile() {
-        return profiles.getProfileList().get(random.nextInt(profiles.getProfileList().size()));
+        return profiles.getAllProfiles()
+                .skip(random.nextInt((int) profiles.getAllProfiles().count()))
+                .findAny()
+                .orElseThrow();
     }
-    public ProfileSelector(ProfileStorage profiles) {
+
+    public ProfileSelector(ProfileData profiles) {
         this.profiles = profiles;
     }
 }

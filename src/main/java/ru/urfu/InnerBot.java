@@ -1,16 +1,14 @@
 package ru.urfu;
 
-import ru.urfu.matching.Matcher;
 import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileCreator;
-import ru.urfu.profile.ProfileSelector;
-import ru.urfu.profile.ProfileStorage;
+import ru.urfu.profile.ProfileData;
 
 import java.util.Scanner;
 
 public class InnerBot {
     ProfileCreator creator;
-    ProfileStorage profileStorage;
+    ProfileData profileStorage;
     Scanner scanner = new Scanner(System.in);
 
     public void start(Profile profile) {
@@ -41,7 +39,7 @@ public class InnerBot {
     }
 
 
-    public InnerBot(ProfileStorage storage) {
+    public InnerBot(ProfileData storage) {
         this.profileStorage = storage;
         this.creator = new ProfileCreator(this.profileStorage);
     }

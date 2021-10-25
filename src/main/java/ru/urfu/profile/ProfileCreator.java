@@ -3,6 +3,7 @@ package ru.urfu.profile;
 import org.telegram.telegrambots.meta.api.objects.Location;
 import ru.urfu.matching.Matcher;
 
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -11,22 +12,20 @@ import java.util.UUID;
  */
 
 public class ProfileCreator {
-    private final ProfileStorage profiles;
+    private final ProfileData profiles;
 
     private final Scanner scanner = new Scanner(System.in);
 
-    public Profile CreateProfile() throws Exception {
-        var id = UUID.randomUUID();
-
-        while (Profile.isUsedId(id))
-            id = UUID.randomUUID();
+    public Profile CreateProfile(long id) throws Exception {
+        if (ProfileData.containsId(id))
+            throw new Exception(String.format("Пользователь с таким id уже существует (%s)",id));
 
         Profile profile = new Profile(id);
         profiles.addProfile(profile);
         return profile;
     }
 
-    public ProfileCreator(ProfileStorage profiles) {
+    public ProfileCreator(ProfileData profiles) {
         this.profiles = profiles;
     }
 
@@ -37,15 +36,15 @@ public class ProfileCreator {
      * @throws Exception кидает ошибку
      */
     public Profile createFullProfile() throws Exception {
-        Profile profile = CreateProfile();
+        Profile profile = CreateProfile(0);
         profile.setGender(askForGender());
         profile.setName(askForName());
         profile.setSelector(new ProfileSelector(profiles));
         profile.setMatcher(new Matcher(profile, profile.getSelector()));
-        //profile.setPhotoLink(askForPhoto());
-        //profile.setLocation(askForLocation());
-        //profile.setDescription(askForDescription());
-        return profile;
+        profile.setPhotoLink(askForPhoto());
+        profile.setLocation(askForLocation());
+        profile.setDescription(askForDescription());
+        throw new Exception("not implemented");
     }
 
     public String askForPhoto() throws Exception {
@@ -65,17 +64,13 @@ public class ProfileCreator {
         throw new Exception("not implemented");
     }
 
-    public Gender askForGender() {
-        System.out.println("what is your gender? (f/m)");
-        if ("f".equals(scanner.nextLine())){
-            return Gender.female;
-        }
-        return Gender.male;
+    public Gender askForGender() throws Exception {
+        throw new Exception("not implemented");
     }
 
     public Boolean askYesOrNo(){
         var input = scanner.nextLine();
-        return  ("y".equals(input) || "yes".equals(input) || "Y".equals(input) || "Yes".equals(input));
+        return  ("y".equals(input.toLowerCase(Locale.ROOT)) || "yes".equals(input.toLowerCase(Locale.ROOT)));
     }
 
 }

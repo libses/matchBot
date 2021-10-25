@@ -1,23 +1,19 @@
 package ru.urfu.bot;
 
 
+import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import org.telegram.telegrambots.meta.generics.BotOptions;
-import org.telegram.telegrambots.meta.generics.LongPollingBot;
+import ru.urfu.profile.ProfileData;
 
 import java.io.*;
 import java.util.Scanner;
 
-public class Bot implements LongPollingBot {
+public class Bot extends TelegramLongPollingBot {
 
     private final String token;
     private final String userName;
-
-    public Bot(String token, String userName) {
-        this.token = token;
-        this.userName = userName;
-    }
+    private final UpdateHandler updateHandler;
+    public ProfileData data;
 
     public static Bot create() throws IOException {
         String token;
@@ -54,19 +50,28 @@ public class Bot implements LongPollingBot {
         return new Bot(token, userName);
     }
 
+
+    public Bot(String token, String userName) {
+        this.token = token;
+        this.userName = userName;
+        data = new ProfileData();
+        updateHandler = new UpdateHandler(data,this);
+    }
+
+
     @Override
     public void onUpdateReceived(Update update) {
+        if (update.getMessage().hasText()) {
+            try {
+                updateHandler.textHandler(this, update);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
-    }
 
-    @Override
-    public BotOptions getOptions() {
-        return null;
-    }
-
-    @Override
-    public void clearWebhook() throws TelegramApiRequestException {
-
+        if (update.getMessage().hasPhoto())
+            updateHandler.photoHandler(this, update);
     }
 
     @Override

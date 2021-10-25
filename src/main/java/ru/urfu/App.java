@@ -1,17 +1,18 @@
 package ru.urfu;
 
-import ru.urfu.profile.ProfileStorage;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.urfu.bot.Bot;
 
-public class App
-{
-    public static void main( String[] args ) throws Exception {
-
-        var profiles = new ProfileStorage();
-        var bot = new InnerBot(profiles);
-        for (int i = 0; i < 5; i++){
-            profiles.addProfile(bot.creator.createFullProfile());
+public class App {
+    public static void main(String[] args) {
+        try {
+            var bot = Bot.create();
+            var telegramApi = new TelegramBotsApi(DefaultBotSession.class);
+            telegramApi.registerBot(bot);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        var profile1 = bot.creator.createFullProfile();
-        bot.start(profile1);
+
     }
 }

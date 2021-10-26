@@ -23,9 +23,8 @@ public class UpdateHandler {
         registrar.registration(update);
     }
 
-    public void handlePhoto(Bot bot, Update update) {
-
-
+    public void handlePhoto(Bot bot, Update update) throws Exception {
+        registrar.registration(update);
     }
 
 

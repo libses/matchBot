@@ -26,7 +26,8 @@ public class Registrar {
             "Имя", this::nameHandler,
             "Возраст", this::ageHandler,
             "Город", this::cityHandler,
-            "Пол", this::genderHandler);
+            "Пол", this::genderHandler,
+            "Фото", this::photoHandler);
 
 
     public Registrar(ProfileData storage, Bot bot) {
@@ -36,6 +37,7 @@ public class Registrar {
 
     /**
      * Сам метод регистрации
+     *
      * @param update обрабатывает изменения
      * @throws Exception эксепшны от используемых методов
      */
@@ -52,17 +54,20 @@ public class Registrar {
                     .chatId(update.getMessage().getChatId().toString())
                     .text("Напиши свое имя:)")
                     .build());
+
             return;
         }
 
         handlers.get(profilesInRegistration.get(id).getCurrentRegistrationStep()).accept(update);
 
         if (profilesInRegistration.get(id).isRegistrationCompleted())
+            data.addProfile(profilesInRegistration.get(id).getProfile());
             profilesInRegistration.remove(id);
     }
 
     /**
      * Получаем user id
+     *
      * @param update update
      * @return id
      */
@@ -73,6 +78,7 @@ public class Registrar {
 
     /**
      * Получаем город
+     *
      * @param update update
      */
 
@@ -89,6 +95,7 @@ public class Registrar {
 
     /**
      * Получаем фото
+     *
      * @param update update
      */
 
@@ -98,7 +105,9 @@ public class Registrar {
 
             profilesInRegistration.get(getId(update))
                     .getProfile()
-                        .setPhotoLink(photo.getFileId());
+                    .setPhotoLink(photo.getFileId());
+
+            profilesInRegistration.get(getId(update)).updateProgress();
 
         } catch (Exception ignored) {
         }
@@ -106,6 +115,7 @@ public class Registrar {
 
     /**
      * Получаем возраст
+     *
      * @param update update
      */
 
@@ -133,6 +143,7 @@ public class Registrar {
 
     /**
      * Получаем пол
+     *
      * @param update update
      */
     private void genderHandler(Update update) {
@@ -159,6 +170,7 @@ public class Registrar {
 
     /**
      * Получаем имя
+     *
      * @param update update
      */
     public void nameHandler(Update update) {

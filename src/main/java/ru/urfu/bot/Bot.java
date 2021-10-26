@@ -68,8 +68,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     /**
-     * Обрабатывает изменения
-     * @param update само изменение
+     * Обрабатывает обновление
      */
     @Override
     public void onUpdateReceived(Update update) {
@@ -82,8 +81,13 @@ public class Bot extends TelegramLongPollingBot {
         }
 
 
-        if (update.getMessage().hasPhoto())
-            updateHandler.handlePhoto(this, update);
+        if (update.getMessage().hasPhoto()) {
+            try {
+                updateHandler.handlePhoto(this, update);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

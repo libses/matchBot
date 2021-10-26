@@ -67,7 +67,8 @@ public class Registrar {
      * @return id
      */
     private long getId(Update update) {
-        return update.getMessage().getContact().getUserId();
+
+        return update.getMessage().getFrom().getId();
     }
 
     /**
@@ -76,7 +77,7 @@ public class Registrar {
      */
 
     private void cityHandler(Update update) {
-        profilesInRegistration.get(update.getMessage().getContact().getUserId()).updateProgress();
+        profilesInRegistration.get(getId(update)).updateProgress();
         try {
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
@@ -114,6 +115,10 @@ public class Registrar {
             var id = getId(update);
             profilesInRegistration.get(id).getProfile().setAge(age);
             profilesInRegistration.get(id).updateProgress();
+            bot.execute(SendMessage.builder()
+                    .chatId(update.getMessage().getChatId().toString())
+                    .text("Напиши свой город")
+                    .build());
         } catch (Exception e) {
             try {
                 bot.execute(SendMessage.builder()

@@ -49,7 +49,6 @@ public class Registrar {
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
 
-
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
                     .text("Напиши свое имя:)")
@@ -71,8 +70,7 @@ public class Registrar {
      * @param update update
      * @return id
      */
-    private long getId(Update update) {
-
+    public long getId(Update update) {
         return update.getMessage().getFrom().getId();
     }
 

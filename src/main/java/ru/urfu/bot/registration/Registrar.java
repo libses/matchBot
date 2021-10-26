@@ -32,12 +32,13 @@ public class Registrar {
     }
 
     public void registration(Update update) throws Exception {
-        var id = update.getMessage().getContact().getUserId();
+        var id = update.getMessage().getFrom().getId();
 
-        if (!ProfileData.containsId(id)) {
+        if (!ProfileData.containsId(id) && !profilesInRegistration.containsKey(id)) {
             var profile = new Profile(id);
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
+
 
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())

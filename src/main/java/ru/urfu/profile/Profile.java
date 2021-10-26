@@ -7,6 +7,10 @@ import java.util.*;
 import org.telegram.telegrambots.meta.api.objects.Location;
 import ru.urfu.matching.Matcher;
 
+/**
+ * Класс профиля.
+ */
+
 public class Profile {
     private ProfileSelector selector;
 
@@ -115,6 +119,11 @@ public class Profile {
     }
 
 
+    /**
+     * создаёт профиль с определенным id
+     * @param id id профиля
+     * @throws Exception бросает если такой id уже есть
+     */
     public Profile(long id) throws Exception {
         if (ProfileData.containsId(id))
             throw new Exception("Пользователь с таким id уже существует");

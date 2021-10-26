@@ -3,6 +3,10 @@ package ru.urfu.matching;
 import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileSelector;
 
+/**
+ * Класс, используемый для того, чтобы лайкать или дизлайкать пользователей
+ */
+
 public class Matcher {
     private Profile ownersProfile;
     private ProfileSelector selector;

@@ -8,6 +8,10 @@ import ru.urfu.profile.ProfileData;
 import java.io.*;
 import java.util.Scanner;
 
+/**
+ * Класс с самим телеграм-ботом, необходимый для связи с telegram через API
+ */
+
 public class Bot extends TelegramLongPollingBot {
 
     private final String token;
@@ -15,6 +19,11 @@ public class Bot extends TelegramLongPollingBot {
     private final UpdateHandler updateHandler;
     public ProfileData data;
 
+    /**
+     * Метод создаёт нового бота
+     * @return возвращает бота
+     * @throws IOException бросает эксепшн при ошибке ввода
+     */
     public static Bot create() throws IOException {
         String token;
         String userName;
@@ -58,12 +67,15 @@ public class Bot extends TelegramLongPollingBot {
         updateHandler = new UpdateHandler(data,this);
     }
 
-
+    /**
+     * Обрабатывает изменения
+     * @param update само изменение
+     */
     @Override
     public void onUpdateReceived(Update update) {
         if (update.getMessage().hasText()) {
             try {
-                updateHandler.textHandler(this, update);
+                updateHandler.handleText(this, update);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -71,7 +83,7 @@ public class Bot extends TelegramLongPollingBot {
 
 
         if (update.getMessage().hasPhoto())
-            updateHandler.photoHandler(this, update);
+            updateHandler.handlePhoto(this, update);
     }
 
     @Override

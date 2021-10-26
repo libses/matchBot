@@ -2,8 +2,13 @@ package ru.urfu.bot.registration;
 
 import ru.urfu.profile.Profile;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+/**
+ * Класс, который хранит прогресс регистрации
+ */
 
 public class ProfileInRegistration {
     private static final List<String> registrationSteps = Arrays.asList("Имя", "Пол", "Возраст", "Город", "Фото");

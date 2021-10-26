@@ -14,6 +14,9 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+/**
+ * Класс регистратора
+ */
 
 public class Registrar {
     ProfileData data;
@@ -31,6 +34,11 @@ public class Registrar {
         this.data = storage;
     }
 
+    /**
+     * Сам метод регистрации
+     * @param update обрабатывает изменения
+     * @throws Exception эксепшны от используемых методов
+     */
     public void registration(Update update) throws Exception {
         var id = update.getMessage().getFrom().getId();
 
@@ -53,9 +61,19 @@ public class Registrar {
             profilesInRegistration.remove(id);
     }
 
+    /**
+     * Получаем user id
+     * @param update update
+     * @return id
+     */
     private long getId(Update update) {
         return update.getMessage().getContact().getUserId();
     }
+
+    /**
+     * Получаем город
+     * @param update update
+     */
 
     private void cityHandler(Update update) {
         profilesInRegistration.get(update.getMessage().getContact().getUserId()).updateProgress();
@@ -68,6 +86,10 @@ public class Registrar {
         }
     }
 
+    /**
+     * Получаем фото
+     * @param update update
+     */
 
     private void photoHandler(Update update) {
         try {
@@ -81,6 +103,10 @@ public class Registrar {
         }
     }
 
+    /**
+     * Получаем возраст
+     * @param update update
+     */
 
     private void ageHandler(Update update) {
         try {
@@ -100,6 +126,10 @@ public class Registrar {
         }
     }
 
+    /**
+     * Получаем пол
+     * @param update update
+     */
     private void genderHandler(Update update) {
         var id = getId(update);
 
@@ -122,6 +152,10 @@ public class Registrar {
     }
 
 
+    /**
+     * Получаем имя
+     * @param update update
+     */
     public void nameHandler(Update update) {
         var id = getId(update);
 

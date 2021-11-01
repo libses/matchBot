@@ -26,4 +26,8 @@ public class ProfileCreator {
         return profile;
     }
 
+    public ProfileCreator(ProfileData data) {
+        this.profiles = data;
+    }
+
 }

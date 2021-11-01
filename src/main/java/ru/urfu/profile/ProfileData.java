@@ -1,5 +1,7 @@
 package ru.urfu.profile;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Lock;
@@ -19,6 +21,8 @@ public class ProfileData {
     public Stream<Profile> getAllProfiles() {
         return profileList.values().stream();
     }
+
+    public Collection<Profile> getProfileList() { return profileList.values();}
 
     public void addProfile(Profile profile) {
         profileList.put(profile.ID, profile);

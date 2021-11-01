@@ -30,7 +30,7 @@ public class UpdateHandler {
             registrar.registration(update);
 
         if(Objects.equals(update.getMessage().getText(), "next")){
-           var nextProfile = selector.getRandomProfile();
+           var nextProfile = selector.getNextProfile();
            var message = String.format("%s\n%s\n%s\n%s",
                    nextProfile.getName(),
                    nextProfile.getCity(),

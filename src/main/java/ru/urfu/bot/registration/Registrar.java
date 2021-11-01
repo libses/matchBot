@@ -2,6 +2,10 @@ package ru.urfu.bot.registration;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.bot.Bot;
 import ru.urfu.profile.Gender;
@@ -9,8 +13,7 @@ import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileData;
 import ru.urfu.profile.ProfileStatus;
 
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -48,7 +51,8 @@ public class Registrar {
             var profile = new Profile(id);
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
-            profile.setTelegramID(update.getMessage().getFrom().getId());
+
+            profile.setTelegramUserName(update.getMessage().getFrom().getUserName());
 
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
@@ -60,7 +64,7 @@ public class Registrar {
 
         handlers.get(profilesInRegistration.get(id).getCurrentRegistrationStep()).accept(update);
 
-        if (profilesInRegistration.get(id).isRegistrationCompleted()){
+        if (profilesInRegistration.get(id).isRegistrationCompleted()) {
             data.addProfile(profilesInRegistration.get(id).getProfile());
             profilesInRegistration.remove(id);
         }
@@ -111,6 +115,12 @@ public class Registrar {
 
             profilesInRegistration.get(getId(update)).updateProgress();
 
+            bot.execute(SendMessage.builder()
+                    .chatId(update.getMessage().getChatId().toString())
+                    .text("Готово, теперь ты в базе и можешь знакомиться")
+                            .replyMarkup(bot.defaultKeyboard)
+                    .build());
+
         } catch (Exception ignored) {
         }
     }
@@ -151,8 +161,12 @@ public class Registrar {
     private void genderHandler(Update update) {
         var id = getId(update);
 
-        if (Objects.equals(update.getMessage().getText(), "female")) {
+        if (Objects.equals(update.getMessage().getText(), "Женский\uD83D\uDE4B\u200D♀️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.female);
+        }
+
+        if (Objects.equals(update.getMessage().getText(), "Non-Binary\uD83C\uDFF3️\u200D⚧️")) {
+            profilesInRegistration.get(id).getProfile().setGender(Gender.other);
         }
 
         profilesInRegistration.get(id).getProfile().setGender(Gender.male);
@@ -180,11 +194,18 @@ public class Registrar {
 
         profilesInRegistration.get(id).getProfile().setName(update.getMessage().getText());
         profilesInRegistration.get(id).updateProgress();
+        List<KeyboardButton> buttons = List.of(
+                new KeyboardButton("Мужской\uD83D\uDE4B\u200D♂️"),
+                new KeyboardButton("Женский\uD83D\uDE4B\u200D♀️"),
+                new KeyboardButton("Non-Binary\uD83C\uDFF3️\u200D⚧️"));
+        KeyboardRow row = new KeyboardRow(buttons);
+        ReplyKeyboard replyKeyboard = new ReplyKeyboardMarkup(List.of(row));
 
         try {
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
-                    .text("Напиши свой пол")
+                            .replyMarkup(replyKeyboard)
+                    .text("Выбери свой пол:)")
                     .build()
             );
         } catch (TelegramApiException e) {
@@ -192,7 +213,7 @@ public class Registrar {
         }
     }
 
-    public boolean inRegistration(long id){
+    public boolean inRegistration(long id) {
         return profilesInRegistration.containsKey(id);
     }
 

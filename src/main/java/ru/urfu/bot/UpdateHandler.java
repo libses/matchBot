@@ -1,5 +1,6 @@
 package ru.urfu.bot;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,10 +15,12 @@ import java.util.Objects;
  */
 
 public class UpdateHandler {
+    final ProfileData data;
     final Registrar registrar;
     final ProfileSelector selector;
 
     public UpdateHandler(ProfileData data,Bot bot) {
+        this.data = data;
         registrar = new Registrar(data,bot);
         selector = new ProfileSelector(data);
 
@@ -29,17 +32,18 @@ public class UpdateHandler {
         if(registrar.inRegistration(id) || !ProfileData.containsId(id))
             registrar.registration(update);
 
-        if(Objects.equals(update.getMessage().getText(), "next")){
-           var nextProfile = selector.getNextProfile();
-           var message = String.format("%s\n%s\n%s\n%s",
+        if(Objects.equals(update.getMessage().getText(), "Дальше")){
+           var nextProfile = selector.getRandomProfile();
+           var message = String.format("%s\n%s\n%s\n@%s",
                    nextProfile.getName(),
                    nextProfile.getCity(),
                    nextProfile.getAge(),
-                   nextProfile.getTelegramID());
+                   nextProfile.getTelegramUserName());
 
            bot.execute(SendPhoto.builder()
                    .chatId(update.getMessage().getChatId().toString())
                    .photo(new InputFile(nextProfile.getPhotoLink()))
+                           .replyMarkup(bot.defaultKeyboard)
                    .caption(message)
                    .build()
            );
@@ -48,7 +52,7 @@ public class UpdateHandler {
 
     }
 
-    public void handlePhoto(Update update) throws Exception {
+    public void handlePhoto(Bot bot, Update update) throws Exception {
         registrar.registration(update);
     }
 

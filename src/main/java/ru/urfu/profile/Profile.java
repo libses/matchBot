@@ -1,11 +1,11 @@
 package ru.urfu.profile;
 
-import ru.urfu.matching.MatchData;
-
-import java.util.*;
-
 import org.telegram.telegrambots.meta.api.objects.Location;
+import ru.urfu.matching.MatchData;
 import ru.urfu.matching.Matcher;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Класс профиля.
@@ -50,6 +50,17 @@ public class Profile {
 
     public void setTelegramID(long telegramID) {
         this.telegramID = telegramID;
+    }
+
+
+    private String telegramUserName;
+
+    public String getTelegramUserName() {
+        return telegramUserName;
+    }
+
+    public void setTelegramUserName(String telegramName) {
+        this.telegramUserName = telegramName;
     }
 
 
@@ -121,6 +132,7 @@ public class Profile {
 
     /**
      * создаёт профиль с определенным id
+     *
      * @param id id профиля
      * @throws Exception бросает если такой id уже есть
      */
@@ -146,11 +158,11 @@ public class Profile {
 
     private String city;
 
-    public String getCity(){
+    public String getCity() {
         return city;
     }
 
-    public void setCity(String city){
+    public void setCity(String city) {
         this.city = city;
     }
 
@@ -177,7 +189,6 @@ public class Profile {
     }
 
 
-
     @Override
     public String toString() {
         return String.format("Profile name is: %s\n" +
@@ -200,4 +211,5 @@ public class Profile {
 
     public void printProfile() {
     }
+
 }

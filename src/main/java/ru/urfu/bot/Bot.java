@@ -2,10 +2,16 @@ package ru.urfu.bot;
 
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.profile.ProfileData;
 
 import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -19,8 +25,15 @@ public class Bot extends TelegramLongPollingBot {
     private final UpdateHandler updateHandler;
     public ProfileData data;
 
+    public final ReplyKeyboardMarkup defaultKeyboard = new ReplyKeyboardMarkup(
+            List.of(new KeyboardRow(
+                    List.of(new KeyboardButton("Дальше"))
+            ))
+    );
+
     /**
      * Метод создаёт нового бота
+     *
      * @return возвращает бота
      * @throws IOException бросает эксепшн при ошибке ввода
      */
@@ -64,7 +77,7 @@ public class Bot extends TelegramLongPollingBot {
         this.token = token;
         this.userName = userName;
         data = new ProfileData();
-        updateHandler = new UpdateHandler(data,this);
+        updateHandler = new UpdateHandler(data, this);
     }
 
     /**
@@ -89,6 +102,7 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
     }
+
 
     @Override
     public String getBotUsername() {

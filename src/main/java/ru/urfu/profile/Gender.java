@@ -6,5 +6,6 @@ package ru.urfu.profile;
 
 public enum Gender {
     male,
-    female
+    female,
+    other
 }

@@ -1,6 +1,5 @@
 package ru.urfu.bot;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -32,17 +31,18 @@ public class UpdateHandler {
         if(registrar.inRegistration(id) || !ProfileData.containsId(id))
             registrar.registration(update);
 
-        if(Objects.equals(update.getMessage().getText(), "next")){
+        if(Objects.equals(update.getMessage().getText(), "Дальше")){
            var nextProfile = selector.getRandomProfile();
-           var message = String.format("%s\n%s\n%s\n%s",
+           var message = String.format("%s\n%s\n%s\n@%s",
                    nextProfile.getName(),
                    nextProfile.getCity(),
                    nextProfile.getAge(),
-                   nextProfile.getTelegramID());
+                   nextProfile.getTelegramUserName());
 
            bot.execute(SendPhoto.builder()
                    .chatId(update.getMessage().getChatId().toString())
                    .photo(new InputFile(nextProfile.getPhotoLink()))
+                           .replyMarkup(bot.defaultKeyboard)
                    .caption(message)
                    .build()
            );

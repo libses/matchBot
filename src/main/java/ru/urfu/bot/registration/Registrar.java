@@ -44,14 +44,15 @@ public class Registrar {
     public void registration(Update update) throws Exception {
         var id = update.getMessage().getFrom().getId();
 
-        if (!ProfileData.containsId(id) && !profilesInRegistration.containsKey(id)) {
+        if (!profilesInRegistration.containsKey(id)) {
             var profile = new Profile(id);
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
+            profile.setTelegramID(update.getMessage().getFrom().getId());
 
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
-                    .text("Напиши свое имя:)")
+                    .text("Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)")
                     .build());
 
             return;
@@ -59,9 +60,10 @@ public class Registrar {
 
         handlers.get(profilesInRegistration.get(id).getCurrentRegistrationStep()).accept(update);
 
-        if (profilesInRegistration.get(id).isRegistrationCompleted())
+        if (profilesInRegistration.get(id).isRegistrationCompleted()){
             data.addProfile(profilesInRegistration.get(id).getProfile());
             profilesInRegistration.remove(id);
+        }
     }
 
     /**
@@ -82,6 +84,8 @@ public class Registrar {
 
     private void cityHandler(Update update) {
         profilesInRegistration.get(getId(update)).updateProgress();
+        profilesInRegistration.get(getId(update)).getProfile().setCity(update.getMessage().getText());
+
         try {
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
@@ -186,6 +190,10 @@ public class Registrar {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean inRegistration(long id){
+        return profilesInRegistration.containsKey(id);
     }
 
 

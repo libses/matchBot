@@ -42,13 +42,13 @@ public class Profile {
     }
 
 
-    private String telegramID;
+    private long telegramID;
 
-    public String getTelegramID() {
+    public long getTelegramID() {
         return telegramID;
     }
 
-    public void setTelegramID(String telegramID) {
+    public void setTelegramID(long telegramID) {
         this.telegramID = telegramID;
     }
 
@@ -141,6 +141,17 @@ public class Profile {
 
     public void setPhotoLink(String photoLink) {
         this.photoLink = photoLink;
+    }
+
+
+    private String city;
+
+    public String getCity(){
+        return city;
+    }
+
+    public void setCity(String city){
+        this.city = city;
     }
 
 

@@ -3,7 +3,6 @@ package ru.urfu.profile;
 import java.util.*;
 
 import org.telegram.telegrambots.meta.api.objects.Location;
-import ru.urfu.matching.MatchData;
 import ru.urfu.matching.Matcher;
 
 import java.util.ArrayList;

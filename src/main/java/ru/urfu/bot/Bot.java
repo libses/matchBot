@@ -96,7 +96,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.getMessage().hasPhoto()) {
             try {
-                updateHandler.handlePhoto(update);
+                updateHandler.handlePhoto(this, update);
             } catch (Exception e) {
                 e.printStackTrace();
             }

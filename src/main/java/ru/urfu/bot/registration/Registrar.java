@@ -19,9 +19,9 @@ import java.util.function.Consumer;
  */
 
 public class Registrar {
-    ProfileData data;
-    Bot bot;
-    Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
+    final ProfileData data;
+    final Bot bot;
+    final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
     final Map<String, Consumer<Update>> handlers = Map.of(
             "Имя", this::nameHandler,
             "Возраст", this::ageHandler,

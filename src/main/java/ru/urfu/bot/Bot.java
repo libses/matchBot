@@ -17,7 +17,7 @@ public class Bot extends TelegramLongPollingBot {
     private final String token;
     private final String userName;
     private final UpdateHandler updateHandler;
-    public ProfileData data;
+    public final ProfileData data;
 
     /**
      * Метод создаёт нового бота
@@ -83,7 +83,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.getMessage().hasPhoto()) {
             try {
-                updateHandler.handlePhoto(this, update);
+                updateHandler.handlePhoto(update);
             } catch (Exception e) {
                 e.printStackTrace();
             }

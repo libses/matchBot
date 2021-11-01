@@ -1,6 +1,5 @@
 package ru.urfu.bot;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -15,12 +14,10 @@ import java.util.Objects;
  */
 
 public class UpdateHandler {
-    final ProfileData data;
     final Registrar registrar;
     final ProfileSelector selector;
 
     public UpdateHandler(ProfileData data,Bot bot) {
-        this.data = data;
         registrar = new Registrar(data,bot);
         selector = new ProfileSelector(data);
 
@@ -51,7 +48,7 @@ public class UpdateHandler {
 
     }
 
-    public void handlePhoto(Bot bot, Update update) throws Exception {
+    public void handlePhoto(Update update) throws Exception {
         registrar.registration(update);
     }
 

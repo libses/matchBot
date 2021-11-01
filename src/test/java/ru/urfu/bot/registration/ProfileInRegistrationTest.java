@@ -1,6 +1,5 @@
 package ru.urfu.bot.registration;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import ru.urfu.profile.Profile;

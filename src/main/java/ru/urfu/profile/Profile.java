@@ -1,7 +1,5 @@
 package ru.urfu.profile;
 
-import ru.urfu.matching.MatchData;
-
 import java.util.*;
 
 import org.telegram.telegrambots.meta.api.objects.Location;
@@ -22,10 +20,6 @@ public class Profile {
 
     public void setSelector(ProfileSelector selector) {
         this.selector = selector;
-    }
-
-    public Matcher getMatcher() {
-        return matcher;
     }
 
     public void setMatcher(Matcher matcher) {
@@ -55,35 +49,23 @@ public class Profile {
 
     private String vkID;
 
-    public String getVkID() {
-        return vkID;
-    }
-
-    public void setVkID(String vkID) {
-        this.vkID = vkID;
-    }
-
 
     private Location location;
-
-    public Location getLocation() {
-        return location;
-    }
 
     public void setLocation(Location location) {
         this.location = location;
     }
 
 
-    private MatchData matchData;
-
-    public MatchData getMatchData() {
-        return matchData;
-    }
-
-    public void setMatchData(MatchData matchData) {
-        this.matchData = matchData;
-    }
+//    private MatchData matchData;
+//
+//    public MatchData getMatchData() {
+//        return matchData;
+//    }
+//
+//    public void setMatchData(MatchData matchData) {
+//        this.matchData = matchData;
+//    }
 
 
     private String name;
@@ -99,20 +81,12 @@ public class Profile {
 
     private Gender gender;
 
-    public Gender getGender() {
-        return this.gender;
-    }
-
     public void setGender(Gender gender) {
         this.gender = gender;
     }
 
 
     private String description;
-
-    public String getDescription() {
-        return description;
-    }
 
     public void setDescription(String description) {
         this.description = description;
@@ -168,10 +142,6 @@ public class Profile {
 
     private ProfileStatus status = ProfileStatus.registration;
 
-    public ProfileStatus getStatus() {
-        return status;
-    }
-
     public void setStatus(ProfileStatus status) {
         this.status = status;
     }
@@ -198,6 +168,4 @@ public class Profile {
         return Objects.hash(ID);
     }
 
-    public void printProfile() {
-    }
 }

@@ -5,5 +5,4 @@ package ru.urfu.matching;
  */
 
 public interface DataToMatchDataConverter {
-    MatchData convert(String data) throws Exception;
 }

@@ -2,7 +2,6 @@ package ru.urfu.bot.registration;
 
 import junit.framework.TestCase;
 import org.junit.Assert;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -14,10 +13,6 @@ public class RegistrarTest extends TestCase {
     public void testRegistration() {
         Assert.assertTrue(true);
         //Здесь слишком сложный тест, который требует работы с телеграмом. Его невозможно реализовать на данном этапе
-    }
-
-    public void testNameHandler() {
-
     }
 
     public void testGetId(){

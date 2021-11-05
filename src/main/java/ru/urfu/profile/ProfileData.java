@@ -17,6 +17,8 @@ public class ProfileData {
 
     private static final Map<Long, Profile> profileList = new ConcurrentHashMap<>();
 
+    public Map<Long, Profile> getMap() {return profileList;}
+
 
     public Stream<Profile> getAllProfiles() {
         return profileList.values().stream();

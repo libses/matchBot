@@ -21,7 +21,7 @@ public class ProfileCreator {
         if (ProfileData.containsId(id))
             throw new Exception(String.format("Пользователь с таким id уже существует (%s)",id));
 
-        Profile profile = new Profile(id);
+        Profile profile = new Profile(id, profiles);
         profiles.addProfile(profile);
         return profile;
     }

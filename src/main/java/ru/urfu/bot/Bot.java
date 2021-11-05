@@ -41,32 +41,41 @@ public class Bot extends TelegramLongPollingBot {
         String token;
         String userName;
 
-        try {
-            var reader = new FileReader("botConfig.txt");
-            var scanner = new Scanner(reader);
+        try (var reader = new FileReader("botConfig.txt"); var scanner = new Scanner(reader)) {
             token = scanner.nextLine().split("=")[1];
             userName = scanner.nextLine().split("=")[1];
+            if (token.length() < 14) {
+                throw new FileNotFoundException();
+            }
+            if (!userName.endsWith("bot")) {
+                throw new FileNotFoundException();
+            }
 
-            scanner.close();
-            reader.close();
-
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             new File("", "botConfig.txt");
-            var writer = new FileWriter("botConfig.txt", true);
+            var writer = new FileWriter("botConfig.txt", false);
             var scanner = new Scanner(System.in);
 
-            System.out.println("Введите токен бота:");
+            token = " ";
+            while (token.length() < 14) {
+                System.out.println("Введите корректный токен бота:");
+                token = scanner.nextLine();
+            }
 
-            token = scanner.nextLine();
+
             writer.write("botToken=" + token + '\n');
 
-            System.out.println("Введите username бота:");
+            userName = " ";
+            while (!userName.endsWith("bot")) {
+                System.out.println("Введите корректный username бота:");
 
-            userName = scanner.nextLine();
+                userName = scanner.nextLine();
+            }
             writer.write("botUserName=" + userName);
 
             scanner.close();
             writer.close();
+            System.out.println("Бот запущен, ждём сообщений.");
         }
 
         return new Bot(token, userName);

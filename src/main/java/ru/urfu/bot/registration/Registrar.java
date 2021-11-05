@@ -48,7 +48,7 @@ public class Registrar {
         var id = update.getMessage().getFrom().getId();
 
         if (!profilesInRegistration.containsKey(id)) {
-            var profile = new Profile(id);
+            var profile = new Profile(id, data);
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
 

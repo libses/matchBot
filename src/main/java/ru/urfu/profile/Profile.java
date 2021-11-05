@@ -136,12 +136,13 @@ public class Profile {
      * @param id id профиля
      * @throws Exception бросает если такой id уже есть
      */
-    public Profile(long id) throws Exception {
+    public Profile(long id, ProfileData data) throws Exception {
         if (ProfileData.containsId(id))
             throw new Exception("Пользователь с таким id уже существует");
 
         this.ID = id;
         this.likedBy = new ArrayList<>();
+        this.selector = new ProfileSelector(data);
     }
 
 

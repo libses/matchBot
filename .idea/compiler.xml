@@ -9,5 +9,8 @@
         <module name="matchBot" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="matchBot" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

@@ -27,8 +27,10 @@ public class Bot extends TelegramLongPollingBot {
 
     public final ReplyKeyboardMarkup defaultKeyboard = new ReplyKeyboardMarkup(
             List.of(new KeyboardRow(
-                    List.of(new KeyboardButton("Дальше"))
+                    List.of(new KeyboardButton("❤️"),
+                            new KeyboardButton("\uD83D\uDC4E"))
             ))
+            , true, false, false, " "
     );
 
     /**
@@ -96,7 +98,7 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.getMessage().hasText()) {
             try {
-                updateHandler.handleText(this, update);
+                updateHandler.handleText( update);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -105,7 +107,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.getMessage().hasPhoto()) {
             try {
-                updateHandler.handlePhoto(this, update);
+                updateHandler.handlePhoto( update);
             } catch (Exception e) {
                 e.printStackTrace();
             }

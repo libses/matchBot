@@ -4,6 +4,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -115,10 +116,14 @@ public class Registrar {
 
             profilesInRegistration.get(getId(update)).updateProgress();
 
+            ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(List.of(new KeyboardRow(
+                    List.of(new KeyboardButton("Поехали!\uD83D\uDE40"))
+            )), true, false, false, " ");
+
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
                     .text("Готово, теперь ты в базе и можешь знакомиться")
-                            .replyMarkup(bot.defaultKeyboard)
+                    .replyMarkup(keyboard)
                     .build());
 
         } catch (Exception ignored) {
@@ -176,13 +181,15 @@ public class Registrar {
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
                     .text("Напиши свой возраст")
-                    .build()
-            );
+                    .build());
+
+            bot.execute(SendMessage.builder()
+                    .replyMarkup(new ReplyKeyboardRemove(true))
+                    .build());
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Получаем имя
@@ -198,13 +205,16 @@ public class Registrar {
                 new KeyboardButton("Мужской\uD83D\uDE4B\u200D♂️"),
                 new KeyboardButton("Женский\uD83D\uDE4B\u200D♀️"),
                 new KeyboardButton("Non-Binary\uD83C\uDFF3️\u200D⚧️"));
+
         KeyboardRow row = new KeyboardRow(buttons);
-        ReplyKeyboard replyKeyboard = new ReplyKeyboardMarkup(List.of(row));
+        ReplyKeyboard replyKeyboard =
+                new ReplyKeyboardMarkup
+                        (List.of(row), true, true, false, " ");
 
         try {
             bot.execute(SendMessage.builder()
                     .chatId(update.getMessage().getChatId().toString())
-                            .replyMarkup(replyKeyboard)
+                    .replyMarkup(replyKeyboard)
                     .text("Выбери свой пол:)")
                     .build()
             );

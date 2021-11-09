@@ -4,6 +4,9 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.urfu.bot.Bot;
 
+/**
+ * Класс самого приложения. Запускает самого бота и тгАПИ
+ */
 public class App {
     public static void main(String[] args) {
         try {

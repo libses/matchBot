@@ -28,6 +28,10 @@ public class ProfileSelector {
         liked.add(profile);
     }
 
+    /**
+     * Метод выбирает и возвращает следующий профиль
+     * @return профиль
+     */
     public Profile getNextProfile() {
         if (!liked.isEmpty()){
             var p = liked.get(0);

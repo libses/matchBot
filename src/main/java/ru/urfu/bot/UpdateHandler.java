@@ -18,6 +18,7 @@ public class UpdateHandler {
     final Registrar registrar;
     final Bot bot;
 
+
     public UpdateHandler(ProfileData data, Bot bot) {
         this.bot = bot;
         this.data = data;
@@ -25,6 +26,11 @@ public class UpdateHandler {
     }
 
 
+    /**
+     * Метод, принимающий и обрабатывающий полученный текст
+     * @param update апдейт от бота
+     * @throws Exception бросает при ошибках регистрации
+     */
     public void handleText(Update update) throws Exception {
         long id = getIdFromUpdate(update);
         if (!isRegistered(id))
@@ -45,6 +51,11 @@ public class UpdateHandler {
 
     }
 
+    /**
+     * Метод, который обрабатывает ситуацию получения лайка
+     * @param update апдейт от бота
+     * @throws TelegramApiException бросает эксепшн при сбое api
+     */
     private void likeHandler(Update update) throws TelegramApiException {
         var selectorLike = data.getMap().get(getIdFromUpdate(update)).getSelector();
 
@@ -65,6 +76,12 @@ public class UpdateHandler {
         sendPhotoWithCaption(update, nextProfileLike, captionLike);
     }
 
+
+    /**
+     * Метод, обрабатывающий ситуацию дизлайка.
+     * @param update апдейт от бота
+     * @throws TelegramApiException бросает при сбое апи
+     */
     private void dislikeHandler(Update update) throws TelegramApiException {
         var selectorNext = data.getMap().get(getIdFromUpdate(update)).getSelector();
 
@@ -80,18 +97,43 @@ public class UpdateHandler {
         sendPhotoWithCaption(update, nextProfile, caption);
     }
 
+
+    /**
+     * Метод, получающий текст из апдейта
+     * @param update апдейт от бота
+     * @return возвращает сам текст
+     */
     private String getTextFromUpdate(Update update) {
         return update.getMessage().getText();
     }
 
+    /**
+     * Метод, получающий ID из апдейта
+     * @param update апдейт от бота
+     * @return возвращает сам id
+     */
     private Long getIdFromUpdate(Update update) {
         return update.getMessage().getFrom().getId();
     }
 
+
+    /**
+     * Метод, который проверяет, зарегистрирован ли человек
+     * @param id принимает id на вход
+     * @return возвращает boolean (да/нет)
+     */
     private boolean isRegistered(long id) {
         return !(registrar.inRegistration(id) || !ProfileData.containsId(id));
     }
 
+
+    /**
+     * Метод для отправки фотографии с подписью
+     * @param update апдейт от бота
+     * @param nextProfile следующий профиль
+     * @param message само сообщение
+     * @throws TelegramApiException бросает при ошибках апи
+     */
     private void sendPhotoWithCaption
             (Update update, Profile nextProfile, String message)
             throws TelegramApiException {
@@ -105,10 +147,22 @@ public class UpdateHandler {
         );
     }
 
+
+    /**
+     * Метод, возвращающий айди чата
+     * @param update принимает апдейт от бота
+     * @return возвращает строку с чат айди
+     */
     private String getChatIdFromUpdate(Update update) {
         return update.getMessage().getChatId().toString();
     }
 
+
+    /**
+     * Метод, генерирующий подпись к фотографии
+     * @param nextProfile профиль для генерации
+     * @return возвращает подпись
+     */
     private String getCaption(Profile nextProfile) {
 
         return String.format("%s\n%s\n%s\n@%s",
@@ -118,6 +172,12 @@ public class UpdateHandler {
                 nextProfile.getTelegramUserName());
     }
 
+
+    /**
+     * Метод, принимающий фото
+     * @param update апдейт от бота
+     * @throws Exception бросает внутренний метод
+     */
     public void handlePhoto(Update update) throws Exception {
         registrar.registration(update);
     }

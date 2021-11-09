@@ -3,7 +3,6 @@ package ru.urfu.profile;
 import java.util.*;
 
 import org.telegram.telegrambots.meta.api.objects.Location;
-import ru.urfu.matching.Matcher;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -15,8 +14,6 @@ import java.util.Objects;
 public class Profile {
     private ProfileSelector selector;
 
-    private Matcher matcher;
-
     public ProfileSelector getSelector() {
         return selector;
     }
@@ -24,15 +21,6 @@ public class Profile {
     public void setSelector(ProfileSelector selector) {
         this.selector = selector;
     }
-
-    public Matcher getMatcher() {
-        return matcher;
-    }
-
-    public void setMatcher(Matcher matcher) {
-        this.matcher = matcher;
-    }
-
 
     public final long ID;
 
@@ -133,6 +121,7 @@ public class Profile {
 
     /**
      * создаёт профиль с определенным id
+     *
      * @param id id профиля
      * @throws Exception бросает если такой id уже есть
      */
@@ -188,7 +177,6 @@ public class Profile {
     public void setStatus(ProfileStatus status) {
         this.status = status;
     }
-
 
 
     @Override

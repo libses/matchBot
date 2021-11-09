@@ -5,6 +5,10 @@ import org.junit.Assert;
 
 public class ProfileSelectorTest extends TestCase {
 
+    /**
+     * Тест, проверяющий корректность работы выбора следующего профиля
+     * @throws Exception может бросить ошибку, если такой id уже есть
+     */
     public void testGetNextProfile() throws Exception {
         var profiles = new ProfileData();
         var profile0 = new Profile(2, profiles);

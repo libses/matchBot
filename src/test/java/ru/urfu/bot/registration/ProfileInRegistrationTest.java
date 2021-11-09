@@ -9,6 +9,11 @@ public class ProfileInRegistrationTest {
     public ProfileInRegistrationTest() {
 
     }
+
+    /**
+     * Проверяет, что профиль не меняется при начале регистрации и находится в начальном положении регистрации
+     * @throws Exception бросает если id уже есть
+     */
     @Test
     public void profileStaysTheSameAndFieldsWorkCorrectlyTest() throws Exception {
         Profile profile = new Profile(0, new ProfileData());
@@ -18,6 +23,10 @@ public class ProfileInRegistrationTest {
         Assert.assertEquals(prIR.getCurrentRegistrationStep(), "Имя");
     }
 
+    /**
+     * Проверяет, что при регистрации прогресс регистрации увеличивается пропорционально
+     * @throws Exception бросает если id уже есть
+     */
     @Test
     public void increaseProgressTest() throws Exception{
         Profile profile = new Profile(0, new ProfileData());

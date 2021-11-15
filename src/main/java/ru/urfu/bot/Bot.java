@@ -36,11 +36,12 @@ public class Bot extends TelegramLongPollingBot {
 
     public final ReplyKeyboardMarkup additionalMenuKeyboard = new ReplyKeyboardMarkup(
             List.of(new KeyboardRow(
-                    List.of(new KeyboardButton("Мне понравились"),
-                            new KeyboardButton("Взаимные симпатии"),
-                            new KeyboardButton("Назад"))
-            ))
-            ,true, false, false, " "
+                            List.of(new KeyboardButton("Мои ❤️"),
+                                    new KeyboardButton("Я понравился \uD83D\uDE3B"))),
+                    new KeyboardRow(
+                            List.of(new KeyboardButton("Взаимные \uD83D\uDC9E"),
+                                    new KeyboardButton("Назад"))))
+            , true, false, false, " "
     );
 
     /**
@@ -108,7 +109,7 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.getMessage().hasText()) {
             try {
-                updateHandler.handleText( update);
+                updateHandler.handleText(update);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -117,7 +118,7 @@ public class Bot extends TelegramLongPollingBot {
 
         if (update.getMessage().hasPhoto()) {
             try {
-                updateHandler.handlePhoto( update);
+                updateHandler.handlePhoto(update);
             } catch (Exception e) {
                 e.printStackTrace();
             }

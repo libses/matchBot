@@ -14,7 +14,9 @@ import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileData;
 import ru.urfu.profile.ProfileStatus;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 

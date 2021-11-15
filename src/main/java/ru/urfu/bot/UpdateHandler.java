@@ -35,16 +35,24 @@ public class UpdateHandler {
      */
     public void handleText(Update update) throws Exception {
         long id = getIdFromUpdate(update);
-        if (!isRegistered(id))
+        if (!isRegistered(id)) {
             registrar.registration(update);
+            return;
+        }
 
         if (inAdditionalMenu) {
             handleTextInAdditionalMenu(update);
             return;
         }
 
+        handleTextInDefaultMenu(update);
+
+    }
+
+    private void handleTextInDefaultMenu(Update update) throws TelegramApiException {
         switch (getTextFromUpdate(update)) {
             //Обрабатываем случаи когда юзер только зарегался и когда пропускает анкету
+            case ("Назад"):
             case ("Поехали!\uD83D\uDE40"):
             case ("\uD83D\uDC4E"):
                 handleDislikeCase(update);
@@ -61,7 +69,6 @@ public class UpdateHandler {
                 help(update);
 
         }
-
     }
 
     private void handleTextInAdditionalMenu(Update update) throws TelegramApiException {
@@ -69,6 +76,13 @@ public class UpdateHandler {
 
         switch (message) {
             case ("Назад"):
+                inAdditionalMenu = false;
+                bot.execute(SendMessage.builder()
+                        .text("Смотрим дальше:)")
+                        .chatId(getChatIdFromUpdate(update))
+                        .replyMarkup(bot.defaultKeyboard)
+                        .build());
+                handleTextInDefaultMenu(update);
                 break;
 
             case ("Взаимные симпатии"):
@@ -81,18 +95,13 @@ public class UpdateHandler {
                 getWhoLikedMe(update);
                 break;
         }
-        inAdditionalMenu = false;
-        bot.execute(SendMessage.builder()
-                .text("Закрыто дополнительное меню")
-                .chatId(getChatIdFromUpdate(update))
-                .replyMarkup(bot.defaultKeyboard)
-                .build());
     }
 
     private void getWhoLikedMe(Update update) throws TelegramApiException {
         var profileId = getIdFromUpdate(update);
         var likedBy = data.getMap().get(profileId).getLikedBy();
-        for (Profile p : likedBy ) {
+
+        for (Profile p : likedBy) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
     }
@@ -100,6 +109,7 @@ public class UpdateHandler {
     private void getMutualSympathy(Update update) throws TelegramApiException {
         var profileId = getIdFromUpdate(update);
         var likedByMe = data.getMap().get(profileId).getMutualLikes();
+
         for (Profile p : likedByMe) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
@@ -108,6 +118,7 @@ public class UpdateHandler {
     private void getLikedByMe(Update update) throws TelegramApiException {
         var profileId = getIdFromUpdate(update);
         var likedByMe = data.getMap().get(profileId).getLikedProfiles();
+
         for (Profile p : likedByMe) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
@@ -118,7 +129,7 @@ public class UpdateHandler {
 
     private void openAdditionalMenu(Update update) throws TelegramApiException {
         bot.execute(SendMessage.builder()
-                .text("Открыто дополнительное меню")
+                .text("Просмотр данных о симпатиях")
                 .chatId(getChatIdFromUpdate(update))
                 .replyMarkup(bot.additionalMenuKeyboard)
                 .build());

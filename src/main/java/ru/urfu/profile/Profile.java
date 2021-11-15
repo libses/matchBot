@@ -6,12 +6,29 @@ import org.telegram.telegrambots.meta.api.objects.Location;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Класс профиля.
  */
 
 public class Profile {
+    /**
+     * создаёт профиль с определенным id
+     *
+     * @param id id профиля
+     * @throws Exception бросает если такой id уже есть
+     */
+    public Profile(long id, ProfileData data) throws Exception {
+        if (ProfileData.containsId(id))
+            throw new Exception("Пользователь с таким id уже существует");
+
+        this.ID = id;
+        this.likedBy = new ArrayList<>();
+        this.selector = new ProfileSelector(data);
+    }
+
+
     private ProfileSelector selector;
 
     public ProfileSelector getSelector() {
@@ -22,23 +39,13 @@ public class Profile {
         this.selector = selector;
     }
 
+
     public final long ID;
 
     private final ArrayList<Profile> likedBy;
 
     public ArrayList<Profile> getLikedBy() {
         return likedBy;
-    }
-
-
-    private long telegramID;
-
-    public long getTelegramID() {
-        return telegramID;
-    }
-
-    public void setTelegramID(long telegramID) {
-        this.telegramID = telegramID;
     }
 
 
@@ -53,28 +60,6 @@ public class Profile {
     }
 
 
-    private String vkID;
-
-    public String getVkID() {
-        return vkID;
-    }
-
-    public void setVkID(String vkID) {
-        this.vkID = vkID;
-    }
-
-
-    private Location location;
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
-
 //    private MatchData matchData;
 //
 //    public MatchData getMatchData() {
@@ -83,6 +68,7 @@ public class Profile {
 //
 //    public void setMatchData(MatchData matchData) {
 //        this.matchData = matchData;
+
 //    }
 
 
@@ -116,22 +102,6 @@ public class Profile {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-
-    /**
-     * создаёт профиль с определенным id
-     *
-     * @param id id профиля
-     * @throws Exception бросает если такой id уже есть
-     */
-    public Profile(long id, ProfileData data) throws Exception {
-        if (ProfileData.containsId(id))
-            throw new Exception("Пользователь с таким id уже существует");
-
-        this.ID = id;
-        this.likedBy = new ArrayList<>();
-        this.selector = new ProfileSelector(data);
     }
 
 
@@ -178,6 +148,26 @@ public class Profile {
         this.status = status;
     }
 
+    private final List<Profile> likedProfiles = new ArrayList<>();
+
+    public Stream<Profile> getLikedProfiles() {
+        return likedProfiles.stream();
+    }
+
+    public void addToLiked(Profile profile){
+        likedProfiles.add(profile);
+    }
+
+    private final List<Profile> mutualLikes = new ArrayList<>();
+
+    public Stream<Profile> getMutualLikes() {
+        return mutualLikes.stream();
+    }
+
+    public void addToMutualLikes(Profile profile){
+        likedProfiles.remove(profile);
+        mutualLikes.add(profile);
+    }
 
     @Override
     public String toString() {
@@ -185,6 +175,7 @@ public class Profile {
                 "Profile gender is: %s\n" +
                 "Profile age: %s\n", name, gender, age);
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -194,12 +185,9 @@ public class Profile {
         return Objects.equals(ID, profile.ID);
     }
 
+
     @Override
     public int hashCode() {
         return Objects.hash(ID);
     }
-
-    public void printProfile() {
-    }
-
 }

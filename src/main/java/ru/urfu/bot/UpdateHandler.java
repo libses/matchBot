@@ -1,5 +1,6 @@
 package ru.urfu.bot;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -17,6 +18,7 @@ public class UpdateHandler {
     final ProfileData data;
     final Registrar registrar;
     final Bot bot;
+    private boolean inAdditionalMenu = false;
 
 
     public UpdateHandler(ProfileData data, Bot bot) {
@@ -28,6 +30,7 @@ public class UpdateHandler {
 
     /**
      * Метод, принимающий и обрабатывающий полученный текст
+     *
      * @param update апдейт от бота
      * @throws Exception бросает при ошибках регистрации
      */
@@ -35,24 +38,66 @@ public class UpdateHandler {
         long id = getIdFromUpdate(update);
         if (!isRegistered(id))
             registrar.registration(update);
+
+        if (inAdditionalMenu) {
+            additionalMenuHandler(update);
+            return;
+        }
+
         switch (getTextFromUpdate(update)) {
             //Обрабатываем случаи когда юзер только зарегался и когда пропускает анкету
             case ("Поехали!\uD83D\uDE40"):
-
             case ("\uD83D\uDC4E"):
                 dislikeHandler(update);
                 break;
-
             //Обрабатываем лайк
             case ("❤️"):
                 likeHandler(update);
                 break;
+            case ("Еще"):
+                inAdditionalMenu = true;
+                additionalMenu(update);
+                break;
+            default:
+                help(update);
+
         }
 
     }
 
+    private void additionalMenuHandler(Update update) throws TelegramApiException {
+        var message = update.getMessage().getText();
+        switch (message) {
+            case ("Назад"):
+                inAdditionalMenu = false;
+                break;
+
+            case ("Взаимные симпатии"):
+            case ("Мне понравились"):
+                return;
+        }
+        var id = update.getMessage().getChat().getId();
+
+        bot.execute(SendMessage.builder()
+                .chatId(id.toString())
+                .replyMarkup(bot.defaultKeyboard)
+                .build());
+    }
+
+    private void help(Update update) {
+    }
+
+    private void additionalMenu(Update update) throws TelegramApiException {
+        var id = update.getMessage().getChat().getId();
+        bot.execute(SendMessage.builder()
+                .chatId(id.toString())
+                .replyMarkup(bot.additionalMenuKeyboard)
+                .build());
+    }
+
     /**
      * Метод, который обрабатывает ситуацию получения лайка
+     *
      * @param update апдейт от бота
      * @throws TelegramApiException бросает эксепшн при сбое api
      */
@@ -79,6 +124,7 @@ public class UpdateHandler {
 
     /**
      * Метод, обрабатывающий ситуацию дизлайка.
+     *
      * @param update апдейт от бота
      * @throws TelegramApiException бросает при сбое апи
      */
@@ -100,6 +146,7 @@ public class UpdateHandler {
 
     /**
      * Метод, получающий текст из апдейта
+     *
      * @param update апдейт от бота
      * @return возвращает сам текст
      */
@@ -109,6 +156,7 @@ public class UpdateHandler {
 
     /**
      * Метод, получающий ID из апдейта
+     *
      * @param update апдейт от бота
      * @return возвращает сам id
      */
@@ -119,6 +167,7 @@ public class UpdateHandler {
 
     /**
      * Метод, который проверяет, зарегистрирован ли человек
+     *
      * @param id принимает id на вход
      * @return возвращает boolean (да/нет)
      */
@@ -129,13 +178,14 @@ public class UpdateHandler {
 
     /**
      * Метод для отправки фотографии с подписью
-     * @param update апдейт от бота
+     *
+     * @param update      апдейт от бота
      * @param nextProfile следующий профиль
-     * @param message само сообщение
+     * @param message     само сообщение
      * @throws TelegramApiException бросает при ошибках апи
      */
     private void sendPhotoWithCaption
-            (Update update, Profile nextProfile, String message)
+    (Update update, Profile nextProfile, String message)
             throws TelegramApiException {
 
         bot.execute(SendPhoto.builder()
@@ -150,6 +200,7 @@ public class UpdateHandler {
 
     /**
      * Метод, возвращающий айди чата
+     *
      * @param update принимает апдейт от бота
      * @return возвращает строку с чат айди
      */
@@ -160,6 +211,7 @@ public class UpdateHandler {
 
     /**
      * Метод, генерирующий подпись к фотографии
+     *
      * @param nextProfile профиль для генерации
      * @return возвращает подпись
      */
@@ -175,6 +227,7 @@ public class UpdateHandler {
 
     /**
      * Метод, принимающий фото
+     *
      * @param update апдейт от бота
      * @throws Exception бросает внутренний метод
      */

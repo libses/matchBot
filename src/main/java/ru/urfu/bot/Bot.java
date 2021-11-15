@@ -28,9 +28,19 @@ public class Bot extends TelegramLongPollingBot {
     public final ReplyKeyboardMarkup defaultKeyboard = new ReplyKeyboardMarkup(
             List.of(new KeyboardRow(
                     List.of(new KeyboardButton("❤️"),
-                            new KeyboardButton("\uD83D\uDC4E"))
+                            new KeyboardButton("\uD83D\uDC4E"),
+                            new KeyboardButton("Еще"))
             ))
             , true, false, false, " "
+    );
+
+    public final ReplyKeyboardMarkup additionalMenuKeyboard = new ReplyKeyboardMarkup(
+            List.of(new KeyboardRow(
+                    List.of(new KeyboardButton("Мне понравились"),
+                            new KeyboardButton("Взаимные симпании"),
+                            new KeyboardButton("Назад"))
+            ))
+            ,true, false, false, " "
     );
 
     /**

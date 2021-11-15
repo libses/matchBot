@@ -37,7 +37,7 @@ public class Bot extends TelegramLongPollingBot {
     public final ReplyKeyboardMarkup additionalMenuKeyboard = new ReplyKeyboardMarkup(
             List.of(new KeyboardRow(
                     List.of(new KeyboardButton("Мне понравились"),
-                            new KeyboardButton("Взаимные симпании"),
+                            new KeyboardButton("Взаимные симпатии"),
                             new KeyboardButton("Назад"))
             ))
             ,true, false, false, " "

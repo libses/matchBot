@@ -13,10 +13,10 @@ import java.util.stream.Stream;
  */
 
 public class ProfileSelector {
+    private final Profile owner;
     private final Random random = new Random();
     private final ProfileData profiles;
     private final ArrayList<Profile> viewed = new ArrayList<>();
-    private final ArrayList<Profile> liked = new ArrayList<>();
 
     public Profile getCurrent() {
         return current;
@@ -24,15 +24,12 @@ public class ProfileSelector {
 
     private Profile current;
 
-    public void addLiked(Profile profile){
-        liked.add(profile);
-    }
-
     /**
      * Метод выбирает и возвращает следующий профиль
      * @return профиль
      */
     public Profile getNextProfile() {
+        var liked = owner.getLikedProfiles();
         if (!liked.isEmpty()){
             var p = liked.get(0);
             liked.remove(0);
@@ -56,7 +53,8 @@ public class ProfileSelector {
         return p;
     }
 
-    public ProfileSelector(ProfileData profiles) {
+    public ProfileSelector(ProfileData profiles, Profile owner) {
         this.profiles = profiles;
+        this.owner = owner;
     }
 }

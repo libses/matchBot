@@ -16,7 +16,7 @@ public class ProfileSelectorTest extends TestCase {
         var profile1 = new Profile(3, profiles);
         profiles.addProfile(profile0);
         profiles.addProfile(profile1);
-        var ps = new ProfileSelector(profiles);
+        var ps = new ProfileSelector(profiles, profile0);
         var next = ps.getNextProfile();
         for (int i = 0; i < 10; i++) {
             Assert.assertTrue(next.equals(profile0) || next.equals(profile1));

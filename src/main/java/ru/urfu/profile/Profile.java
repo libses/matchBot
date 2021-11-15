@@ -25,7 +25,7 @@ public class Profile {
 
         this.ID = id;
         this.likedBy = new ArrayList<>();
-        this.selector = new ProfileSelector(data);
+        this.selector = new ProfileSelector(data, this);
     }
 
 
@@ -58,19 +58,6 @@ public class Profile {
     public void setTelegramUserName(String telegramName) {
         this.telegramUserName = telegramName;
     }
-
-
-//    private MatchData matchData;
-//
-//    public MatchData getMatchData() {
-//        return matchData;
-//    }
-//
-//    public void setMatchData(MatchData matchData) {
-//        this.matchData = matchData;
-
-//    }
-
 
     private String name;
 
@@ -150,23 +137,23 @@ public class Profile {
 
     private final List<Profile> likedProfiles = new ArrayList<>();
 
-    public Stream<Profile> getLikedProfiles() {
-        return likedProfiles.stream();
+    public List<Profile> getLikedProfiles() {
+        return likedProfiles;
     }
 
     public void addToLiked(Profile profile){
         likedProfiles.add(profile);
     }
 
-    private final List<Profile> mutualLikes = new ArrayList<>();
-
-    public Stream<Profile> getMutualLikes() {
-        return mutualLikes.stream();
-    }
-
-    public void addToMutualLikes(Profile profile){
-        likedProfiles.remove(profile);
-        mutualLikes.add(profile);
+    public List<Profile> getMutualLikes()
+    {
+        var list = new ArrayList<Profile>();
+        for (Profile liked : likedProfiles) {
+            if (likedBy.contains(liked)) {
+                list.add(liked);
+            }
+        }
+        return list;
     }
 
     @Override

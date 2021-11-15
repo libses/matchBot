@@ -1,12 +1,8 @@
 package ru.urfu.profile;
 
-import java.util.*;
-
-import org.telegram.telegrambots.meta.api.objects.Location;
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 /**
  * Класс профиля.
@@ -141,12 +137,11 @@ public class Profile {
         return likedProfiles;
     }
 
-    public void addToLiked(Profile profile){
+    public void addToLiked(Profile profile) {
         likedProfiles.add(profile);
     }
 
-    public List<Profile> getMutualLikes()
-    {
+    public List<Profile> getMutualLikes() {
         var list = new ArrayList<Profile>();
         for (Profile liked : likedProfiles) {
             if (likedBy.contains(liked)) {

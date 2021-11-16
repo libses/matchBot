@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Keyboards {
 
-    public final ReplyKeyboardMarkup main = new ReplyKeyboardMarkup(
+    public static final ReplyKeyboardMarkup main = new ReplyKeyboardMarkup(
             List.of(new KeyboardRow(
                     List.of(new KeyboardButton("❤️"),
                             new KeyboardButton("\uD83D\uDC4E"),
@@ -17,7 +17,7 @@ public class Keyboards {
             , true, false, false, " "
     );
 
-    public final ReplyKeyboardMarkup additionalMenu = new ReplyKeyboardMarkup(
+    public static final ReplyKeyboardMarkup additionalMenu = new ReplyKeyboardMarkup(
             List.of(new KeyboardRow(
                             List.of(new KeyboardButton("Мои ❤️"),
                                     new KeyboardButton("Я понравился???"))),
@@ -27,7 +27,7 @@ public class Keyboards {
             , true, false, false, " "
     );
 
-    public final ReplyKeyboardMarkup invalidCommand = ReplyKeyboardMarkup.builder()
+    public static final ReplyKeyboardMarkup invalidCommand = ReplyKeyboardMarkup.builder()
             .keyboardRow(new KeyboardRow(List.of(new KeyboardButton("Ок, понял"))))
             .build();
 }

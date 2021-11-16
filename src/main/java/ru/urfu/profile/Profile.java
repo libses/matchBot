@@ -1,7 +1,5 @@
 package ru.urfu.profile;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,17 +11,16 @@ public class Profile {
      * создаёт профиль с определенным id
      *
      * @param id id профиля
-     * @throws Exception бросает если такой id уже есть
      */
-    public Profile(long id, ProfileData data) throws Exception {
-        if (ProfileData.containsId(id))
-            throw new Exception("Пользователь с таким id уже существует");
-
+    public Profile(long id) {
         this.ID = id;
-        this.likedBy = new ArrayList<>();
-        this.selector = new ProfileSelector(data, this);
+        MatchHandler.addUser(this);
+        this.selector = new ProfileSelector(this);
     }
 
+    public long getID() {
+        return ID;
+    }
 
     private ProfileSelector selector;
 
@@ -35,21 +32,7 @@ public class Profile {
         this.selector = selector;
     }
 
-
     public final long ID;
-
-    private final ArrayList<Profile> likedBy;
-
-    public ArrayList<Profile> getLikedBy() {
-        return likedBy;
-    }
-
-    public void addLikedBy(Profile profile) {
-        if (!likedBy.contains(profile)) {
-            likedBy.add(profile);
-        }
-    }
-
 
     private String telegramUserName;
 
@@ -135,28 +118,6 @@ public class Profile {
 
     public void setStatus(ProfileStatus status) {
         this.status = status;
-    }
-
-    private final List<Profile> likedProfiles = new ArrayList<>();
-
-    public List<Profile> getLikedProfiles() {
-        return likedProfiles;
-    }
-
-    public void addToLiked(Profile profile) {
-        if (!likedProfiles.contains(profile)) {
-            likedProfiles.add(profile);
-        }
-    }
-
-    public List<Profile> getMutualLikes() {
-        var list = new ArrayList<Profile>();
-        for (Profile liked : likedProfiles) {
-            if (likedBy.contains(liked)) {
-                list.add(liked);
-            }
-        }
-        return list;
     }
 
     @Override

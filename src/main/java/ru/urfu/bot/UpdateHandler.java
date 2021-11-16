@@ -5,33 +5,26 @@ import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.bot.registration.Registrar;
 import ru.urfu.profile.Keyboards;
+import ru.urfu.profile.MatchHandler;
 import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileData;
-
-import java.util.List;
 
 /**
  * Класс, который принимает и обрабатывает обновления
  */
 
 public class UpdateHandler {
-    final ProfileData data;
     final Registrar registrar;
     final Bot bot;
     private boolean inAdditionalMenu = false;
-    final Keyboards keyboards;
 
 
-    public UpdateHandler(ProfileData data, Bot bot) {
+    public UpdateHandler(Bot bot) {
         this.bot = bot;
-        this.data = data;
-        registrar = new Registrar(data, bot);
-        keyboards = new Keyboards();
+        registrar = new Registrar(bot);
     }
 
 
@@ -59,31 +52,29 @@ public class UpdateHandler {
 
     private void handleTextInDefaultMenu(Update update) throws TelegramApiException {
         switch (getTextFromUpdate(update)) {
-            //Обрабатываем случаи когда юзер только зарегался и когда пропускает анкету
             case ("Назад"):
             case ("Ок, понял"):
             case ("Поехали!\uD83D\uDE40"):
             case ("\uD83D\uDC4E"):
-                handleDislikeCase(update);
+                handleNextCase(update);
                 break;
-            //Обрабатываем лайк
+
             case ("❤️"):
                 handleLikeCase(update);
                 break;
+
             case ("Еще"):
                 inAdditionalMenu = true;
                 openAdditionalMenu(update);
                 break;
+
             default:
                 help(update);
-
         }
     }
 
     private void handleTextInAdditionalMenu(Update update) throws TelegramApiException {
-        var message = getTextFromUpdate(update);
-
-        switch (message) {
+        switch (getTextFromUpdate(update)) {
             case ("Назад"):
                 break;
 
@@ -100,40 +91,41 @@ public class UpdateHandler {
                 break;
         }
         inAdditionalMenu = false;
-        sendMessage(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", keyboards.main);
-        var owner = getProfileFromUpdate(update);
-        var currentProfile = owner.getSelector().getCurrent();
-        var photo = new InputFile(currentProfile.getPhotoLink());
-        sendPhoto(getChatIdFromUpdate(update), photo, keyboards.main, getCaption(currentProfile));
+        sendMessage(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", Keyboards.main);
+        handleNextCase(update);
     }
 
     private void getWhoLikedMe(Update update) throws TelegramApiException {
         var owner = getProfileFromUpdate(update);
-        var likedBy = owner.getLikedBy();
-
-        for (Profile p : likedBy) {
+        var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
+        if (whoLikedUser.isEmpty()) {
+            sendMessage(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.main);
+        }
+        for (Profile p : whoLikedUser) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
     }
 
-    private Profile getProfileFromId(Long profileId) {
-        return data.getMap().get(profileId);
-    }
-
     private void getMutualSympathy(Update update) throws TelegramApiException {
         var owner = getProfileFromUpdate(update);
-        var mutualLikes = owner.getMutualLikes();
-
-        for (Profile p : mutualLikes) {
+        var mutual = MatchHandler.getMutualLikes(owner);
+        if (mutual.isEmpty()) {
+            sendMessage(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.main);
+        }
+        for (Profile p : mutual) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
     }
 
     private void getLikedByMe(Update update) throws TelegramApiException {
         var owner = getProfileFromUpdate(update);
-        var likedByOwner = owner.getLikedProfiles();
-
-        for (Profile p : likedByOwner) {
+        var likes = MatchHandler.getLikesByUser(owner);
+        if (likes.isEmpty()) {
+            sendMessage(getChatIdFromUpdate(update),
+                    "Ты же прекрасно знаешь, что не ставил никому лайки. Не ломай бота",
+                    Keyboards.main);
+        }
+        for (Profile p : likes) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
     }
@@ -141,23 +133,11 @@ public class UpdateHandler {
     private void help(Update update) throws TelegramApiException {
         var chatId = getChatIdFromUpdate(update);
         var text = "Ты использовал неизвестную мне команду, пожалуйста пользуйся кнопками";
-        var replyMarkup = ReplyKeyboardMarkup.builder()
-                .keyboardRow(new KeyboardRow(List.of(new KeyboardButton("Ок, понял"))))
-                .build();
-
-        sendMessage(chatId, text, keyboards.invalidCommand);
-    }
-
-    private void sendMessage(String chatId, String text, ReplyKeyboardMarkup replyMarkup) throws TelegramApiException {
-        bot.execute(SendMessage.builder()
-                .chatId(chatId)
-                .text(text)
-                .replyMarkup(replyMarkup)
-                .build());
+        sendMessage(chatId, text, Keyboards.invalidCommand);
     }
 
     private void openAdditionalMenu(Update update) throws TelegramApiException {
-        sendMessage(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", keyboards.additionalMenu);
+        sendMessage(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", Keyboards.additionalMenu);
     }
 
     /**
@@ -168,37 +148,27 @@ public class UpdateHandler {
      */
     private void handleLikeCase(Update update) throws TelegramApiException {
         var owner = getProfileFromUpdate(update);
-        var selector = owner.getSelector();
-
-        var currentProfile = selector.getCurrent();
-        var nextProfile = selector.getNextProfile();
-
-        var caption = getCaption(nextProfile);
-
-        currentProfile.addLikedBy(owner);
-        owner.addToLiked(currentProfile);
-
-        if (owner.getLikedBy().contains(nextProfile)) {
-            caption = "Ты понравился одному человеку!\n" + caption;
+        var other = owner.getSelector().getCurrent();
+        if (other.getID() != -1) {
+            MatchHandler.likeProfile(owner, owner.getSelector().getCurrent());
         }
-
-        sendPhotoWithCaption(update, nextProfile, caption);
+        handleNextCase(update);
     }
 
 
     /**
-     * Метод, обрабатывающий ситуацию дизлайка.
+     * Метод, обрабатывающий ситуацию пропуска профиля.
      *
      * @param update апдейт от бота
      * @throws TelegramApiException бросает при сбое апи
      */
-    private void handleDislikeCase(Update update) throws TelegramApiException {
+    private void handleNextCase(Update update) throws TelegramApiException {
         var owner = getProfileFromUpdate(update);
         var selector = owner.getSelector();
         var nextProfile = selector.getNextProfile();
         var caption = getCaption(nextProfile);
 
-        if (owner.getLikedBy().contains(nextProfile)) {
+        if (MatchHandler.isFirstLikesSecond(nextProfile, owner)) {
             caption = "Ты понравился одному человеку!\n" + caption;
         }
 
@@ -255,11 +225,11 @@ public class UpdateHandler {
         try
         {
             var photo = new InputFile(nextProfile.getPhotoLink());
-            sendPhoto(chatId, photo, keyboards.main, message);
+            sendPhoto(chatId, photo, Keyboards.main, message);
         }
         catch (Exception e)
         {
-            sendMessage(chatId, "Анкеты кончились или произошла ошибка!", keyboards.main);
+            sendMessage(chatId, "Анкеты кончились или произошла ошибка!", Keyboards.main);
         }
 
     }
@@ -312,5 +282,16 @@ public class UpdateHandler {
      */
     public void handlePhoto(Update update) throws Exception {
         registrar.registerFromUpdate(update);
+    }
+    private Profile getProfileFromId(Long profileId) {
+        return ProfileData.getMap().get(profileId);
+    }
+
+    private void sendMessage(String chatId, String text, ReplyKeyboardMarkup replyMarkup) throws TelegramApiException {
+        bot.execute(SendMessage.builder()
+                .chatId(chatId)
+                .text(text)
+                .replyMarkup(replyMarkup)
+                .build());
     }
 }

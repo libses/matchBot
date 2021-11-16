@@ -9,10 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.bot.Bot;
-import ru.urfu.profile.Gender;
-import ru.urfu.profile.Profile;
-import ru.urfu.profile.ProfileData;
-import ru.urfu.profile.ProfileStatus;
+import ru.urfu.profile.*;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +22,6 @@ import java.util.function.Consumer;
  */
 
 public class Registrar {
-    final ProfileData data;
     final Bot bot;
     final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
     final Map<String, Consumer<Update>> handlers = Map.of(
@@ -36,9 +32,8 @@ public class Registrar {
             "Фото", this::photoHandler);
 
 
-    public Registrar(ProfileData storage, Bot bot) {
+    public Registrar(Bot bot) {
         this.bot = bot;
-        this.data = storage;
     }
 
     /**
@@ -51,7 +46,7 @@ public class Registrar {
         var id = update.getMessage().getFrom().getId();
 
         if (!profilesInRegistration.containsKey(id)) {
-            var profile = new Profile(id, data);
+            var profile = new Profile(id);
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
 
@@ -68,7 +63,7 @@ public class Registrar {
         handlers.get(profilesInRegistration.get(id).getCurrentRegistrationStep()).accept(update);
 
         if (profilesInRegistration.get(id).isRegistrationCompleted()) {
-            data.addProfile(profilesInRegistration.get(id).getProfile());
+            ProfileData.addProfile(profilesInRegistration.get(id).getProfile());
             profilesInRegistration.remove(id);
         }
     }
@@ -181,12 +176,9 @@ public class Registrar {
 
         try {
             bot.execute(SendMessage.builder()
+                    .replyMarkup(new ReplyKeyboardRemove(true))
                     .chatId(update.getMessage().getChatId().toString())
                     .text("Напиши свой возраст")
-                    .build());
-
-            bot.execute(SendMessage.builder()
-                    .replyMarkup(new ReplyKeyboardRemove(true))
                     .build());
         } catch (TelegramApiException e) {
             e.printStackTrace();

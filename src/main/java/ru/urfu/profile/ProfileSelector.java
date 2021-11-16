@@ -9,7 +9,6 @@ import java.util.Collection;
 
 public class ProfileSelector {
     private final Profile owner;
-    private final ProfileData profiles;
     private final ArrayList<Profile> viewed = new ArrayList<>();
 
     public Profile getCurrent() {
@@ -24,23 +23,20 @@ public class ProfileSelector {
      * @return профиль
      */
     public Profile getNextProfile() {
-        var liked = owner.getLikedBy();
-        if (!liked.isEmpty()) {
-            var p = liked.get(0);
-            liked.remove(0);
-            viewed.add(p);
-            current = p;
-            return p;
+        var liked = MatchHandler.likesTo.get(owner);
+        for (Profile profile : liked) {
+            if (!viewed.contains(profile)) {
+                return extractProfileToCurrentAndView(profile);
+            }
         }
 
 
-        Collection<Profile> profileCollection = profiles.getProfileList();
+
+        Collection<Profile> profileCollection = ProfileData.getProfileList();
         for (Profile p :
                 profileCollection) {
             if (!viewed.contains(p) && !p.equals(owner)) {
-                viewed.add(p);
-                current = p;
-                return p;
+                return extractProfileToCurrentAndView(p);
             }
         }
 
@@ -48,21 +44,24 @@ public class ProfileSelector {
         for (Profile p :
                 profileCollection) {
             if (!p.equals(owner)) {
-                viewed.add(p);
-                current = p;
-                return p;
+                return extractProfileToCurrentAndView(p);
             }
         }
-        try {
-            return new Profile(-1, profiles);
-        } catch (Exception e) {
-            return null;
-        }
+        var emptyProfile = new Profile(-1);
+        emptyProfile.setName("");
+        emptyProfile.setCity("");
+        emptyProfile.setTelegramUserName("");
+        return extractProfileToCurrentAndView(emptyProfile);
+    }
+
+    private Profile extractProfileToCurrentAndView(Profile p) {
+        viewed.add(p);
+        current = p;
+        return p;
     }
 
 
-    public ProfileSelector(ProfileData profiles, Profile owner) {
-        this.profiles = profiles;
+    public ProfileSelector(Profile owner) {
         this.owner = owner;
     }
 }

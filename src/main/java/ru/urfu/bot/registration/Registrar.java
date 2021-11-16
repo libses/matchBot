@@ -47,7 +47,7 @@ public class Registrar {
      * @param update обрабатывает изменения
      * @throws Exception эксепшны от используемых методов
      */
-    public void registration(Update update) throws Exception {
+    public void registerFromUpdate(Update update) throws Exception {
         var id = update.getMessage().getFrom().getId();
 
         if (!profilesInRegistration.containsKey(id)) {

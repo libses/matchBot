@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.bot.registration.Registrar;
+import ru.urfu.profile.Keyboards;
 import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileData;
 
@@ -23,12 +24,14 @@ public class UpdateHandler {
     final Registrar registrar;
     final Bot bot;
     private boolean inAdditionalMenu = false;
+    final Keyboards keyboards;
 
 
     public UpdateHandler(ProfileData data, Bot bot) {
         this.bot = bot;
         this.data = data;
         registrar = new Registrar(data, bot);
+        keyboards = new Keyboards();
     }
 
 
@@ -41,7 +44,7 @@ public class UpdateHandler {
     public void handleText(Update update) throws Exception {
         long id = getIdFromUpdate(update);
         if (!isRegistered(id)) {
-            registrar.registration(update);
+            registrar.registerFromUpdate(update);
             return;
         }
 
@@ -52,7 +55,6 @@ public class UpdateHandler {
         }
 
         handleTextInDefaultMenu(update);
-
     }
 
     private void handleTextInDefaultMenu(Update update) throws TelegramApiException {
@@ -83,79 +85,79 @@ public class UpdateHandler {
 
         switch (message) {
             case ("Назад"):
-//                bot.execute(SendMessage.builder()
-//                        .text("Смотрим дальше:)")
-//                        .chatId(getChatIdFromUpdate(update))
-//                        .replyMarkup(bot.defaultKeyboard)
-//                        .build());
-//                handleTextInDefaultMenu(update);
-                inAdditionalMenu = false;
                 break;
 
             case ("Взаимные \uD83D\uDC9E"):
                 getMutualSympathy(update);
-                inAdditionalMenu = false;
                 break;
+
             case ("Мои ❤️"):
                 getLikedByMe(update);
-                inAdditionalMenu = false;
                 break;
+
             case ("Я понравился???"):
                 getWhoLikedMe(update);
-                inAdditionalMenu = false;
                 break;
         }
+        inAdditionalMenu = false;
+        sendMessage(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", keyboards.main);
+        var owner = getProfileFromUpdate(update);
+        var currentProfile = owner.getSelector().getCurrent();
+        var photo = new InputFile(currentProfile.getPhotoLink());
+        sendPhoto(getChatIdFromUpdate(update), photo, keyboards.main, getCaption(currentProfile));
     }
 
     private void getWhoLikedMe(Update update) throws TelegramApiException {
-        var profileId = getIdFromUpdate(update);
-        var likedBy = data.getMap().get(profileId).getLikedBy();
+        var owner = getProfileFromUpdate(update);
+        var likedBy = owner.getLikedBy();
 
         for (Profile p : likedBy) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
     }
 
-    private void getMutualSympathy(Update update) throws TelegramApiException {
-        var profileId = getIdFromUpdate(update);
-        var likedByMe = data.getMap().get(profileId).getMutualLikes();
+    private Profile getProfileFromId(Long profileId) {
+        return data.getMap().get(profileId);
+    }
 
-        for (Profile p : likedByMe) {
+    private void getMutualSympathy(Update update) throws TelegramApiException {
+        var owner = getProfileFromUpdate(update);
+        var mutualLikes = owner.getMutualLikes();
+
+        for (Profile p : mutualLikes) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
     }
 
     private void getLikedByMe(Update update) throws TelegramApiException {
-        var profileId = getIdFromUpdate(update);
-        var likedByMe = data.getMap().get(profileId).getLikedProfiles();
+        var owner = getProfileFromUpdate(update);
+        var likedByOwner = owner.getLikedProfiles();
 
-        for (Profile p : likedByMe) {
+        for (Profile p : likedByOwner) {
             sendPhotoWithCaption(update, p, getCaption(p));
         }
     }
 
-    /*
-     * обрабатываетм неизвестыные команды
-     */
     private void help(Update update) throws TelegramApiException {
+        var chatId = getChatIdFromUpdate(update);
+        var text = "Ты использовал неизвестную мне команду, пожалуйста пользуйся кнопками";
+        var replyMarkup = ReplyKeyboardMarkup.builder()
+                .keyboardRow(new KeyboardRow(List.of(new KeyboardButton("Ок, понял"))))
+                .build();
+
+        sendMessage(chatId, text, keyboards.invalidCommand);
+    }
+
+    private void sendMessage(String chatId, String text, ReplyKeyboardMarkup replyMarkup) throws TelegramApiException {
         bot.execute(SendMessage.builder()
-                .chatId(getChatIdFromUpdate(update))
-                .text("Ты использовал неизвестную мне команду, пожалуйста пользуйся кнопками")
-                .replyMarkup(ReplyKeyboardMarkup.builder()
-                        .keyboardRow(new KeyboardRow(List.of(new KeyboardButton("Ок, понял"))))
-                        .build())
+                .chatId(chatId)
+                .text(text)
+                .replyMarkup(replyMarkup)
                 .build());
     }
 
-/*
-* открываем дополнительное меняю
-* */
     private void openAdditionalMenu(Update update) throws TelegramApiException {
-        bot.execute(SendMessage.builder()
-                .text("Просмотр данных о симпатиях")
-                .chatId(getChatIdFromUpdate(update))
-                .replyMarkup(bot.additionalMenuKeyboard)
-                .build());
+        sendMessage(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", keyboards.additionalMenu);
     }
 
     /**
@@ -165,22 +167,22 @@ public class UpdateHandler {
      * @throws TelegramApiException бросает эксепшн при сбое api
      */
     private void handleLikeCase(Update update) throws TelegramApiException {
-        var profile = data.getMap().get(getIdFromUpdate(update));
-        var selectorLike = profile.getSelector();
+        var owner = getProfileFromUpdate(update);
+        var selector = owner.getSelector();
 
-        var currentProfile = selectorLike.getCurrent();
-        var nextProfileLike = selectorLike.getNextProfile();
+        var currentProfile = selector.getCurrent();
+        var nextProfile = selector.getNextProfile();
 
-        var captionLike = getCaption(nextProfileLike);
+        var caption = getCaption(nextProfile);
 
-        currentProfile.addLikedBy(profile);
-        profile.addToLiked(currentProfile);
+        currentProfile.addLikedBy(owner);
+        owner.addToLiked(currentProfile);
 
-        if (profile.getLikedBy().contains(nextProfileLike)) {
-            captionLike = "Ты понравился одному человеку!\n" + captionLike;
+        if (owner.getLikedBy().contains(nextProfile)) {
+            caption = "Ты понравился одному человеку!\n" + caption;
         }
 
-        sendPhotoWithCaption(update, nextProfileLike, captionLike);
+        sendPhotoWithCaption(update, nextProfile, caption);
     }
 
 
@@ -191,18 +193,20 @@ public class UpdateHandler {
      * @throws TelegramApiException бросает при сбое апи
      */
     private void handleDislikeCase(Update update) throws TelegramApiException {
-        var selectorNext = data.getMap().get(getIdFromUpdate(update)).getSelector();
-
-        var nextProfile = selectorNext.getNextProfile();
-        var ownerNext = data.getMap().get(getIdFromUpdate(update));
-
+        var owner = getProfileFromUpdate(update);
+        var selector = owner.getSelector();
+        var nextProfile = selector.getNextProfile();
         var caption = getCaption(nextProfile);
 
-        if (ownerNext.getLikedBy().contains(nextProfile)) {
+        if (owner.getLikedBy().contains(nextProfile)) {
             caption = "Ты понравился одному человеку!\n" + caption;
         }
 
         sendPhotoWithCaption(update, nextProfile, caption);
+    }
+
+    private Profile getProfileFromUpdate(Update update) {
+        return getProfileFromId(getIdFromUpdate(update));
     }
 
 
@@ -246,27 +250,30 @@ public class UpdateHandler {
      * @param message     само сообщение
      * @throws TelegramApiException бросает при ошибках апи
      */
-    private void sendPhotoWithCaption
-    (Update update, Profile nextProfile, String message)
-            throws TelegramApiException {
-
-        try {
-            bot.execute(SendPhoto.builder()
-                    .chatId(getChatIdFromUpdate(update))
-                    .photo(new InputFile(nextProfile.getPhotoLink()))
-                    .replyMarkup(bot.defaultKeyboard)
-                    .caption(message)
-                    .build()
-            );
+    private void sendPhotoWithCaption(Update update, Profile nextProfile, String message) throws TelegramApiException {
+        var chatId = getChatIdFromUpdate(update);
+        try
+        {
+            var photo = new InputFile(nextProfile.getPhotoLink());
+            sendPhoto(chatId, photo, keyboards.main, message);
         }
-        catch (Exception e) {
-            bot.execute(SendMessage.builder()
-                    .chatId(getChatIdFromUpdate(update))
-                    .text("Анкеты кончились или произошла ошибка!")
-                    .replyMarkup(bot.defaultKeyboard)
-                    .build());
+        catch (Exception e)
+        {
+            sendMessage(chatId, "Анкеты кончились или произошла ошибка!", keyboards.main);
         }
 
+    }
+
+    private void sendPhoto(String chatId, InputFile photo, ReplyKeyboardMarkup replyMarkup, String caption)
+            throws TelegramApiException
+    {
+        bot.execute(SendPhoto.builder()
+                .chatId(chatId)
+                .photo(photo)
+                .replyMarkup(replyMarkup)
+                .caption(caption)
+                .build()
+        );
     }
 
 
@@ -304,8 +311,6 @@ public class UpdateHandler {
      * @throws Exception бросает внутренний метод
      */
     public void handlePhoto(Update update) throws Exception {
-        registrar.registration(update);
+        registrar.registerFromUpdate(update);
     }
-
-
 }

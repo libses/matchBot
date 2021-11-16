@@ -26,25 +26,6 @@ public class Bot extends TelegramLongPollingBot {
     private final UpdateHandler updateHandler;
     public final ProfileData data;
 
-    public final ReplyKeyboardMarkup defaultKeyboard = new ReplyKeyboardMarkup(
-            List.of(new KeyboardRow(
-                    List.of(new KeyboardButton("❤️"),
-                            new KeyboardButton("\uD83D\uDC4E"),
-                            new KeyboardButton("Еще"))
-            ))
-            , true, false, false, " "
-    );
-
-    public final ReplyKeyboardMarkup additionalMenuKeyboard = new ReplyKeyboardMarkup(
-            List.of(new KeyboardRow(
-                            List.of(new KeyboardButton("Мои ❤️"),
-                                    new KeyboardButton("Я понравился???"))),
-                    new KeyboardRow(
-                            List.of(new KeyboardButton("Взаимные \uD83D\uDC9E"),
-                                    new KeyboardButton("Назад"))))
-            , true, false, false, " "
-    );
-
     /**
      * Метод создаёт нового бота
      *

@@ -46,6 +46,7 @@ public class UpdateHandler {
         }
 
         if (inAdditionalMenu) {
+            openAdditionalMenu(update);
             handleTextInAdditionalMenu(update);
             return;
         }
@@ -82,23 +83,26 @@ public class UpdateHandler {
 
         switch (message) {
             case ("Назад"):
+//                bot.execute(SendMessage.builder()
+//                        .text("Смотрим дальше:)")
+//                        .chatId(getChatIdFromUpdate(update))
+//                        .replyMarkup(bot.defaultKeyboard)
+//                        .build());
+//                handleTextInDefaultMenu(update);
                 inAdditionalMenu = false;
-                bot.execute(SendMessage.builder()
-                        .text("Смотрим дальше:)")
-                        .chatId(getChatIdFromUpdate(update))
-                        .replyMarkup(bot.defaultKeyboard)
-                        .build());
-                handleTextInDefaultMenu(update);
                 break;
 
-            case ("Взаимные симпатии"):
+            case ("Взаимные \uD83D\uDC9E"):
                 getMutualSympathy(update);
+                inAdditionalMenu = false;
                 break;
-            case ("Мне понравились"):
+            case ("Мои ❤️"):
                 getLikedByMe(update);
+                inAdditionalMenu = false;
                 break;
-            case ("Я понравился"):
+            case ("Я понравился???"):
                 getWhoLikedMe(update);
+                inAdditionalMenu = false;
                 break;
         }
     }
@@ -169,8 +173,8 @@ public class UpdateHandler {
 
         var captionLike = getCaption(nextProfileLike);
 
-        currentProfile.getLikedBy().add(profile);
-        profile.getLikedProfiles().add(currentProfile);
+        currentProfile.addLikedBy(profile);
+        profile.addToLiked(currentProfile);
 
         if (profile.getLikedBy().contains(nextProfileLike)) {
             captionLike = "Ты понравился одному человеку!\n" + captionLike;
@@ -246,13 +250,23 @@ public class UpdateHandler {
     (Update update, Profile nextProfile, String message)
             throws TelegramApiException {
 
-        bot.execute(SendPhoto.builder()
-                .chatId(getChatIdFromUpdate(update))
-                .photo(new InputFile(nextProfile.getPhotoLink()))
-                .replyMarkup(bot.defaultKeyboard)
-                .caption(message)
-                .build()
-        );
+        try {
+            bot.execute(SendPhoto.builder()
+                    .chatId(getChatIdFromUpdate(update))
+                    .photo(new InputFile(nextProfile.getPhotoLink()))
+                    .replyMarkup(bot.defaultKeyboard)
+                    .caption(message)
+                    .build()
+            );
+        }
+        catch (Exception e) {
+            bot.execute(SendMessage.builder()
+                    .chatId(getChatIdFromUpdate(update))
+                    .text("Анкеты кончились или произошла ошибка!")
+                    .replyMarkup(bot.defaultKeyboard)
+                    .build());
+        }
+
     }
 
 

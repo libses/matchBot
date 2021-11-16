@@ -44,6 +44,12 @@ public class Profile {
         return likedBy;
     }
 
+    public void addLikedBy(Profile profile) {
+        if (!likedBy.contains(profile)) {
+            likedBy.add(profile);
+        }
+    }
+
 
     private String telegramUserName;
 
@@ -138,7 +144,9 @@ public class Profile {
     }
 
     public void addToLiked(Profile profile) {
-        likedProfiles.add(profile);
+        if (!likedProfiles.contains(profile)) {
+            likedProfiles.add(profile);
+        }
     }
 
     public List<Profile> getMutualLikes() {

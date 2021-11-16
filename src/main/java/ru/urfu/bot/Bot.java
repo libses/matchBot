@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileData;
 
 import java.io.*;
@@ -37,7 +38,7 @@ public class Bot extends TelegramLongPollingBot {
     public final ReplyKeyboardMarkup additionalMenuKeyboard = new ReplyKeyboardMarkup(
             List.of(new KeyboardRow(
                             List.of(new KeyboardButton("Мои ❤️"),
-                                    new KeyboardButton("Я понравился \uD83D\uDE3B"))),
+                                    new KeyboardButton("Я понравился???"))),
                     new KeyboardRow(
                             List.of(new KeyboardButton("Взаимные \uD83D\uDC9E"),
                                     new KeyboardButton("Назад"))))
@@ -50,7 +51,7 @@ public class Bot extends TelegramLongPollingBot {
      * @return возвращает бота
      * @throws IOException бросает эксепшн при ошибке ввода
      */
-    public static Bot create() throws IOException {
+    public static Bot create() throws Exception {
         String token;
         String userName;
 
@@ -95,7 +96,7 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    public Bot(String token, String userName) {
+    public Bot(String token, String userName) throws Exception {
         this.token = token;
         this.userName = userName;
         data = new ProfileData();

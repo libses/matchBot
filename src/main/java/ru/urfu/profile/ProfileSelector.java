@@ -24,7 +24,7 @@ public class ProfileSelector {
      * @return профиль
      */
     public Profile getNextProfile() {
-        var liked = owner.getLikedProfiles();
+        var liked = owner.getLikedBy();
         if (!liked.isEmpty()) {
             var p = liked.get(0);
             liked.remove(0);
@@ -37,19 +37,27 @@ public class ProfileSelector {
         Collection<Profile> profileCollection = profiles.getProfileList();
         for (Profile p :
                 profileCollection) {
-            if (!viewed.contains(p)) {
+            if (!viewed.contains(p) && !p.equals(owner)) {
                 viewed.add(p);
                 current = p;
                 return p;
             }
         }
 
-
         viewed.clear();
-        Profile p = profileCollection.stream().findFirst().orElseThrow();
-        viewed.add(p);
-        current = p;
-        return p;
+        for (Profile p :
+                profileCollection) {
+            if (!p.equals(owner)) {
+                viewed.add(p);
+                current = p;
+                return p;
+            }
+        }
+        try {
+            return new Profile(-1, profiles);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
 

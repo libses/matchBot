@@ -7,7 +7,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.bot.registration.Registrar;
-import ru.urfu.profile.Keyboards;
 import ru.urfu.profile.MatchHandler;
 import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileData;

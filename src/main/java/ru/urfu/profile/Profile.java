@@ -122,9 +122,10 @@ public class Profile {
 
     @Override
     public String toString() {
-        return String.format("Profile name is: %s\n" +
+        return String.format("Profile id is: %s\n" +
+                "Profile name is: %s\n" +
                 "Profile gender is: %s\n" +
-                "Profile age: %s\n", name, gender, age);
+                "Profile age: %s\n",ID, name, gender, age);
     }
 
 

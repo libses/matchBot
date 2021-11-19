@@ -2,17 +2,9 @@ package ru.urfu.bot;
 
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.urfu.profile.Profile;
-import ru.urfu.profile.ProfileData;
 
 import java.io.*;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -24,26 +16,6 @@ public class Bot extends TelegramLongPollingBot {
     private final String token;
     private final String userName;
     private final UpdateHandler updateHandler;
-    public final ProfileData data;
-
-    public final ReplyKeyboardMarkup defaultKeyboard = new ReplyKeyboardMarkup(
-            List.of(new KeyboardRow(
-                    List.of(new KeyboardButton("❤️"),
-                            new KeyboardButton("\uD83D\uDC4E"),
-                            new KeyboardButton("Еще"))
-            ))
-            , true, false, false, " "
-    );
-
-    public final ReplyKeyboardMarkup additionalMenuKeyboard = new ReplyKeyboardMarkup(
-            List.of(new KeyboardRow(
-                            List.of(new KeyboardButton("Мои ❤️"),
-                                    new KeyboardButton("Я понравился???"))),
-                    new KeyboardRow(
-                            List.of(new KeyboardButton("Взаимные \uD83D\uDC9E"),
-                                    new KeyboardButton("Назад"))))
-            , true, false, false, " "
-    );
 
     /**
      * Метод создаёт нового бота
@@ -96,11 +68,10 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-    public Bot(String token, String userName) throws Exception {
+    public Bot(String token, String userName) {
         this.token = token;
         this.userName = userName;
-        data = new ProfileData();
-        updateHandler = new UpdateHandler(data, this);
+        updateHandler = new UpdateHandler(this);
     }
 
     /**

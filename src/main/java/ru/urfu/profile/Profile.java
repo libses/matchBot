@@ -137,6 +137,8 @@ public class Profile {
         this.status = status;
     }
 
+
+
     private final List<Profile> likedProfiles = new ArrayList<>();
 
     public List<Profile> getLikedProfiles() {
@@ -148,6 +150,8 @@ public class Profile {
             likedProfiles.add(profile);
         }
     }
+
+
 
     public List<Profile> getMutualLikes() {
         var list = new ArrayList<Profile>();

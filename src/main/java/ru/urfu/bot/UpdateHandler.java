@@ -55,6 +55,10 @@ public class UpdateHandler {
 
     }
 
+
+    /**
+     *обрабатываем действия пользователя в основном меню
+     */
     private void handleTextInDefaultMenu(Update update) throws TelegramApiException {
         switch (getTextFromUpdate(update)) {
             //Обрабатываем случаи когда юзер только зарегался и когда пропускает анкету
@@ -78,6 +82,9 @@ public class UpdateHandler {
         }
     }
 
+    /**
+    * Обрабатываем действия пользователя в дополнительном меню
+    * */
     private void handleTextInAdditionalMenu(Update update) throws TelegramApiException {
         var message = getTextFromUpdate(update);
 
@@ -107,6 +114,9 @@ public class UpdateHandler {
         }
     }
 
+    /**
+    * Получаем список тех, кого я лайкнул
+    * */
     private void getWhoLikedMe(Update update) throws TelegramApiException {
         var profileId = getIdFromUpdate(update);
         var likedBy = data.getMap().get(profileId).getLikedBy();
@@ -116,6 +126,9 @@ public class UpdateHandler {
         }
     }
 
+    /**
+     * получаем список взаимных симпатий
+     */
     private void getMutualSympathy(Update update) throws TelegramApiException {
         var profileId = getIdFromUpdate(update);
         var likedByMe = data.getMap().get(profileId).getMutualLikes();
@@ -125,6 +138,9 @@ public class UpdateHandler {
         }
     }
 
+    /**
+     *получаем список тех кто лайкнул меня
+     */
     private void getLikedByMe(Update update) throws TelegramApiException {
         var profileId = getIdFromUpdate(update);
         var likedByMe = data.getMap().get(profileId).getLikedProfiles();

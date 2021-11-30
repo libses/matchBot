@@ -1,17 +1,20 @@
 package ru.urfu.bot;
 
-import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.urfu.profile.Profile;
 
 public class MessageSender {
-    public static void sendPhotoWithCaption(IUpdate update, Profile nextProfile, String message) {
-        TelegramMessageSender.sendPhotoWithCaption(update, nextProfile, message);
+    public static void sendMessage(String chatIdFromUpdate, String s, ReplyKeyboardMarkup main, IUpdate update) {
+        if (update.isFromTelegram()) {
+            TelegramMessageSender.sendMessage(chatIdFromUpdate, s, main);
+        }
+        DiscordMessageSender.sendMessage(update.getMessage().getChatId(), s);
     }
-    public static void sendMessage(String chatId, String text, ReplyKeyboardMarkup replyMarkup) {
-        TelegramMessageSender.sendMessage(chatId, text, replyMarkup);
-    }
-    public static void sendPhoto(String chatId, InputFile photo, ReplyKeyboardMarkup replyMarkup, String caption) {
-        TelegramMessageSender.sendPhoto(chatId, photo, replyMarkup, caption);
+
+    public static void sendPhotoWithCaption(IUpdate update, Profile p, String caption) {
+        if (update.isFromTelegram()) {
+            TelegramMessageSender.sendPhotoWithCaption(update, p, caption);
+        }
     }
 }

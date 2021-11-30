@@ -11,13 +11,11 @@ import ru.urfu.profile.ProfileData;
 
 public class UpdateHandler {
     final Registrar registrar;
-    final Bot bot;
     private boolean inAdditionalMenu = false;
 
 
-    public UpdateHandler(Bot bot) {
-        this.bot = bot;
-        registrar = new Registrar(bot);
+    public UpdateHandler() {
+        registrar = new Registrar();
     }
 
 
@@ -91,7 +89,7 @@ public class UpdateHandler {
                 break;
         }
         inAdditionalMenu = false;
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", Keyboards.main);
+        MessageSender.sendMessage(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", Keyboards.main, update);
         handleNextCase(update);
     }
 
@@ -102,7 +100,7 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
         if (whoLikedUser.isEmpty()) {
-            MessageSender.sendMessage(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.main);
+            MessageSender.sendMessage(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.main, update);
         }
         for (Profile p : whoLikedUser) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
@@ -116,7 +114,7 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var mutual = MatchHandler.getMutualLikes(owner);
         if (mutual.isEmpty()) {
-            MessageSender.sendMessage(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.main);
+            MessageSender.sendMessage(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.main, update);
         }
         for (Profile p : mutual) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
@@ -132,7 +130,7 @@ public class UpdateHandler {
         if (likes.isEmpty()) {
             MessageSender.sendMessage(getChatIdFromUpdate(update),
                     "Ты же прекрасно знаешь, что не ставил никому лайки. Не ломай бота",
-                    Keyboards.main);
+                    Keyboards.main, update);
         }
         for (Profile p : likes) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
@@ -142,11 +140,11 @@ public class UpdateHandler {
     private void help(IUpdate update) {
         var chatId = getChatIdFromUpdate(update);
         var text = "Ты использовал неизвестную мне команду, пожалуйста пользуйся кнопками";
-        MessageSender.sendMessage(chatId, text, Keyboards.invalidCommand);
+        MessageSender.sendMessage(chatId, text, Keyboards.invalidCommand, update);
     }
 
     private void openAdditionalMenu(IUpdate update) {
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", Keyboards.additionalMenu);
+        MessageSender.sendMessage(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", Keyboards.additionalMenu, update);
     }
 
     /**

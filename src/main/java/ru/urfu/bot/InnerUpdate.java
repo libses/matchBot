@@ -6,12 +6,18 @@ public class InnerUpdate implements IUpdate {
 
     IMessage message;
 
-    public InnerUpdate(IMessage message) {
+    boolean isFromTelegram;
+
+    public InnerUpdate(IMessage message, boolean isFromTelegram) {
         this.message = message;
+        this.isFromTelegram = isFromTelegram;
     }
 
-    @Override
     public IMessage getMessage() {
         return message;
+    }
+
+    public boolean isFromTelegram() {
+        return isFromTelegram;
     }
 }

@@ -12,7 +12,7 @@ public class RegistrarTest extends TestCase {
      * Проверяет, что getId работает корректно
      */
     public void testGetId() {
-        Registrar registrar = new Registrar(new Bot("2055254510:AAFkBxlmgL2TqKHmZNtRuuvRbf1LYnW4C2s", "testformatch_bot"));
+        Registrar registrar = new Registrar();
         Update update = new Update();
         Message message = new Message();
         User user = new User();

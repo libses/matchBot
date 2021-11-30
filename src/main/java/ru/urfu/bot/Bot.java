@@ -73,7 +73,7 @@ public class Bot extends TelegramLongPollingBot {
     public Bot(String token, String userName) {
         this.token = token;
         this.userName = userName;
-        updateHandler = new UpdateHandler(this);
+        updateHandler = new UpdateHandler();
     }
 
     /**

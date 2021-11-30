@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.bot.Bot;
 import ru.urfu.bot.IUpdate;
+import ru.urfu.bot.Keyboards;
+import ru.urfu.bot.MessageSender;
 import ru.urfu.profile.*;
 
 import java.util.List;
@@ -23,7 +25,6 @@ import java.util.function.Consumer;
  */
 
 public class Registrar {
-    final Bot bot;
     final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
     final Map<String, Consumer<IUpdate>> handlers = Map.of(
             "Имя", this::nameHandler,
@@ -33,8 +34,7 @@ public class Registrar {
             "Фото", this::photoHandler);
 
 
-    public Registrar(Bot bot) {
-        this.bot = bot;
+    public Registrar() {
     }
 
     /**
@@ -53,11 +53,9 @@ public class Registrar {
 
             profile.setTelegramUserName(update.getMessage().getFrom().getUserName());
 
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)")
-                    .build());
-
+            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+                    "Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)",
+                    Keyboards.main, update);
             return;
         }
 
@@ -90,10 +88,9 @@ public class Registrar {
         profilesInRegistration.get(getId(update)).getProfile().setCity(update.getMessage().getText());
 
         try {
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Отправь свое фото")
-                    .build());
+            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+                    "Отправь фотку)",
+                    Keyboards.main, update);
         } catch (Exception ignored) {
         }
     }
@@ -118,12 +115,9 @@ public class Registrar {
                     List.of(new KeyboardButton("Поехали!\uD83D\uDE40"))
             )), true, false, false, " ");
 
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Готово, теперь ты в базе и можешь знакомиться")
-                    .replyMarkup(keyboard)
-                    .build());
-
+            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+                    "Ты в базе!",
+                    Keyboards.main, update);
         } catch (Exception ignored) {
         }
     }
@@ -140,19 +134,13 @@ public class Registrar {
             var id = getId(update);
             profilesInRegistration.get(id).getProfile().setAge(age);
             profilesInRegistration.get(id).updateProgress();
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Напиши свой город")
-                    .build());
+            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+                    "Напиши город",
+                    Keyboards.main, update);
         } catch (Exception e) {
-            try {
-                bot.execute(SendMessage.builder()
-                        .chatId(update.getMessage().getChatId().toString())
-                        .text("Введи возраст еще раз")
-                        .build());
-            } catch (TelegramApiException ex) {
-                ex.printStackTrace();
-            }
+            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+                    "Введи ещё раз",
+                    Keyboards.main, update);
         }
     }
 
@@ -175,15 +163,9 @@ public class Registrar {
         profilesInRegistration.get(id).getProfile().setGender(Gender.male);
         profilesInRegistration.get(id).updateProgress();
 
-        try {
-            bot.execute(SendMessage.builder()
-                    .replyMarkup(new ReplyKeyboardRemove(true))
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Напиши свой возраст")
-                    .build());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+                "Сколько тебе лет?",
+                Keyboards.main, update);
     }
 
     /**
@@ -202,20 +184,13 @@ public class Registrar {
                 new KeyboardButton("Non-Binary\uD83C\uDFF3️\u200D⚧️"));
 
         KeyboardRow row = new KeyboardRow(buttons);
-        ReplyKeyboard replyKeyboard =
+        ReplyKeyboardMarkup replyKeyboard =
                 new ReplyKeyboardMarkup
                         (List.of(row), true, true, false, " ");
 
-        try {
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .replyMarkup(replyKeyboard)
-                    .text("Выбери свой пол:)")
-                    .build()
-            );
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+                "Выбери гендер",
+                replyKeyboard, update);
     }
 
     public boolean inRegistration(long id) {

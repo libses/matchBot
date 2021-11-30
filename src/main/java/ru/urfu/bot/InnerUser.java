@@ -6,6 +6,8 @@ public class InnerUser implements IUser{
 
     private String userName;
 
+    private boolean isTelegram;
+
     public Long getId() {
         return id;
     }
@@ -14,8 +16,13 @@ public class InnerUser implements IUser{
         return userName;
     }
 
-    public InnerUser(Long id, String userName) {
+    public boolean isTelegramUser() {
+        return isTelegram;
+    }
+
+    public InnerUser(Long id, String userName, boolean isTelegram) {
         this.id = id;
         this.userName = userName;
+        this.isTelegram = isTelegram;
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
 
 public class TGToInnerConverter {
     public static InnerUpdate Convert(Update update){
-        return new InnerUpdate(Convert(update.getMessage()));
+        return new InnerUpdate(Convert(update.getMessage()), true);
     }
 
     public static InnerMessage Convert(Message message) {
@@ -20,7 +20,7 @@ public class TGToInnerConverter {
     }
 
     public static InnerUser Convert(User user) {
-        return new InnerUser(user.getId(), user.getUserName());
+        return new InnerUser(user.getId(), user.getUserName(), true);
     }
 
     public static List<IPhotoSize> Convert(List<PhotoSize> photoSizes) {

@@ -27,55 +27,46 @@ public class Bot extends TelegramLongPollingBot {
         String token;
         String userName;
 
-        try {
-            var tokenSystem = System.getenv("TOKEN");
-            var nameSystem = System.getenv("NAME");
-            if (tokenSystem.isEmpty() || nameSystem.isEmpty()) {
-                throw new Exception();
+        try (var reader = new FileReader("botConfig.txt"); var scanner = new Scanner(reader)) {
+            token = scanner.nextLine().split("=")[1];
+            userName = scanner.nextLine().split("=")[1];
+            if (token.length() < 14) {
+                throw new FileNotFoundException();
             }
-            token = tokenSystem;
-            userName = nameSystem;
-        }
-        catch (Exception e1) {
-            try (var reader = new FileReader("botConfig.txt"); var scanner = new Scanner(reader)) {
-                token = scanner.nextLine().split("=")[1];
-                userName = scanner.nextLine().split("=")[1];
-                if (token.length() < 14) {
-                    throw new FileNotFoundException();
-                }
-                if (!userName.endsWith("bot")) {
-                    throw new FileNotFoundException();
-                }
-
-            } catch (Exception e2) {
-                new File("", "botConfig.txt");
-                var writer = new FileWriter("botConfig.txt", false);
-                var scanner = new Scanner(System.in);
-
-                token = " ";
-                while (token.length() < 14) {
-                    System.out.println("Введите корректный токен бота:");
-                    token = scanner.nextLine();
-                }
-
-
-                writer.write("botToken=" + token + '\n');
-
-                userName = " ";
-                while (!userName.endsWith("bot")) {
-                    System.out.println("Введите корректный username бота:");
-
-                    userName = scanner.nextLine();
-                }
-                writer.write("botUserName=" + userName);
-
-                scanner.close();
-                writer.close();
-                System.out.println("Бот запущен, ждём сообщений.");
+            if (!userName.endsWith("bot")) {
+                throw new FileNotFoundException();
             }
+
+        } catch (Exception e2) {
+            new File("", "botConfig.txt");
+            var writer = new FileWriter("botConfig.txt", false);
+            var scanner = new Scanner(System.in);
+
+            token = " ";
+            while (token.length() < 14) {
+                System.out.println("Введите корректный токен бота:");
+                token = scanner.nextLine();
+            }
+
+
+            writer.write("botToken=" + token + '\n');
+
+            userName = " ";
+            while (!userName.endsWith("bot")) {
+                System.out.println("Введите корректный username бота:");
+
+                userName = scanner.nextLine();
+            }
+            writer.write("botUserName=" + userName);
+
+            scanner.close();
+            writer.close();
+            System.out.println("Бот запущен, ждём сообщений.");
         }
 
-        return new Bot(token, userName);
+        var newBot = new Bot(token, userName);
+        TelegramMessageSender.bot = newBot;
+        return newBot;
     }
 
 
@@ -90,18 +81,19 @@ public class Bot extends TelegramLongPollingBot {
      */
     @Override
     public void onUpdateReceived(Update update) {
-        if (update.getMessage().hasText()) {
+        var innerUpdate = TGToInnerConverter.Convert(update);
+        if (innerUpdate.getMessage().hasText()) {
             try {
-                updateHandler.handleText(update);
+                updateHandler.handleText(innerUpdate);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
 
-        if (update.getMessage().hasPhoto()) {
+        if (innerUpdate.getMessage().hasPhoto()) {
             try {
-                updateHandler.handlePhoto(update);
+                updateHandler.handlePhoto(innerUpdate);
             } catch (Exception e) {
                 e.printStackTrace();
             }

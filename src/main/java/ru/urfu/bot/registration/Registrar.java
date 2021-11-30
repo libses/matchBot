@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.bot.Bot;
+import ru.urfu.bot.IUpdate;
 import ru.urfu.profile.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.function.Consumer;
 public class Registrar {
     final Bot bot;
     final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
-    final Map<String, Consumer<Update>> handlers = Map.of(
+    final Map<String, Consumer<IUpdate>> handlers = Map.of(
             "Имя", this::nameHandler,
             "Возраст", this::ageHandler,
             "Город", this::cityHandler,
@@ -42,7 +43,7 @@ public class Registrar {
      * @param update обрабатывает изменения
      * @throws Exception эксепшны от используемых методов
      */
-    public void registerFromUpdate(Update update) throws Exception {
+    public void registerFromUpdate(IUpdate update) throws Exception {
         var id = update.getMessage().getFrom().getId();
 
         if (!profilesInRegistration.containsKey(id)) {
@@ -74,7 +75,7 @@ public class Registrar {
      * @param update update
      * @return id
      */
-    public long getId(Update update) {
+    public long getId(IUpdate update) {
         return update.getMessage().getFrom().getId();
     }
 
@@ -84,7 +85,7 @@ public class Registrar {
      * @param update update
      */
 
-    private void cityHandler(Update update) {
+    private void cityHandler(IUpdate update) {
         profilesInRegistration.get(getId(update)).updateProgress();
         profilesInRegistration.get(getId(update)).getProfile().setCity(update.getMessage().getText());
 
@@ -103,7 +104,7 @@ public class Registrar {
      * @param update update
      */
 
-    private void photoHandler(Update update) {
+    private void photoHandler(IUpdate update) {
         try {
             var photo = update.getMessage().getPhoto().get(0);
 
@@ -133,7 +134,7 @@ public class Registrar {
      * @param update update
      */
 
-    private void ageHandler(Update update) {
+    private void ageHandler(IUpdate update) {
         try {
             var age = Integer.parseInt(update.getMessage().getText());
             var id = getId(update);
@@ -160,7 +161,7 @@ public class Registrar {
      *
      * @param update update
      */
-    private void genderHandler(Update update) {
+    private void genderHandler(IUpdate update) {
         var id = getId(update);
 
         if (Objects.equals(update.getMessage().getText(), "Женский\uD83D\uDE4B\u200D♀️")) {
@@ -190,7 +191,7 @@ public class Registrar {
      *
      * @param update update
      */
-    public void nameHandler(Update update) {
+    public void nameHandler(IUpdate update) {
         var id = getId(update);
 
         profilesInRegistration.get(id).getProfile().setName(update.getMessage().getText());

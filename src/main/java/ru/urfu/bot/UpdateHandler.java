@@ -11,11 +11,11 @@ import ru.urfu.profile.ProfileData;
 
 public class UpdateHandler {
     final Registrar registrar;
-    final Bot bot;
+    final TelegramBot bot;
     private boolean inAdditionalMenu = false;
 
 
-    public UpdateHandler(Bot bot) {
+    public UpdateHandler(TelegramBot bot) {
         this.bot = bot;
         registrar = new Registrar(bot);
     }
@@ -80,15 +80,15 @@ public class UpdateHandler {
 
             case ("Взаимные \uD83D\uDC9E"):
                 getMutualSympathy(update);
-                break;
+                return;
 
             case ("Мои ❤️"):
                 getLikedByMe(update);
-                break;
+                return;
 
             case ("Я понравился???"):
                 getWhoLikedMe(update);
-                break;
+                return;
         }
         inAdditionalMenu = false;
         MessageSender.sendMessage(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", Keyboards.main);
@@ -102,7 +102,7 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
         if (whoLikedUser.isEmpty()) {
-            MessageSender.sendMessage(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.main);
+            MessageSender.sendMessage(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.additionalMenu);
         }
         for (Profile p : whoLikedUser) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
@@ -116,7 +116,7 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var mutual = MatchHandler.getMutualLikes(owner);
         if (mutual.isEmpty()) {
-            MessageSender.sendMessage(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.main);
+            MessageSender.sendMessage(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.additionalMenu);
         }
         for (Profile p : mutual) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
@@ -132,7 +132,7 @@ public class UpdateHandler {
         if (likes.isEmpty()) {
             MessageSender.sendMessage(getChatIdFromUpdate(update),
                     "Ты же прекрасно знаешь, что не ставил никому лайки. Не ломай бота",
-                    Keyboards.main);
+                    Keyboards.additionalMenu);
         }
         for (Profile p : likes) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));

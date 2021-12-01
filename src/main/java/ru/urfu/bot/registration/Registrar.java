@@ -1,14 +1,13 @@
 package ru.urfu.bot.registration;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.urfu.bot.Bot;
+import ru.urfu.bot.TelegramBot;
 import ru.urfu.bot.IUpdate;
 import ru.urfu.profile.*;
 
@@ -23,7 +22,7 @@ import java.util.function.Consumer;
  */
 
 public class Registrar {
-    final Bot bot;
+    final TelegramBot bot;
     final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
     final Map<String, Consumer<IUpdate>> handlers = Map.of(
             "Имя", this::nameHandler,
@@ -33,7 +32,7 @@ public class Registrar {
             "Фото", this::photoHandler);
 
 
-    public Registrar(Bot bot) {
+    public Registrar(TelegramBot bot) {
         this.bot = bot;
     }
 

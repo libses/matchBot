@@ -8,7 +8,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.urfu.profile.Profile;
 
 public class TelegramMessageSender {
-    public static Bot bot;
+    public static TelegramBot bot;
+
     /**
      * Метод, возвращающий айди чата
      *
@@ -18,6 +19,7 @@ public class TelegramMessageSender {
     public static String getChatIdFromUpdate(IUpdate update) {
         return update.getMessage().getChatId().toString();
     }
+
     /**
      * Метод для отправки фотографии с подписью
      *
@@ -27,18 +29,18 @@ public class TelegramMessageSender {
      */
     public static void sendPhotoWithCaption(IUpdate update, Profile nextProfile, String message) {
         var chatId = getChatIdFromUpdate(update);
-        try
-        {
+
+        if (nextProfile.ID != -1) {
             var photo = new InputFile(nextProfile.getPhotoLink());
             sendPhoto(chatId, photo, Keyboards.main, message);
+            return;
         }
-        catch (Exception e)
-        {
-            sendMessage(chatId, "Анкеты кончились или произошла ошибка!", Keyboards.main);
-        }
+
+        sendMessage(chatId, "Анкеты кончились или произошла ошибка!", Keyboards.main);
+
     }
 
-    public static void sendMessage(String chatId, String text, ReplyKeyboardMarkup replyMarkup){
+    public static void sendMessage(String chatId, String text, ReplyKeyboardMarkup replyMarkup) {
         try {
             bot.execute(SendMessage.builder()
                     .chatId(chatId)

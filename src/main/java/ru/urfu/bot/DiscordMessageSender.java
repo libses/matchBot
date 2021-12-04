@@ -19,8 +19,8 @@ public class DiscordMessageSender {
         try {
             URL url = new URL(urlStr);
             BufferedImage img = ImageIO.read(url);
-            File file = new File("temp.jpg");
-            ImageIO.write(img, "jpg", file);
+            File file = new File("temp.png");
+            ImageIO.write(img, "png", file);
             api.getTextChannelById(chatId).sendMessage(text).addFile(file).queue();
         } catch (IOException e) {
             e.printStackTrace();

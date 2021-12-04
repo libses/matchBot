@@ -11,7 +11,7 @@ import java.net.URL;
 public class DiscordMessageSender {
     public static JDA api;
 
-    public static void sendMessage(Long chatId, String text){
+    public static void sendMessage(Long chatId, String text) {
         api.getTextChannelById(chatId).sendMessage(text).queue();
     }
 

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TGToInnerConverter {
-    public static InnerUpdate Convert(Update update){
+    public static InnerUpdate Convert(Update update) {
         return new InnerUpdate(Convert(update.getMessage()), true);
     }
 

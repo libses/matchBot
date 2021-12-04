@@ -3,20 +3,16 @@ package ru.urfu.bot;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageChannel;
-import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 import javax.security.auth.login.LoginException;
 
-public class PingPongBot extends ListenerAdapter
-{
+public class PingPongBot extends ListenerAdapter {
     private static UpdateHandler updateHandler;
 
-    public static void main(String[] args) throws LoginException
-    {
+    public static void main(String[] args) throws LoginException {
         // args[0] should be the token
         // We only need 2 intents in this bot. We only respond to messages in guilds and private channels.
         // All other events will be disabled.
@@ -28,9 +24,8 @@ public class PingPongBot extends ListenerAdapter
     }
 
     @Override
-    public void onMessageReceived(MessageReceivedEvent event)
-    {
-        if (event.getAuthor().isBot()){
+    public void onMessageReceived(MessageReceivedEvent event) {
+        if (event.getAuthor().isBot()) {
             return;
         }
         DiscordMessageSender.api = event.getJDA();

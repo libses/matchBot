@@ -1,6 +1,6 @@
 package ru.urfu.bot;
 
-public class InnerPhoto implements IPhotoSize{
+public class InnerPhoto implements IPhotoSize {
     private String fileId;
 
     public String getFileId() {

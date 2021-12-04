@@ -1,6 +1,5 @@
 package ru.urfu.bot;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.urfu.profile.Profile;
 

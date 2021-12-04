@@ -1,7 +1,5 @@
 package ru.urfu.bot;
 
-import org.telegram.telegrambots.meta.api.objects.Update;
-
 public class InnerUpdate implements IUpdate {
 
     IMessage message;

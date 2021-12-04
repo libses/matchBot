@@ -2,7 +2,7 @@ package ru.urfu.bot;
 
 import java.util.List;
 
-public class InnerMessage implements IMessage{
+public class InnerMessage implements IMessage {
     private IUser author;
     private String text;
     private Long chatId;

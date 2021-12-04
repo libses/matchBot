@@ -43,7 +43,7 @@ public class UpdateHandler {
 
 
     /**
-     *обрабатываем действия пользователя в основном меню
+     * обрабатываем действия пользователя в основном меню
      */
     private void handleTextInDefaultMenu(IUpdate update) {
         switch (getTextFromUpdate(update)) {
@@ -76,8 +76,8 @@ public class UpdateHandler {
     }
 
     /**
-    * Обрабатываем действия пользователя в дополнительном меню
-    * */
+     * Обрабатываем действия пользователя в дополнительном меню
+     */
     private void handleTextInAdditionalMenu(IUpdate update) {
         switch (getTextFromUpdate(update)) {
             case ("Назад"):
@@ -101,8 +101,8 @@ public class UpdateHandler {
     }
 
     /**
-    * Получаем список тех, кого я лайкнул
-    * */
+     * Получаем список тех, кого я лайкнул
+     */
     private void getWhoLikedMe(IUpdate update) {
         var owner = getProfileFromUpdate(update);
         var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
@@ -133,7 +133,7 @@ public class UpdateHandler {
     }
 
     /**
-     *получаем список тех кто лайкнул меня
+     * получаем список тех кто лайкнул меня
      */
     private void getLikedByMe(IUpdate update) {
         var owner = getProfileFromUpdate(update);
@@ -266,6 +266,7 @@ public class UpdateHandler {
     public void handlePhoto(IUpdate update) throws Exception {
         registrar.registerFromUpdate(update);
     }
+
     private Profile getProfileFromId(Long profileId) {
         return ProfileData.getMap().get(profileId);
     }

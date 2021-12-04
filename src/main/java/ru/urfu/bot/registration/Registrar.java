@@ -6,7 +6,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import ru.urfu.bot.IUpdate;
 import ru.urfu.bot.Keyboards;
 import ru.urfu.bot.MessageSender;
-import ru.urfu.profile.*;
+import ru.urfu.profile.Gender;
+import ru.urfu.profile.Profile;
+import ru.urfu.profile.ProfileData;
+import ru.urfu.profile.ProfileStatus;
 
 import java.util.List;
 import java.util.Map;

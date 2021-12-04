@@ -1,6 +1,6 @@
 package ru.urfu.bot;
 
-public class InnerUser implements IUser{
+public class InnerUser implements IUser {
 
     private Long id;
 

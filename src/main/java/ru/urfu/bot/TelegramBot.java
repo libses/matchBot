@@ -4,9 +4,7 @@ package ru.urfu.bot;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import java.io.*;
-import java.util.MissingResourceException;
-import java.util.Scanner;
+import java.io.IOException;
 
 /**
  * Класс с самим телеграм-ботом, необходимый для связи с telegram через API
@@ -50,14 +48,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         var innerUpdate = TGToInnerConverter.Convert(update);
-        if (innerUpdate.getMessage().hasText()) {
-            try {
-                updateHandler.handleText(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
 
         if (innerUpdate.getMessage().hasPhoto()) {
             try {

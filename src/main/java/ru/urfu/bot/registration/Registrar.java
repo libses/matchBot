@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRem
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.urfu.bot.Bot;
+import ru.urfu.bot.TelegramBot;
 import ru.urfu.bot.IUpdate;
 import ru.urfu.bot.Keyboards;
 import ru.urfu.bot.MessageSender;

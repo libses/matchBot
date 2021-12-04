@@ -5,13 +5,14 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.*;
+import java.util.MissingResourceException;
 import java.util.Scanner;
 
 /**
  * Класс с самим телеграм-ботом, необходимый для связи с telegram через API
  */
 
-public class Bot extends TelegramLongPollingBot {
+public class TelegramBot extends TelegramLongPollingBot {
 
     private final String token;
     private final String userName;
@@ -23,54 +24,21 @@ public class Bot extends TelegramLongPollingBot {
      * @return возвращает бота
      * @throws IOException бросает эксепшн при ошибке ввода
      */
-    public static Bot create() throws Exception {
-        String token;
-        String userName;
-
-        try (var reader = new FileReader("botConfig.txt"); var scanner = new Scanner(reader)) {
-            token = scanner.nextLine().split("=")[1];
-            userName = scanner.nextLine().split("=")[1];
-            if (token.length() < 14) {
-                throw new FileNotFoundException();
-            }
-            if (!userName.endsWith("bot")) {
-                throw new FileNotFoundException();
-            }
-
-        } catch (Exception e2) {
-            new File("", "botConfig.txt");
-            var writer = new FileWriter("botConfig.txt", false);
-            var scanner = new Scanner(System.in);
-
-            token = " ";
-            while (token.length() < 14) {
-                System.out.println("Введите корректный токен бота:");
-                token = scanner.nextLine();
-            }
-
-
-            writer.write("botToken=" + token + '\n');
-
-            userName = " ";
-            while (!userName.endsWith("bot")) {
-                System.out.println("Введите корректный username бота:");
-
-                userName = scanner.nextLine();
-            }
-            writer.write("botUserName=" + userName);
-
-            scanner.close();
-            writer.close();
-            System.out.println("Бот запущен, ждём сообщений.");
+    public static TelegramBot create() throws Exception {
+        String token = System.getenv("BOT_TOKEN");
+        String userName = System.getenv("BOT_NAME");
+        if (token == null || userName == null || !userName.endsWith("bot") || token.length() != 46) {
+            throw new Exception("Проверьте перменные среды BOT_TOKEN и BOT_NAME");
         }
 
-        var newBot = new Bot(token, userName);
+
+        var newBot = new TelegramBot(token, userName);
         TelegramMessageSender.bot = newBot;
         return newBot;
     }
 
 
-    public Bot(String token, String userName) {
+    public TelegramBot(String token, String userName) {
         this.token = token;
         this.userName = userName;
         updateHandler = new UpdateHandler();

@@ -32,11 +32,11 @@ public class TelegramMessageSender {
 
         if (nextProfile.ID != -1) {
             var photo = new InputFile(nextProfile.getPhotoLink());
-            sendPhoto(chatId, photo, Keyboards.main, message);
+            sendPhoto(chatId, photo, Keyboards.main.getTelegramKeyboard(), message);
             return;
         }
 
-        sendMessage(chatId, "Анкеты кончились или произошла ошибка!", Keyboards.main);
+        sendMessage(chatId, "Анкеты кончились или произошла ошибка!", Keyboards.main.getTelegramKeyboard());
 
     }
 

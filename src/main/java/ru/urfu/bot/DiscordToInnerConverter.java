@@ -30,7 +30,7 @@ public class DiscordToInnerConverter {
 
     public static IPhotoSize Convert(Message.Attachment photo) {
         if (photo.isImage()) {
-            return new InnerPhoto(photo.getId());
+            return new InnerPhoto(photo.getUrl());
         }
         return null;
     }

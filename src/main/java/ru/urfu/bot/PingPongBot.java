@@ -13,15 +13,18 @@ import javax.security.auth.login.LoginException;
 
 public class PingPongBot extends ListenerAdapter
 {
+    private static UpdateHandler updateHandler;
+
     public static void main(String[] args) throws LoginException
     {
         // args[0] should be the token
         // We only need 2 intents in this bot. We only respond to messages in guilds and private channels.
         // All other events will be disabled.
-        JDABuilder.createLight("OTE1MzE1NDU2Nzc1MTc2Mjcy.YaZz8g.eKMrhpCLUdBayCnfCju_ddx2V88", GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
+        JDABuilder.createLight("OTE1MzE1NDU2Nzc1MTc2Mjcy.YaZz8g.P5OwJJ7m-V1BbBtydiLvq_dsPX8", GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
                 .addEventListeners(new PingPongBot())
                 .setActivity(Activity.playing("Type !ping"))
                 .build();
+        updateHandler = new UpdateHandler();
     }
 
     @Override
@@ -35,7 +38,7 @@ public class PingPongBot extends ListenerAdapter
         event.getChannel();
         Message msg = event.getMessage();
         var innerUpdate = DiscordToInnerConverter.Convert(event);
-        var updateHandler = new UpdateHandler();
+
         if (innerUpdate.getMessage().hasText()) {
             try {
                 updateHandler.handleText(innerUpdate);

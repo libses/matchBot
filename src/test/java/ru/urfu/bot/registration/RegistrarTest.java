@@ -5,7 +5,6 @@ import org.junit.Assert;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
-import ru.urfu.bot.Bot;
 
 public class RegistrarTest extends TestCase {
     /**

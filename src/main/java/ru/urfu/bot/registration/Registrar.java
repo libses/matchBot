@@ -1,14 +1,8 @@
 package ru.urfu.bot.registration;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.urfu.bot.TelegramBot;
 import ru.urfu.bot.IUpdate;
 import ru.urfu.bot.Keyboards;
 import ru.urfu.bot.MessageSender;
@@ -108,6 +102,7 @@ public class Registrar {
             profilesInRegistration.get(getId(update))
                     .getProfile()
                     .setPhotoLink(photo.getFileId());
+
 
             profilesInRegistration.get(getId(update)).updateProgress();
 

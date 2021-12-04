@@ -9,12 +9,17 @@ public class MessageSender {
         if (update.isFromTelegram()) {
             TelegramMessageSender.sendMessage(chatIdFromUpdate, s, main);
         }
-        DiscordMessageSender.sendMessage(update.getMessage().getChatId(), s);
+        else {
+            DiscordMessageSender.sendMessage(update.getMessage().getChatId(), s);
+        }
     }
 
     public static void sendPhotoWithCaption(IUpdate update, Profile p, String caption) {
         if (update.isFromTelegram()) {
             TelegramMessageSender.sendPhotoWithCaption(update, p, caption);
+        }
+        else {
+            DiscordMessageSender.sendPhoto(update.getMessage().getChatId(), caption, p.getPhotoLink());
         }
     }
 }

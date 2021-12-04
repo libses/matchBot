@@ -47,17 +47,24 @@ public class UpdateHandler {
      */
     private void handleTextInDefaultMenu(IUpdate update) {
         switch (getTextFromUpdate(update)) {
+            case ("Дальше"):
             case ("Назад"):
+            case ("назад"):
             case ("Ок, понял"):
             case ("Поехали!\uD83D\uDE40"):
             case ("\uD83D\uDC4E"):
                 handleNextCase(update);
                 break;
 
+            case ("Лайк"):
+            case ("лайк"):
             case ("❤️"):
                 handleLikeCase(update);
                 break;
 
+            case ("eщё"):
+            case ("еще"):
+            case ("Ещё"):
             case ("Еще"):
                 inAdditionalMenu = true;
                 openAdditionalMenu(update);
@@ -105,6 +112,8 @@ public class UpdateHandler {
         for (Profile p : whoLikedUser) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
+
+        MessageSender.sendMessage(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -119,6 +128,8 @@ public class UpdateHandler {
         for (Profile p : mutual) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
+
+        MessageSender.sendMessage(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -135,6 +146,8 @@ public class UpdateHandler {
         for (Profile p : likes) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
+
+        MessageSender.sendMessage(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
     }
 
     private void help(IUpdate update) {

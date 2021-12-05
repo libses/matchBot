@@ -16,7 +16,7 @@ public class PingPongBot extends ListenerAdapter {
         // args[0] should be the token
         // We only need 2 intents in this bot. We only respond to messages in guilds and private channels.
         // All other events will be disabled.
-        JDABuilder.createLight("OTE1MzE1NDU2Nzc1MTc2Mjcy.YaZz8g.4WZqOqLkkEp2dbxH8E-dAgYpZ7I", GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
+        JDABuilder.createLight("OTE1MzE1NDU2Nzc1MTc2Mjcy.YaZz8g.zQWNWTHgdhXn3IH-pu4UHm74kc0", GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
                 .addEventListeners(new PingPongBot())
                 .setActivity(Activity.playing("Type !ping"))
                 .build();

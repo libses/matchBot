@@ -32,15 +32,27 @@ public class TelegramMessageSender {
 
         if (nextProfile.ID != -1) {
             var photo = new InputFile(nextProfile.getPhotoLink());
-            sendPhoto(chatId, photo, Keyboards.main, message);
+            sendPhoto(chatId, photo, Keyboards.main.getTelegramKeyboard(), message);
             return;
         }
 
-        sendMessage(chatId, "Ты долистал анкеты до конца! Начинаем по второму кругу.", Keyboards.main);
+        sendMessageWithKeyboard(chatId, "Ты долистал анкеты до конца! Начинаем по второму кругу.", Keyboards.main.getTelegramKeyboard());
 
     }
 
-    public static void sendMessage(String chatId, String text, ReplyKeyboardMarkup replyMarkup) {
+    public static void sendMessage(String chatId, String text) {
+        try {
+            bot.execute(SendMessage.builder()
+                    .chatId(chatId)
+                    .text(text)
+                    .build());
+        }
+        catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sendMessageWithKeyboard(String chatId, String text, ReplyKeyboardMarkup replyMarkup) {
         try {
             bot.execute(SendMessage.builder()
                     .chatId(chatId)

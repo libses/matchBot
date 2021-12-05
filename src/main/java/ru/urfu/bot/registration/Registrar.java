@@ -47,8 +47,7 @@ public class Registrar {
             profile.setTelegramUserName(update.getMessage().getFrom().getUserName());
 
             MessageSender.sendMessage(update.getMessage().getChatId().toString(),
-                    "Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)",
-                    Keyboards.main, update);
+                    "Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)", update);
             return;
         }
 
@@ -82,8 +81,7 @@ public class Registrar {
 
         try {
             MessageSender.sendMessage(update.getMessage().getChatId().toString(),
-                    "Отправь фотку)",
-                    Keyboards.main, update);
+                    "Отправь фотку)", update);
         } catch (Exception ignored) {
         }
     }
@@ -105,7 +103,7 @@ public class Registrar {
 
             profilesInRegistration.get(getId(update)).updateProgress();
 
-            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+            MessageSender.sendMessageWithKeyboard(update.getMessage().getChatId().toString(),
                     "Ты в базе!",
                     Keyboards.go, update);
         } catch (Exception ignored) {
@@ -125,12 +123,10 @@ public class Registrar {
             profilesInRegistration.get(id).getProfile().setAge(age);
             profilesInRegistration.get(id).updateProgress();
             MessageSender.sendMessage(update.getMessage().getChatId().toString(),
-                    "Напиши город",
-                    Keyboards.main, update);
+                    "Напиши город", update);
         } catch (Exception e) {
             MessageSender.sendMessage(update.getMessage().getChatId().toString(),
-                    "Введи ещё раз",
-                    Keyboards.main, update);
+                    "Введи ещё раз", update);
         }
     }
 
@@ -154,8 +150,7 @@ public class Registrar {
         profilesInRegistration.get(id).updateProgress();
 
         MessageSender.sendMessage(update.getMessage().getChatId().toString(),
-                "Сколько тебе лет?",
-                Keyboards.main, update);
+                "Сколько тебе лет?", update);
     }
 
     /**
@@ -169,7 +164,7 @@ public class Registrar {
         profilesInRegistration.get(id).getProfile().setName(update.getMessage().getText());
         profilesInRegistration.get(id).updateProgress();
 
-        MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+        MessageSender.sendMessageWithKeyboard(update.getMessage().getChatId().toString(),
                 "Выбери гендер",
                 Keyboards.genders, update);
     }

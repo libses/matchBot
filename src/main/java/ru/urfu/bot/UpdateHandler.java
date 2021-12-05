@@ -21,7 +21,7 @@ public class UpdateHandler {
     public void handleLocation(IUpdate update) {
         getProfileFromUpdate(update).setLocation(update.getLocation());
         ProfileData.getLocationData().addProfile2(getProfileFromUpdate(update));
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "Позиция прикреплена!", Keyboards.main, update);
+        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Позиция прикреплена!", Keyboards.main, update);
     }
 
     /**
@@ -101,7 +101,7 @@ public class UpdateHandler {
                 return;
         }
         inAdditionalMenu = false;
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", Keyboards.main, update);
+        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", Keyboards.main, update);
         handleNextCase(update);
     }
 
@@ -112,13 +112,13 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
         if (whoLikedUser.isEmpty()) {
-            MessageSender.sendMessage(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.additionalMenu, update);
+            MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.additionalMenu, update);
         }
         for (Profile p : whoLikedUser) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -128,13 +128,13 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var mutual = MatchHandler.getMutualLikes(owner);
         if (mutual.isEmpty()) {
-            MessageSender.sendMessage(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.additionalMenu, update);
+            MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.additionalMenu, update);
         }
         for (Profile p : mutual) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -144,7 +144,7 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var likes = MatchHandler.getLikesByUser(owner);
         if (likes.isEmpty()) {
-            MessageSender.sendMessage(getChatIdFromUpdate(update),
+            MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update),
                     "Ты же прекрасно знаешь, что не ставил никому лайки. Не ломай бота",
                     Keyboards.additionalMenu, update);
         }
@@ -152,17 +152,17 @@ public class UpdateHandler {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
     }
 
     private void help(IUpdate update) {
         var chatId = getChatIdFromUpdate(update);
         var text = "Ты использовал неизвестную мне команду, пожалуйста пользуйся кнопками";
-        MessageSender.sendMessage(chatId, text, Keyboards.invalidCommand, update);
+        MessageSender.sendMessageWithKeyboard(chatId, text, Keyboards.invalidCommand, update);
     }
 
     private void openAdditionalMenu(IUpdate update) {
-        MessageSender.sendMessage(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", Keyboards.additionalMenu, update);
     }
 
     /**

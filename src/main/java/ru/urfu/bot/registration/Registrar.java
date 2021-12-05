@@ -1,8 +1,5 @@
 package ru.urfu.bot.registration;
 
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.urfu.bot.IUpdate;
 import ru.urfu.bot.Keyboards;
 import ru.urfu.bot.MessageSender;
@@ -11,7 +8,6 @@ import ru.urfu.profile.Profile;
 import ru.urfu.profile.ProfileData;
 import ru.urfu.profile.ProfileStatus;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -109,13 +105,9 @@ public class Registrar {
 
             profilesInRegistration.get(getId(update)).updateProgress();
 
-            ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(List.of(new KeyboardRow(
-                    List.of(new KeyboardButton("Поехали!\uD83D\uDE40"))
-            )), true, false, false, " ");
-
             MessageSender.sendMessage(update.getMessage().getChatId().toString(),
                     "Ты в базе!",
-                    Keyboards.main, update);
+                    Keyboards.go, update);
         } catch (Exception ignored) {
         }
     }
@@ -176,19 +168,10 @@ public class Registrar {
 
         profilesInRegistration.get(id).getProfile().setName(update.getMessage().getText());
         profilesInRegistration.get(id).updateProgress();
-        List<KeyboardButton> buttons = List.of(
-                new KeyboardButton("Мужской\uD83D\uDE4B\u200D♂️"),
-                new KeyboardButton("Женский\uD83D\uDE4B\u200D♀️"),
-                new KeyboardButton("Non-Binary\uD83C\uDFF3️\u200D⚧️"));
-
-        KeyboardRow row = new KeyboardRow(buttons);
-        ReplyKeyboardMarkup replyKeyboard =
-                new ReplyKeyboardMarkup
-                        (List.of(row), true, true, false, " ");
 
         MessageSender.sendMessage(update.getMessage().getChatId().toString(),
                 "Выбери гендер",
-                replyKeyboard, update);
+                Keyboards.genders, update);
     }
 
     public boolean inRegistration(long id) {

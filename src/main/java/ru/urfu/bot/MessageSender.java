@@ -4,20 +4,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import ru.urfu.profile.Profile;
 
 public class MessageSender {
-    public static void sendMessage(String chatIdFromUpdate, String s, ReplyKeyboardMarkup main, IUpdate update) {
+    public static void sendMessage(String chatIdFromUpdate, String s, IKeyboard keyboard, IUpdate update) {
         if (update.isFromTelegram()) {
-            TelegramMessageSender.sendMessage(chatIdFromUpdate, s, main);
-        }
-        else {
-            DiscordMessageSender.sendMessage(update.getMessage().getChatId(), s);
+            TelegramMessageSender.sendMessage(chatIdFromUpdate, s, keyboard.getTelegramKeyboard());
+        } else {
+            var discordKeyboard = keyboard.getDiscordKeyboard().getKeyboard();
+            var result = String.format("%s\n%s", s, discordKeyboard);
+            DiscordMessageSender.sendMessage(update.getMessage().getChatId(), result);
         }
     }
 
     public static void sendPhotoWithCaption(IUpdate update, Profile p, String caption) {
         if (update.isFromTelegram()) {
             TelegramMessageSender.sendPhotoWithCaption(update, p, caption);
-        }
-        else {
+        } else {
             DiscordMessageSender.sendPhoto(update.getMessage().getChatId(), caption, p.getPhotoLink());
         }
     }

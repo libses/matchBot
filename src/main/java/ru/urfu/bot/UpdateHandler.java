@@ -18,6 +18,11 @@ public class UpdateHandler {
         registrar = new Registrar();
     }
 
+    public void handleLocation(IUpdate update) {
+        getProfileFromUpdate(update).setLocation(update.getLocation());
+        ProfileData.getLocationData().addProfile2(getProfileFromUpdate(update));
+        MessageSender.sendMessage(getChatIdFromUpdate(update), "Позиция прикреплена!", Keyboards.main, update);
+    }
 
     /**
      * Метод, принимающий и обрабатывающий полученный текст
@@ -186,11 +191,11 @@ public class UpdateHandler {
         var nextProfile = selector.getNextProfile();
         var caption = getCaption(nextProfile);
 
-        if (MatchHandler.isFirstLikesSecond(nextProfile, owner)) {
+        if (MatchHandler.isFirstLikesSecond(nextProfile.getProfile(), owner)) {
             caption = "Ты понравился одному человеку!\n" + caption;
         }
 
-        MessageSender.sendPhotoWithCaption(update, nextProfile, caption);
+        MessageSender.sendPhotoWithCaption(update, nextProfile.getProfile(), caption);
     }
 
     private Profile getProfileFromUpdate(IUpdate update) {
@@ -244,9 +249,19 @@ public class UpdateHandler {
     /**
      * Метод, генерирующий подпись к фотографии
      *
-     * @param nextProfile профиль для генерации
+     * @param nextProfileWrapper профиль для генерации
      * @return возвращает подпись
      */
+    private String getCaption(ProfileWrapper nextProfileWrapper) {
+
+        var nextProfile = nextProfileWrapper.getProfile();
+        return nextProfileWrapper.getInformation() + String.format("%s\n%s\n%s\n@%s",
+                nextProfile.getName(),
+                nextProfile.getCity(),
+                nextProfile.getAge(),
+                nextProfile.getTelegramUserName());
+    }
+
     private String getCaption(Profile nextProfile) {
 
         return String.format("%s\n%s\n%s\n@%s",

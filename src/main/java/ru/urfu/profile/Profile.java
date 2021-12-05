@@ -1,5 +1,8 @@
 package ru.urfu.profile;
 
+import ru.urfu.bot.ILocation;
+import ru.urfu.bot.Location;
+
 import java.util.Objects;
 
 /**
@@ -16,6 +19,16 @@ public class Profile {
         this.ID = id;
         MatchHandler.addUser(this);
         this.selector = new ProfileSelector(this);
+    }
+
+    private ILocation location;
+
+    public ILocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(ILocation location) {
+        this.location = location;
     }
 
     public long getID() {

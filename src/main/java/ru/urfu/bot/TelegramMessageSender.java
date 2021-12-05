@@ -36,7 +36,7 @@ public class TelegramMessageSender {
             return;
         }
 
-        sendMessage(chatId, "Анкеты кончились или произошла ошибка!", Keyboards.main);
+        sendMessage(chatId, "Ты долистал анкеты до конца! Начинаем по второму кругу.", Keyboards.main);
 
     }
 

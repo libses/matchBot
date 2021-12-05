@@ -49,6 +49,18 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         var innerUpdate = TGToInnerConverter.Convert(update);
 
+        if (innerUpdate.hasLocation()) {
+            updateHandler.handleLocation(innerUpdate);
+        }
+
+        if (innerUpdate.getMessage().hasText()) {
+            try {
+                updateHandler.handleText(innerUpdate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         if (innerUpdate.getMessage().hasPhoto()) {
             try {
                 updateHandler.handlePhoto(innerUpdate);

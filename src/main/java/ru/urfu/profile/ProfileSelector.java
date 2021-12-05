@@ -1,5 +1,8 @@
 package ru.urfu.profile;
 
+import ru.urfu.bot.LocationData;
+import ru.urfu.bot.ProfileWrapper;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -8,6 +11,10 @@ import java.util.Collection;
  */
 
 public class ProfileSelector {
+    private int counter;
+    private final double oneMeter = (1d / 40075000d) * 360d;
+    private final double oneKiloMeter = oneMeter * 1000;
+
     private final Profile owner;
     private final ArrayList<Profile> viewed = new ArrayList<>();
 
@@ -22,39 +29,42 @@ public class ProfileSelector {
      *
      * @return профиль
      */
-    public Profile getNextProfile() {
-        var liked = MatchHandler.likesTo.get(owner);
-        for (Profile profile : liked) {
-            if (!viewed.contains(profile)) {
-                return extractProfileToCurrentAndView(profile);
+    public ProfileWrapper getNextProfile() {
+        if (counter >= ProfileData.Count - 1) {
+            viewed.clear();
+            counter = 0;
+        }
+        if (owner.getLocation() != null) {
+            var i = 10;
+            var gettedList = ProfileData.getLocationData().getProfilesIn(owner.getLocation(), i);
+            for (Profile profile : gettedList) {
+                if (!viewed.contains(profile) && !profile.equals(owner)) {
+                    var distance = owner.getLocation().FindDistanceTo(profile.getLocation()) / oneKiloMeter;
+                    return wrapProfile(extractProfileToCurrentAndView(profile), "Менее чем в " + ((int)distance + 1) + " км от тебя!\n");
+                }
             }
         }
-
-
-
         Collection<Profile> profileCollection = ProfileData.getProfileList();
         for (Profile p :
                 profileCollection) {
             if (!viewed.contains(p) && !p.equals(owner)) {
-                return extractProfileToCurrentAndView(p);
+                return wrapProfile(extractProfileToCurrentAndView(p), "");
             }
         }
 
-        viewed.clear();
-        for (Profile p :
-                profileCollection) {
-            if (!p.equals(owner)) {
-                return extractProfileToCurrentAndView(p);
-            }
-        }
         var emptyProfile = new Profile(-1);
         emptyProfile.setName("");
         emptyProfile.setCity("");
         emptyProfile.setTelegramUserName("");
-        return extractProfileToCurrentAndView(emptyProfile);
+        return wrapProfile(extractProfileToCurrentAndView(emptyProfile), "");
+    }
+
+    private ProfileWrapper wrapProfile(Profile p, String info) {
+        return new ProfileWrapper(p, info);
     }
 
     private Profile extractProfileToCurrentAndView(Profile p) {
+        counter++;
         viewed.add(p);
         current = p;
         return p;

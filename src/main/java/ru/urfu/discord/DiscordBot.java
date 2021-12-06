@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
-import ru.urfu.bot.IUpdate;
+import ru.urfu.bot.ProfileData;
 import ru.urfu.bot.UpdateHandler;
 
 import javax.security.auth.login.LoginException;

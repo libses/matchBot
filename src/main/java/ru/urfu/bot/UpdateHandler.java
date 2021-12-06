@@ -11,10 +11,12 @@ import ru.urfu.profile.Profile;
 public class UpdateHandler {
     final Registrar registrar;
     private boolean inAdditionalMenu = false;
+    private ProfileData ProfileData;
 
 
     public UpdateHandler() {
-        registrar = new Registrar();
+        this.ProfileData = new ProfileData();
+        this.registrar = new Registrar(ProfileData);
     }
 
     /**
@@ -200,9 +202,10 @@ public class UpdateHandler {
      */
     private void handleLikeCase(IUpdate update) {
         var owner = getProfileFromUpdate(update);
-        var other = owner.getSelector().getCurrent();
+        var selector = this.ProfileData.getProfileSelector(owner);
+        var other = selector.getCurrent();
         if (other.getID() != -1) {
-            MatchHandler.likeProfile(owner, owner.getSelector().getCurrent());
+            MatchHandler.likeProfile(owner, selector.getCurrent());
         }
         handleNextCase(update);
     }
@@ -215,7 +218,7 @@ public class UpdateHandler {
      */
     private void handleNextCase(IUpdate update) {
         var owner = getProfileFromUpdate(update);
-        var selector = owner.getSelector();
+        var selector = this.ProfileData.getProfileSelector(owner);
         var nextProfile = selector.getNextProfileWrapper();
         if (nextProfile.getProfile().ID == -1) {
             MessageSender.sendMessageWithKeyboard("К сожалению нам некого тебе показать",

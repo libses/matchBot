@@ -20,7 +20,6 @@ public class Profile {
     public Profile(long id) {
         this.ID = id;
         MatchHandler.addUser(this);
-        this.selector = new ProfileSelector(this);
     }
 
     private ILocation location;
@@ -35,16 +34,6 @@ public class Profile {
 
     public long getID() {
         return ID;
-    }
-
-    private ProfileSelector selector;
-
-    public ProfileSelector getSelector() {
-        return selector;
-    }
-
-    public void setSelector(ProfileSelector selector) {
-        this.selector = selector;
     }
 
     public final long ID;

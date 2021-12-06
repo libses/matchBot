@@ -18,6 +18,7 @@ import java.util.function.Consumer;
  */
 
 public class Registrar {
+    private ProfileData ProfileData;
     final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
     final Map<String, Consumer<IUpdate>> handlers = Map.of(
             "Имя", this::nameHandler,
@@ -27,7 +28,8 @@ public class Registrar {
             "Фото", this::photoHandler);
 
 
-    public Registrar() {
+    public Registrar(ProfileData pd) {
+        this.ProfileData = pd;
     }
 
     /**

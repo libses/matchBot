@@ -1,7 +1,5 @@
 package ru.urfu.bot;
 
-import ru.urfu.bot.ProfileData;
-import ru.urfu.bot.ProfileWrapper;
 import ru.urfu.profile.Profile;
 
 import java.util.ArrayList;
@@ -23,6 +21,8 @@ public class ProfileSelector {
     }
 
     private Profile current;
+
+    private ProfileData ProfileData;
 
     /**
      * Метод выбирает и возвращает следующую обертку над профилем
@@ -72,7 +72,8 @@ public class ProfileSelector {
     }
 
 
-    public ProfileSelector(Profile owner) {
+    public ProfileSelector(Profile owner, ru.urfu.bot.ProfileData profileData) {
         this.owner = owner;
+        ProfileData = profileData;
     }
 }

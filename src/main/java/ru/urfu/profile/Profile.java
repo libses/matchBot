@@ -79,7 +79,6 @@ public class Profile {
         this.currentKeyboard = currentKeyboard;
     }
 
-
     private Gender gender;
 
     public Gender getGender() {
@@ -89,7 +88,6 @@ public class Profile {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
-
 
     private String description;
 

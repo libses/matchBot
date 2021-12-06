@@ -10,9 +10,9 @@ import ru.urfu.telegram.TelegramBot;
 public class App {
     public static void main(String[] args) {
         try {
-            var bot = TelegramBot.create();
+            var telegramBot = TelegramBot.create();
             var telegramApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramApi.registerBot(bot);
+            telegramApi.registerBot(telegramBot);
         } catch (Exception e) {
             e.printStackTrace();
         }

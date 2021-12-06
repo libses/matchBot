@@ -34,7 +34,7 @@ public class MessageSender {
             TelegramMessageSender.sendMessageWithKeyboard(update.getMessage().getChatId().toString(), text, keyboard.getTelegramKeyboard());
         } else {
             var discordKeyboard = keyboard.getDiscordKeyboard().getKeyboard();
-            var result = String.format("%text\n%text", text, discordKeyboard);
+            var result = text + '\n' + discordKeyboard;
             DiscordMessageSender.sendMessage(update.getMessage().getChatId(), result);
         }
     }

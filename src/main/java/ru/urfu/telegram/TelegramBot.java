@@ -4,6 +4,7 @@ package ru.urfu.telegram;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.urfu.bot.UpdateHandler;
+import ru.urfu.discord.DiscordBot;
 
 import java.io.IOException;
 
@@ -54,21 +55,7 @@ public class TelegramBot extends TelegramLongPollingBot {
             updateHandler.handleLocation(innerUpdate);
         }
 
-        if (innerUpdate.getMessage().hasText()) {
-            try {
-                updateHandler.handleText(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (innerUpdate.getMessage().hasPhoto()) {
-            try {
-                updateHandler.handlePhoto(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        DiscordBot.handleUpdate(innerUpdate, updateHandler);
     }
 
 

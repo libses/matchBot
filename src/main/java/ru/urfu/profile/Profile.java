@@ -1,5 +1,6 @@
 package ru.urfu.profile;
 
+import ru.urfu.bot.keyboards.IKeyboard;
 import ru.urfu.bot.locations.ILocation;
 import ru.urfu.bot.MatchHandler;
 import ru.urfu.bot.ProfileSelector;
@@ -66,6 +67,16 @@ public class Profile {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    private IKeyboard currentKeyboard;
+
+    public IKeyboard getCurrentKeyboard() {
+        return currentKeyboard;
+    }
+
+    public void setCurrentKeyboard(IKeyboard currentKeyboard) {
+        this.currentKeyboard = currentKeyboard;
     }
 
 
@@ -139,7 +150,7 @@ public class Profile {
         return String.format("Profile id is: %s\n" +
                 "Profile name is: %s\n" +
                 "Profile gender is: %s\n" +
-                "Profile age: %s\n",ID, name, gender, age);
+                "Profile age: %s\n", ID, name, gender, age);
     }
 
 

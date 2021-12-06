@@ -104,9 +104,10 @@ public class Registrar {
 
             MessageSender.sendMessageWithKeyboard(
                     "Ты в базе!\n" +
-                     "Ты можешь отправить свою геопозицию, если в твоём клиенте есть такая функция" +
+                            "Ты можешь отправить свою геопозицию, если в твоём клиенте есть такая функция" +
                             " и мы будем искать людей возле тебя!",
                     Keyboards.go, update);
+            profilesInRegistration.get(getId(update)).getProfile().setCurrentKeyboard(Keyboards.go);
         } catch (Exception ignored) {
         }
     }
@@ -142,24 +143,26 @@ public class Registrar {
      */
     private void genderHandler(IUpdate update) {
         var id = getId(update);
+        var messageText = update.getMessage().getText();
+        var command = profilesInRegistration.get(id)
+                .getProfile()
+                .getCurrentKeyboard()
+                .getCommand(messageText);
 
-        if (Objects.equals(update.getMessage().getText(), "Женский\uD83D\uDE4B\u200D♀️")) {
+        if (Objects.equals(command, "Женский\uD83D\uDE4B\u200D♀️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.female);
-        }
-        else if (Objects.equals(update.getMessage().getText(), "Non-Binary\uD83C\uDFF3️\u200D⚧️")) {
+        } else if (Objects.equals(command, "Non-Binary\uD83C\uDFF3️\u200D⚧️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.other);
-        }
-        else if (Objects.equals(update.getMessage().getText(), "Мужской\uD83D\uDE4B\u200D♂️")) {
+        } else if (Objects.equals(command, "Мужской\uD83D\uDE4B\u200D♂️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.male);
-        }
-        else
-        {
+        } else {
             MessageSender.sendMessage("По нашим данным, " +
                     "такого гендера ещё не существует. Воспользуйся кнопками или подожди, когда твой " +
                     "гендер станет известен хоть кому-то, кроме тебя.", update);
             return;
         }
 
+        profilesInRegistration.get(id).getProfile().setCurrentKeyboard(null);
         profilesInRegistration.get(id).updateProgress();
         MessageSender.sendMessage(
                 "Сколько тебе лет?", update);
@@ -175,6 +178,7 @@ public class Registrar {
 
         profilesInRegistration.get(id).getProfile().setName(update.getMessage().getText());
         profilesInRegistration.get(id).updateProgress();
+        profilesInRegistration.get(id).getProfile().setCurrentKeyboard(Keyboards.genders);
 
         MessageSender.sendMessageWithKeyboard(
                 "Выбери гендер",

@@ -12,7 +12,10 @@ public class DiscordKeyboard implements IDiscordKeyboard {
     }
 
     public String getCommand(String key) {
-        return commands.get(key);
+        if (commands.containsKey(key))
+            return commands.get(key);
+
+        return key;
     }
 
     public String getKeyboard() {

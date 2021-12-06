@@ -50,10 +50,9 @@ public class UpdateHandler {
      * обрабатываем действия пользователя в основном меню
      */
     private void handleTextInDefaultMenu(IUpdate update) {
-        switch (getTextFromUpdate(update)) {
+        switch (getCommandFromUpdate(update)) {
             case ("Дальше"):
             case ("Назад"):
-            case ("назад"):
             case ("Ок, понял"):
             case ("Поехали!\uD83D\uDE40"):
             case ("\uD83D\uDC4E"):
@@ -72,18 +71,20 @@ public class UpdateHandler {
             case ("Еще"):
                 inAdditionalMenu = true;
                 openAdditionalMenu(update);
-                break;
+                return;
 
             default:
                 help(update);
+                return;
         }
+        getProfileFromUpdate(update).setCurrentKeyboard(Keyboards.main);
     }
 
     /**
      * Обрабатываем действия пользователя в дополнительном меню
      */
     private void handleTextInAdditionalMenu(IUpdate update) {
-        switch (getTextFromUpdate(update)) {
+        switch (getCommandFromUpdate(update)) {
             case ("Назад"):
                 break;
 
@@ -100,7 +101,7 @@ public class UpdateHandler {
                 return;
         }
         inAdditionalMenu = false;
-        MessageSender.sendMessageWithKeyboard( "Возвращаемся к просмотру анкет!", Keyboards.main, update);
+        MessageSender.sendMessageWithKeyboard("Возвращаемся к просмотру анкет!", Keyboards.main, update);
         handleNextCase(update);
     }
 
@@ -111,7 +112,7 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
         if (whoLikedUser.isEmpty()) {
-            MessageSender.sendMessageWithKeyboard( "Ты никому не нравишься. Совсем.", Keyboards.additionalMenu, update);
+            MessageSender.sendMessageWithKeyboard("Ты никому не нравишься. Совсем.", Keyboards.additionalMenu, update);
         }
         for (Profile p : whoLikedUser) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
@@ -127,13 +128,13 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var mutual = MatchHandler.getMutualLikes(owner);
         if (mutual.isEmpty()) {
-            MessageSender.sendMessageWithKeyboard( "Нет никакой взаимности...", Keyboards.additionalMenu, update);
+            MessageSender.sendMessageWithKeyboard("Нет никакой взаимности...", Keyboards.additionalMenu, update);
         }
         for (Profile p : mutual) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessageWithKeyboard( "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard("с:", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -151,17 +152,18 @@ public class UpdateHandler {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessageWithKeyboard( "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard("с:", Keyboards.additionalMenu, update);
     }
 
     private void help(IUpdate update) {
-        var chatId = getChatIdFromUpdate(update);
         var text = "Ты использовал неизвестную мне команду, пожалуйста пользуйся кнопками";
         MessageSender.sendMessageWithKeyboard(text, Keyboards.invalidCommand, update);
+        getProfileFromUpdate(update).setCurrentKeyboard(Keyboards.invalidCommand);
     }
 
     private void openAdditionalMenu(IUpdate update) {
-        MessageSender.sendMessageWithKeyboard( "Просмотр данных о симпатиях", Keyboards.additionalMenu, update);
+        getProfileFromUpdate(update).setCurrentKeyboard(Keyboards.additionalMenu);
+        MessageSender.sendMessageWithKeyboard("Просмотр данных о симпатиях", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -188,6 +190,13 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var selector = owner.getSelector();
         var nextProfile = selector.getNextProfileWrapper();
+        if (nextProfile.getProfile().ID == -1) {
+            MessageSender.sendMessageWithKeyboard("К сожалению нам некого тебе показать",
+                    Keyboards.invalidCommand,
+                    update);
+
+            return;
+        }
         var caption = getCaption(nextProfile);
 
         if (MatchHandler.isFirstLikesSecond(nextProfile.getProfile(), owner)) {
@@ -208,8 +217,11 @@ public class UpdateHandler {
      * @param update апдейт
      * @return возвращает сам текст
      */
-    private String getTextFromUpdate(IUpdate update) {
-        return update.getMessage().getText();
+    private String getCommandFromUpdate(IUpdate update) {
+        var keyboard = getProfileFromUpdate(update).getCurrentKeyboard();
+        var messageText = update.getMessage().getText();
+
+        return keyboard.getCommand(messageText);
     }
 
     /**

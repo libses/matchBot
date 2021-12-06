@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import ru.urfu.bot.IUpdate;
 import ru.urfu.bot.UpdateHandler;
 
 import javax.security.auth.login.LoginException;
@@ -17,7 +18,8 @@ public class DiscordBot extends ListenerAdapter {
         // args[0] should be the token
         // We only need 2 intents in this bot. We only respond to messages in guilds and private channels.
         // All other events will be disabled.
-        JDABuilder.createLight("OTE1MzE1NDU2Nzc1MTc2Mjcy.YaZz8g.zQWNWTHgdhXn3IH-pu4UHm74kc0", GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
+        var token = System.getenv("DISCORD_BOT_TOKEN");
+        JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
                 .addEventListeners(new DiscordBot())
                 .setActivity(Activity.playing("Type !ping"))
                 .build();
@@ -35,6 +37,10 @@ public class DiscordBot extends ListenerAdapter {
         Message msg = event.getMessage();
         var innerUpdate = DiscordToInnerConverter.Convert(event);
 
+        handleUpdate(innerUpdate, updateHandler);
+    }
+
+    public static void handleUpdate(IUpdate innerUpdate, UpdateHandler updateHandler) {
         if (innerUpdate.getMessage().hasText()) {
             try {
                 updateHandler.handleText(innerUpdate);

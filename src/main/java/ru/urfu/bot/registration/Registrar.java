@@ -1,17 +1,13 @@
 package ru.urfu.bot.registration;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.urfu.bot.Bot;
-import ru.urfu.profile.*;
+import ru.urfu.bot.IUpdate;
+import ru.urfu.bot.keyboards.Keyboards;
+import ru.urfu.bot.MessageSender;
+import ru.urfu.profile.Gender;
+import ru.urfu.profile.Profile;
+import ru.urfu.bot.ProfileData;
+import ru.urfu.profile.ProfileStatus;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,9 +18,9 @@ import java.util.function.Consumer;
  */
 
 public class Registrar {
-    final Bot bot;
+    private ProfileData ProfileData;
     final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
-    final Map<String, Consumer<Update>> handlers = Map.of(
+    final Map<String, Consumer<IUpdate>> handlers = Map.of(
             "Имя", this::nameHandler,
             "Возраст", this::ageHandler,
             "Город", this::cityHandler,
@@ -32,17 +28,16 @@ public class Registrar {
             "Фото", this::photoHandler);
 
 
-    public Registrar(Bot bot) {
-        this.bot = bot;
+    public Registrar(ProfileData pd) {
+        this.ProfileData = pd;
     }
 
     /**
      * Сам метод регистрации
      *
      * @param update обрабатывает изменения
-     * @throws Exception эксепшны от используемых методов
      */
-    public void registerFromUpdate(Update update) throws Exception {
+    public void registerFromUpdate(IUpdate update) {
         var id = update.getMessage().getFrom().getId();
 
         if (!profilesInRegistration.containsKey(id)) {
@@ -50,13 +45,10 @@ public class Registrar {
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
 
-            profile.setTelegramUserName(update.getMessage().getFrom().getUserName());
+            profile.setUserName(update.getMessage().getFrom().getUserName());
 
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)")
-                    .build());
-
+            MessageSender.sendMessage(
+                    "Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)", update);
             return;
         }
 
@@ -74,7 +66,7 @@ public class Registrar {
      * @param update update
      * @return id
      */
-    public long getId(Update update) {
+    public long getId(IUpdate update) {
         return update.getMessage().getFrom().getId();
     }
 
@@ -84,15 +76,13 @@ public class Registrar {
      * @param update update
      */
 
-    private void cityHandler(Update update) {
+    private void cityHandler(IUpdate update) {
         profilesInRegistration.get(getId(update)).updateProgress();
         profilesInRegistration.get(getId(update)).getProfile().setCity(update.getMessage().getText());
 
         try {
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Отправь свое фото")
-                    .build());
+            MessageSender.sendMessage(
+                    "Отправь фотку)", update);
         } catch (Exception ignored) {
         }
     }
@@ -103,7 +93,7 @@ public class Registrar {
      * @param update update
      */
 
-    private void photoHandler(Update update) {
+    private void photoHandler(IUpdate update) {
         try {
             var photo = update.getMessage().getPhoto().get(0);
 
@@ -111,18 +101,15 @@ public class Registrar {
                     .getProfile()
                     .setPhotoLink(photo.getFileId());
 
+
             profilesInRegistration.get(getId(update)).updateProgress();
 
-            ReplyKeyboardMarkup keyboard = new ReplyKeyboardMarkup(List.of(new KeyboardRow(
-                    List.of(new KeyboardButton("Поехали!\uD83D\uDE40"))
-            )), true, false, false, " ");
-
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Готово, теперь ты в базе и можешь знакомиться")
-                    .replyMarkup(keyboard)
-                    .build());
-
+            MessageSender.sendMessageWithKeyboard(
+                    "Ты в базе!\n" +
+                            "Ты можешь отправить свою геопозицию, если в твоём клиенте есть такая функция" +
+                            " и мы будем искать людей возле тебя!",
+                    Keyboards.go, update);
+            profilesInRegistration.get(getId(update)).getProfile().setCurrentKeyboard(Keyboards.go);
         } catch (Exception ignored) {
         }
     }
@@ -133,25 +120,21 @@ public class Registrar {
      * @param update update
      */
 
-    private void ageHandler(Update update) {
+    private void ageHandler(IUpdate update) {
         try {
             var age = Integer.parseInt(update.getMessage().getText());
+            if (age < 10) {
+                throw new Exception();
+            }
             var id = getId(update);
             profilesInRegistration.get(id).getProfile().setAge(age);
             profilesInRegistration.get(id).updateProgress();
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Напиши свой город")
-                    .build());
+            MessageSender.sendMessage(
+                    "Напиши город", update);
         } catch (Exception e) {
-            try {
-                bot.execute(SendMessage.builder()
-                        .chatId(update.getMessage().getChatId().toString())
-                        .text("Введи возраст еще раз")
-                        .build());
-            } catch (TelegramApiException ex) {
-                ex.printStackTrace();
-            }
+            MessageSender.sendMessage(
+                    "Введи ещё раз. Ты вводишь странные цифры или тебе слишком мало лет." +
+                            "\nРегистрация доступна с 10 лет.", update);
         }
     }
 
@@ -160,29 +143,31 @@ public class Registrar {
      *
      * @param update update
      */
-    private void genderHandler(Update update) {
+    private void genderHandler(IUpdate update) {
         var id = getId(update);
+        var messageText = update.getMessage().getText();
+        var command = profilesInRegistration.get(id)
+                .getProfile()
+                .getCurrentKeyboard()
+                .getCommand(messageText);
 
-        if (Objects.equals(update.getMessage().getText(), "Женский\uD83D\uDE4B\u200D♀️")) {
+        if (Objects.equals(command, "Женский\uD83D\uDE4B\u200D♀️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.female);
-        }
-
-        if (Objects.equals(update.getMessage().getText(), "Non-Binary\uD83C\uDFF3️\u200D⚧️")) {
+        } else if (Objects.equals(command, "Non-Binary\uD83C\uDFF3️\u200D⚧️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.other);
+        } else if (Objects.equals(command, "Мужской\uD83D\uDE4B\u200D♂️")) {
+            profilesInRegistration.get(id).getProfile().setGender(Gender.male);
+        } else {
+            MessageSender.sendMessage("По нашим данным, " +
+                    "такого гендера ещё не существует. Воспользуйся кнопками или подожди, когда твой " +
+                    "гендер станет известен хоть кому-то, кроме тебя.", update);
+            return;
         }
 
-        profilesInRegistration.get(id).getProfile().setGender(Gender.male);
+        profilesInRegistration.get(id).getProfile().setCurrentKeyboard(null);
         profilesInRegistration.get(id).updateProgress();
-
-        try {
-            bot.execute(SendMessage.builder()
-                    .replyMarkup(new ReplyKeyboardRemove(true))
-                    .chatId(update.getMessage().getChatId().toString())
-                    .text("Напиши свой возраст")
-                    .build());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        MessageSender.sendMessage(
+                "Сколько тебе лет?", update);
     }
 
     /**
@@ -190,31 +175,16 @@ public class Registrar {
      *
      * @param update update
      */
-    public void nameHandler(Update update) {
+    public void nameHandler(IUpdate update) {
         var id = getId(update);
 
         profilesInRegistration.get(id).getProfile().setName(update.getMessage().getText());
         profilesInRegistration.get(id).updateProgress();
-        List<KeyboardButton> buttons = List.of(
-                new KeyboardButton("Мужской\uD83D\uDE4B\u200D♂️"),
-                new KeyboardButton("Женский\uD83D\uDE4B\u200D♀️"),
-                new KeyboardButton("Non-Binary\uD83C\uDFF3️\u200D⚧️"));
+        profilesInRegistration.get(id).getProfile().setCurrentKeyboard(Keyboards.genders);
 
-        KeyboardRow row = new KeyboardRow(buttons);
-        ReplyKeyboard replyKeyboard =
-                new ReplyKeyboardMarkup
-                        (List.of(row), true, true, false, " ");
-
-        try {
-            bot.execute(SendMessage.builder()
-                    .chatId(update.getMessage().getChatId().toString())
-                    .replyMarkup(replyKeyboard)
-                    .text("Выбери свой пол:)")
-                    .build()
-            );
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+        MessageSender.sendMessageWithKeyboard(
+                "Выбери гендер",
+                Keyboards.genders, update);
     }
 
     public boolean inRegistration(long id) {

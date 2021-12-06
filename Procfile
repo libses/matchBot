@@ -1,1 +1,1 @@
-bot: java -jar target/matchBot-0.1.jar
+worker: java -jar target/matchBot-0.1-jar-with-dependencies.jar

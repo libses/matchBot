@@ -2,7 +2,8 @@ package ru.urfu;
 
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.urfu.bot.Bot;
+import ru.urfu.discord.DiscordBot;
+import ru.urfu.telegram.TelegramBot;
 
 /**
  * Класс самого приложения. Запускает самого бота и тгАПИ
@@ -10,9 +11,10 @@ import ru.urfu.bot.Bot;
 public class App {
     public static void main(String[] args) {
         try {
-            var bot = Bot.create();
+            var telegramBot = TelegramBot.create();
             var telegramApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramApi.registerBot(bot);
+            telegramApi.registerBot(telegramBot);
+            DiscordBot.main(new String[] {});
         } catch (Exception e) {
             e.printStackTrace();
         }

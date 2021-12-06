@@ -1,5 +1,10 @@
 package ru.urfu.profile;
 
+import ru.urfu.bot.keyboards.IKeyboard;
+import ru.urfu.bot.locations.ILocation;
+import ru.urfu.bot.MatchHandler;
+import ru.urfu.bot.ProfileSelector;
+
 import java.util.Objects;
 
 /**
@@ -15,21 +20,20 @@ public class Profile {
     public Profile(long id) {
         this.ID = id;
         MatchHandler.addUser(this);
-        this.selector = new ProfileSelector(this);
+    }
+
+    private ILocation location;
+
+    public ILocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(ILocation location) {
+        this.location = location;
     }
 
     public long getID() {
         return ID;
-    }
-
-    private ProfileSelector selector;
-
-    public ProfileSelector getSelector() {
-        return selector;
-    }
-
-    public void setSelector(ProfileSelector selector) {
-        this.selector = selector;
     }
 
     public final long ID;
@@ -40,7 +44,7 @@ public class Profile {
         return telegramUserName;
     }
 
-    public void setTelegramUserName(String telegramName) {
+    public void setUserName(String telegramName) {
         this.telegramUserName = telegramName;
     }
 
@@ -54,6 +58,15 @@ public class Profile {
         this.name = name;
     }
 
+    private IKeyboard currentKeyboard;
+
+    public IKeyboard getCurrentKeyboard() {
+        return currentKeyboard;
+    }
+
+    public void setCurrentKeyboard(IKeyboard currentKeyboard) {
+        this.currentKeyboard = currentKeyboard;
+    }
 
     private Gender gender;
 
@@ -64,7 +77,6 @@ public class Profile {
     public void setGender(Gender gender) {
         this.gender = gender;
     }
-
 
     private String description;
 
@@ -125,7 +137,7 @@ public class Profile {
         return String.format("Profile id is: %s\n" +
                 "Profile name is: %s\n" +
                 "Profile gender is: %s\n" +
-                "Profile age: %s\n",ID, name, gender, age);
+                "Profile age: %s\n", ID, name, gender, age);
     }
 
 

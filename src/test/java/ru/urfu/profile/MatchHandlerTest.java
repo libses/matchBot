@@ -2,6 +2,7 @@ package ru.urfu.profile;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.urfu.bot.MatchHandler;
 
 import java.util.ArrayList;
 import java.util.List;

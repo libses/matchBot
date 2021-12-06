@@ -1,4 +1,4 @@
-package ru.urfu.bot;
+package ru.urfu.bot.locations;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

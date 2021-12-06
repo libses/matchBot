@@ -1,6 +1,7 @@
-package ru.urfu.profile;
+package ru.urfu.bot;
 
-import ru.urfu.bot.LocationData;
+import ru.urfu.bot.locations.LocationData;
+import ru.urfu.profile.Profile;
 
 import java.util.Collection;
 import java.util.Map;

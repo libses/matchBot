@@ -1,9 +1,11 @@
-package ru.urfu.bot;
+package ru.urfu.telegram;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.PhotoSize;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
+import ru.urfu.bot.*;
+import ru.urfu.bot.locations.Location;
 
 import java.util.ArrayList;
 import java.util.List;

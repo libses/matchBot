@@ -2,7 +2,7 @@ package ru.urfu;
 
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.urfu.bot.TelegramBot;
+import ru.urfu.telegram.TelegramBot;
 
 /**
  * Класс самого приложения. Запускает самого бота и тгАПИ

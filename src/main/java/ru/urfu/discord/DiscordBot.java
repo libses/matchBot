@@ -1,4 +1,4 @@
-package ru.urfu.bot;
+package ru.urfu.discord;
 
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -6,10 +6,11 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import ru.urfu.bot.UpdateHandler;
 
 import javax.security.auth.login.LoginException;
 
-public class PingPongBot extends ListenerAdapter {
+public class DiscordBot extends ListenerAdapter {
     private static UpdateHandler updateHandler;
 
     public static void main(String[] args) throws LoginException {
@@ -17,7 +18,7 @@ public class PingPongBot extends ListenerAdapter {
         // We only need 2 intents in this bot. We only respond to messages in guilds and private channels.
         // All other events will be disabled.
         JDABuilder.createLight("OTE1MzE1NDU2Nzc1MTc2Mjcy.YaZz8g.zQWNWTHgdhXn3IH-pu4UHm74kc0", GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
-                .addEventListeners(new PingPongBot())
+                .addEventListeners(new DiscordBot())
                 .setActivity(Activity.playing("Type !ping"))
                 .build();
         updateHandler = new UpdateHandler();

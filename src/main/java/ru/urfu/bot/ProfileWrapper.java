@@ -3,8 +3,8 @@ package ru.urfu.bot;
 import ru.urfu.profile.Profile;
 
 public class ProfileWrapper {
-    private Profile profile;
-    private String information;
+    private final Profile profile;
+    private final String information;
 
     public Profile getProfile() {
         return profile;

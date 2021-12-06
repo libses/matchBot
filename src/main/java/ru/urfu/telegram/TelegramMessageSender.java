@@ -1,10 +1,12 @@
-package ru.urfu.bot;
+package ru.urfu.telegram;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.urfu.bot.IUpdate;
+import ru.urfu.bot.keyboards.Keyboards;
 import ru.urfu.profile.Profile;
 
 public class TelegramMessageSender {

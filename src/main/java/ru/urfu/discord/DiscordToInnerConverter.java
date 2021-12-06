@@ -1,7 +1,8 @@
-package ru.urfu.bot;
+package ru.urfu.discord;
 
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import ru.urfu.bot.*;
 
 import java.util.ArrayList;
 import java.util.List;

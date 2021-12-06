@@ -1,7 +1,6 @@
 package ru.urfu.bot.registration;
 
 import junit.framework.TestCase;
-import org.junit.Assert;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;

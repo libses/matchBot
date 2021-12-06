@@ -3,10 +3,10 @@ package ru.urfu.bot;
 import java.util.List;
 
 public class InnerMessage implements IMessage {
-    private IUser author;
-    private String text;
-    private Long chatId;
-    private List<IPhotoSize> photos;
+    private final IUser author;
+    private final String text;
+    private final Long chatId;
+    private final List<IPhotoSize> photos;
 
     public InnerMessage(IUser user, String text, Long chatId, List<IPhotoSize> photos) {
         author = user;

@@ -1,7 +1,8 @@
-package ru.urfu.profile;
+package ru.urfu.bot;
 
-import ru.urfu.bot.LocationData;
+import ru.urfu.bot.ProfileData;
 import ru.urfu.bot.ProfileWrapper;
+import ru.urfu.profile.Profile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,7 +14,6 @@ import java.util.Collection;
 public class ProfileSelector {
     private int counter;
     private final double oneMeter = (1d / 40075000d) * 360d;
-    private final double oneKiloMeter = oneMeter * 1000;
 
     private final Profile owner;
     private final ArrayList<Profile> viewed = new ArrayList<>();
@@ -29,7 +29,7 @@ public class ProfileSelector {
      *
      * @return профиль
      */
-    public ProfileWrapper getNextProfile() {
+    public ProfileWrapper getNextProfileWrapper() {
         if (counter >= ProfileData.Count - 1) {
             viewed.clear();
             counter = 0;
@@ -39,6 +39,7 @@ public class ProfileSelector {
             var gettedList = ProfileData.getLocationData().getProfilesIn(owner.getLocation(), i);
             for (Profile profile : gettedList) {
                 if (!viewed.contains(profile) && !profile.equals(owner)) {
+                    double oneKiloMeter = oneMeter * 1000;
                     var distance = owner.getLocation().FindDistanceTo(profile.getLocation()) / oneKiloMeter;
                     return wrapProfile(extractProfileToCurrentAndView(profile), "Менее чем в " + ((int)distance + 1) + " км от тебя!\n");
                 }
@@ -55,7 +56,7 @@ public class ProfileSelector {
         var emptyProfile = new Profile(-1);
         emptyProfile.setName("");
         emptyProfile.setCity("");
-        emptyProfile.setTelegramUserName("");
+        emptyProfile.setUserName("");
         return wrapProfile(extractProfileToCurrentAndView(emptyProfile), "");
     }
 

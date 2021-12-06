@@ -1,9 +1,8 @@
 package ru.urfu.bot;
 
+import ru.urfu.bot.keyboards.Keyboards;
 import ru.urfu.bot.registration.Registrar;
-import ru.urfu.profile.MatchHandler;
 import ru.urfu.profile.Profile;
-import ru.urfu.profile.ProfileData;
 
 /**
  * Класс, который принимает и обрабатывает обновления
@@ -20,8 +19,8 @@ public class UpdateHandler {
 
     public void handleLocation(IUpdate update) {
         getProfileFromUpdate(update).setLocation(update.getLocation());
-        ProfileData.getLocationData().addProfile2(getProfileFromUpdate(update));
-        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Позиция прикреплена!", Keyboards.main, update);
+        ProfileData.getLocationData().addProfile(getProfileFromUpdate(update));
+        MessageSender.sendMessageWithKeyboard("Позиция прикреплена!", Keyboards.main, update);
     }
 
     /**
@@ -30,7 +29,7 @@ public class UpdateHandler {
      * @param update апдейт от бота
      * @throws Exception бросает при ошибках регистрации
      */
-    public void handleText(IUpdate update) throws Exception {
+    public void handleText(IUpdate update) {
         long id = getIdFromUpdate(update);
         if (!isRegistered(id)) {
             registrar.registerFromUpdate(update);
@@ -101,7 +100,7 @@ public class UpdateHandler {
                 return;
         }
         inAdditionalMenu = false;
-        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Возвращаемся к просмотру анкет!", Keyboards.main, update);
+        MessageSender.sendMessageWithKeyboard( "Возвращаемся к просмотру анкет!", Keyboards.main, update);
         handleNextCase(update);
     }
 
@@ -112,13 +111,13 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
         if (whoLikedUser.isEmpty()) {
-            MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Ты никому не нравишься. Совсем.", Keyboards.additionalMenu, update);
+            MessageSender.sendMessageWithKeyboard( "Ты никому не нравишься. Совсем.", Keyboards.additionalMenu, update);
         }
         for (Profile p : whoLikedUser) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard("с:", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -128,13 +127,13 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var mutual = MatchHandler.getMutualLikes(owner);
         if (mutual.isEmpty()) {
-            MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Нет никакой взаимности...", Keyboards.additionalMenu, update);
+            MessageSender.sendMessageWithKeyboard( "Нет никакой взаимности...", Keyboards.additionalMenu, update);
         }
         for (Profile p : mutual) {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard( "с:", Keyboards.additionalMenu, update);
     }
 
     /**
@@ -144,7 +143,7 @@ public class UpdateHandler {
         var owner = getProfileFromUpdate(update);
         var likes = MatchHandler.getLikesByUser(owner);
         if (likes.isEmpty()) {
-            MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update),
+            MessageSender.sendMessageWithKeyboard(
                     "Ты же прекрасно знаешь, что не ставил никому лайки. Не ломай бота",
                     Keyboards.additionalMenu, update);
         }
@@ -152,23 +151,23 @@ public class UpdateHandler {
             MessageSender.sendPhotoWithCaption(update, p, getCaption(p));
         }
 
-        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "с:", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard( "с:", Keyboards.additionalMenu, update);
     }
 
     private void help(IUpdate update) {
         var chatId = getChatIdFromUpdate(update);
         var text = "Ты использовал неизвестную мне команду, пожалуйста пользуйся кнопками";
-        MessageSender.sendMessageWithKeyboard(chatId, text, Keyboards.invalidCommand, update);
+        MessageSender.sendMessageWithKeyboard(text, Keyboards.invalidCommand, update);
     }
 
     private void openAdditionalMenu(IUpdate update) {
-        MessageSender.sendMessageWithKeyboard(getChatIdFromUpdate(update), "Просмотр данных о симпатиях", Keyboards.additionalMenu, update);
+        MessageSender.sendMessageWithKeyboard( "Просмотр данных о симпатиях", Keyboards.additionalMenu, update);
     }
 
     /**
      * Метод, который обрабатывает ситуацию получения лайка
      *
-     * @param update апдейт от бота
+     * @param update апдейт
      */
     private void handleLikeCase(IUpdate update) {
         var owner = getProfileFromUpdate(update);
@@ -183,12 +182,12 @@ public class UpdateHandler {
     /**
      * Метод, обрабатывающий ситуацию пропуска профиля.
      *
-     * @param update апдейт от бота
+     * @param update апдейт
      */
     private void handleNextCase(IUpdate update) {
         var owner = getProfileFromUpdate(update);
         var selector = owner.getSelector();
-        var nextProfile = selector.getNextProfile();
+        var nextProfile = selector.getNextProfileWrapper();
         var caption = getCaption(nextProfile);
 
         if (MatchHandler.isFirstLikesSecond(nextProfile.getProfile(), owner)) {
@@ -206,7 +205,7 @@ public class UpdateHandler {
     /**
      * Метод, получающий текст из апдейта
      *
-     * @param update апдейт от бота
+     * @param update апдейт
      * @return возвращает сам текст
      */
     private String getTextFromUpdate(IUpdate update) {
@@ -238,7 +237,7 @@ public class UpdateHandler {
     /**
      * Метод, возвращающий айди чата
      *
-     * @param update принимает апдейт от бота
+     * @param update принимает апдейт
      * @return возвращает строку с чат айди
      */
     private String getChatIdFromUpdate(IUpdate update) {
@@ -249,7 +248,7 @@ public class UpdateHandler {
     /**
      * Метод, генерирующий подпись к фотографии
      *
-     * @param nextProfileWrapper профиль для генерации
+     * @param nextProfileWrapper профиль-обёртка для генерации
      * @return возвращает подпись
      */
     private String getCaption(ProfileWrapper nextProfileWrapper) {
@@ -278,7 +277,7 @@ public class UpdateHandler {
      * @param update апдейт от бота
      * @throws Exception бросает внутренний метод
      */
-    public void handlePhoto(IUpdate update) throws Exception {
+    public void handlePhoto(IUpdate update) {
         registrar.registerFromUpdate(update);
     }
 

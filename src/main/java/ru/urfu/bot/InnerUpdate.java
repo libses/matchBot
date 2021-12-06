@@ -1,12 +1,14 @@
 package ru.urfu.bot;
 
+import ru.urfu.bot.locations.ILocation;
+
 public class InnerUpdate implements IUpdate {
 
     ILocation location;
 
-    IMessage message;
+    final IMessage message;
 
-    boolean isFromTelegram;
+    final boolean isFromTelegram;
 
     boolean hasLocation;
 

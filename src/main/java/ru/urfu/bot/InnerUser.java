@@ -2,11 +2,11 @@ package ru.urfu.bot;
 
 public class InnerUser implements IUser {
 
-    private Long id;
+    private final Long id;
 
-    private String userName;
+    private final String userName;
 
-    private boolean isTelegram;
+    private final boolean isTelegram;
 
     public Long getId() {
         return id;

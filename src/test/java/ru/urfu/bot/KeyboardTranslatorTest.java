@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+import ru.urfu.bot.keyboards.KeyboardTranslator;
 
 import java.util.List;
 

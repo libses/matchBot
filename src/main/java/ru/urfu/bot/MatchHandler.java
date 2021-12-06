@@ -1,4 +1,6 @@
-package ru.urfu.profile;
+package ru.urfu.bot;
+
+import ru.urfu.profile.Profile;
 
 import java.util.*;
 
@@ -6,8 +8,8 @@ import java.util.*;
  * Тут хранится информация о симпатиях
  */
 public class MatchHandler {
-    static final Map<Profile, Set<Profile>> likesTo = new HashMap<>();
-    static final Map<Profile, Set<Profile>> likedBy = new HashMap<>();
+    public static final Map<Profile, Set<Profile>> likesTo = new HashMap<>();
+    public static final Map<Profile, Set<Profile>> likedBy = new HashMap<>();
 
     /**
      * Получаем профили, которые понравились юзеру

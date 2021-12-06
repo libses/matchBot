@@ -1,7 +1,8 @@
 package ru.urfu.profile;
 
-import ru.urfu.bot.ILocation;
-import ru.urfu.bot.Location;
+import ru.urfu.bot.locations.ILocation;
+import ru.urfu.bot.MatchHandler;
+import ru.urfu.bot.ProfileSelector;
 
 import java.util.Objects;
 
@@ -53,7 +54,7 @@ public class Profile {
         return telegramUserName;
     }
 
-    public void setTelegramUserName(String telegramName) {
+    public void setUserName(String telegramName) {
         this.telegramUserName = telegramName;
     }
 

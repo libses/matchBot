@@ -1,4 +1,4 @@
-package ru.urfu.bot;
+package ru.urfu.bot.locations;
 
 public interface ILocation {
     double getLongitude();

@@ -1,4 +1,4 @@
-package ru.urfu.bot;
+package ru.urfu.discord;
 
 import java.util.Map;
 

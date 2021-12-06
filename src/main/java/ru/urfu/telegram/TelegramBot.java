@@ -1,8 +1,9 @@
-package ru.urfu.bot;
+package ru.urfu.telegram;
 
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.urfu.bot.UpdateHandler;
 
 import java.io.IOException;
 

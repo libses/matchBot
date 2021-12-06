@@ -1,11 +1,11 @@
 package ru.urfu.bot.registration;
 
 import ru.urfu.bot.IUpdate;
-import ru.urfu.bot.Keyboards;
+import ru.urfu.bot.keyboards.Keyboards;
 import ru.urfu.bot.MessageSender;
 import ru.urfu.profile.Gender;
 import ru.urfu.profile.Profile;
-import ru.urfu.profile.ProfileData;
+import ru.urfu.bot.ProfileData;
 import ru.urfu.profile.ProfileStatus;
 
 import java.util.Map;
@@ -34,9 +34,8 @@ public class Registrar {
      * Сам метод регистрации
      *
      * @param update обрабатывает изменения
-     * @throws Exception эксепшны от используемых методов
      */
-    public void registerFromUpdate(IUpdate update) throws Exception {
+    public void registerFromUpdate(IUpdate update) {
         var id = update.getMessage().getFrom().getId();
 
         if (!profilesInRegistration.containsKey(id)) {
@@ -44,9 +43,9 @@ public class Registrar {
             profile.setStatus(ProfileStatus.registration);
             profilesInRegistration.put(id, new ProfileInRegistration(profile));
 
-            profile.setTelegramUserName(update.getMessage().getFrom().getUserName());
+            profile.setUserName(update.getMessage().getFrom().getUserName());
 
-            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+            MessageSender.sendMessage(
                     "Тебя нет в нашей базе, давай зарегистрируемся\n\nНапиши свое имя:)", update);
             return;
         }
@@ -80,7 +79,7 @@ public class Registrar {
         profilesInRegistration.get(getId(update)).getProfile().setCity(update.getMessage().getText());
 
         try {
-            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+            MessageSender.sendMessage(
                     "Отправь фотку)", update);
         } catch (Exception ignored) {
         }
@@ -103,8 +102,10 @@ public class Registrar {
 
             profilesInRegistration.get(getId(update)).updateProgress();
 
-            MessageSender.sendMessageWithKeyboard(update.getMessage().getChatId().toString(),
-                    "Ты в базе!",
+            MessageSender.sendMessageWithKeyboard(
+                    "Ты в базе!\n" +
+                     "Ты можешь отправить свою геопозицию, если в твоём клиенте есть такая функция" +
+                            " и мы будем искать людей возле тебя!",
                     Keyboards.go, update);
         } catch (Exception ignored) {
         }
@@ -119,14 +120,18 @@ public class Registrar {
     private void ageHandler(IUpdate update) {
         try {
             var age = Integer.parseInt(update.getMessage().getText());
+            if (age < 10) {
+                throw new Exception();
+            }
             var id = getId(update);
             profilesInRegistration.get(id).getProfile().setAge(age);
             profilesInRegistration.get(id).updateProgress();
-            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+            MessageSender.sendMessage(
                     "Напиши город", update);
         } catch (Exception e) {
-            MessageSender.sendMessage(update.getMessage().getChatId().toString(),
-                    "Введи ещё раз", update);
+            MessageSender.sendMessage(
+                    "Введи ещё раз. Ты вводишь странные цифры или тебе слишком мало лет." +
+                            "\nРегистрация доступна с 10 лет.", update);
         }
     }
 
@@ -141,15 +146,22 @@ public class Registrar {
         if (Objects.equals(update.getMessage().getText(), "Женский\uD83D\uDE4B\u200D♀️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.female);
         }
-
-        if (Objects.equals(update.getMessage().getText(), "Non-Binary\uD83C\uDFF3️\u200D⚧️")) {
+        else if (Objects.equals(update.getMessage().getText(), "Non-Binary\uD83C\uDFF3️\u200D⚧️")) {
             profilesInRegistration.get(id).getProfile().setGender(Gender.other);
         }
+        else if (Objects.equals(update.getMessage().getText(), "Мужской\uD83D\uDE4B\u200D♂️")) {
+            profilesInRegistration.get(id).getProfile().setGender(Gender.male);
+        }
+        else
+        {
+            MessageSender.sendMessage("По нашим данным, " +
+                    "такого гендера ещё не существует. Воспользуйся кнопками или подожди, когда твой " +
+                    "гендер станет известен хоть кому-то, кроме тебя.", update);
+            return;
+        }
 
-        profilesInRegistration.get(id).getProfile().setGender(Gender.male);
         profilesInRegistration.get(id).updateProgress();
-
-        MessageSender.sendMessage(update.getMessage().getChatId().toString(),
+        MessageSender.sendMessage(
                 "Сколько тебе лет?", update);
     }
 
@@ -164,7 +176,7 @@ public class Registrar {
         profilesInRegistration.get(id).getProfile().setName(update.getMessage().getText());
         profilesInRegistration.get(id).updateProgress();
 
-        MessageSender.sendMessageWithKeyboard(update.getMessage().getChatId().toString(),
+        MessageSender.sendMessageWithKeyboard(
                 "Выбери гендер",
                 Keyboards.genders, update);
     }

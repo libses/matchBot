@@ -17,6 +17,10 @@ public class UpdateHandler {
         registrar = new Registrar();
     }
 
+    /**
+     * Обрабатывает апдейт
+     * @param innerUpdate апдейт
+     */
     public void handleUpdate(IUpdate innerUpdate) {
         if (innerUpdate.getMessage().hasText()) {
             try {
@@ -37,6 +41,10 @@ public class UpdateHandler {
     }
 
 
+    /**
+     * Обрабатывает апдейт
+     * @param update апдейт
+     */
     public void handleLocation(IUpdate update) {
         getProfileFromUpdate(update).setLocation(update.getLocation());
         ProfileData.getLocationData().addProfile(getProfileFromUpdate(update));

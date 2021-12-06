@@ -45,7 +45,11 @@ public class LocationData {
                 var newLocation = new Location(location.getLongitude() + i * precision, location.getLatitude() + j * precision);
                 var getted = getProfilesIn(newLocation);
                 if (getted != null) {
-                    list.addAll(getted);
+                    for (var e : getted) {
+                        if (!list.contains(e)) {
+                            list.add(e);
+                        }
+                    }
                 }
             }
         }

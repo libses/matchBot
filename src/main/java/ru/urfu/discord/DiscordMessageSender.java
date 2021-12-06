@@ -8,13 +8,28 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * Класс, отправляющий сообщения в дискорд
+ */
+
 public class DiscordMessageSender {
     public static JDA api;
 
+    /**
+     * Отправляет сообщение с текстом в канал
+     * @param chatId chatId куда отправляем
+     * @param text что отправляем
+     */
     public static void sendMessage(Long chatId, String text) {
         api.getTextChannelById(chatId).sendMessage(text).queue();
     }
 
+    /**
+     * Отправляем фото по URL
+     * @param chatId chatId куда отправляем
+     * @param text текст
+     * @param urlStr URL фотографии
+     */
     public static void sendPhoto(Long chatId, String text, String urlStr) {
         try {
             URL url = new URL(urlStr);

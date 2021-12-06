@@ -9,6 +9,9 @@ import ru.urfu.bot.IUpdate;
 import ru.urfu.bot.keyboards.Keyboards;
 import ru.urfu.profile.Profile;
 
+/**
+ * Класс, который отправляет сообщения в телеграмм
+ */
 public class TelegramMessageSender {
     public static TelegramBot bot;
 
@@ -42,6 +45,11 @@ public class TelegramMessageSender {
 
     }
 
+    /**
+     * Отправляет сообщение
+     * @param chatId id чата
+     * @param text текст
+     */
     public static void sendMessage(String chatId, String text) {
         try {
             bot.execute(SendMessage.builder()
@@ -54,6 +62,12 @@ public class TelegramMessageSender {
         }
     }
 
+    /**
+     * Отправляет сообщение с клавиатурой
+     * @param chatId id чата
+     * @param text текст
+     * @param replyMarkup клавиатура
+     */
     public static void sendMessageWithKeyboard(String chatId, String text, ReplyKeyboardMarkup replyMarkup) {
         try {
             bot.execute(SendMessage.builder()
@@ -66,6 +80,13 @@ public class TelegramMessageSender {
         }
     }
 
+    /**
+     * Отправляет фото с подписью
+     * @param chatId id чата
+     * @param photo фото
+     * @param replyMarkup клавиатура
+     * @param caption подпись
+     */
     public static void sendPhoto(String chatId, InputFile photo, ReplyKeyboardMarkup replyMarkup, String caption) {
         try {
             bot.execute(SendPhoto.builder()

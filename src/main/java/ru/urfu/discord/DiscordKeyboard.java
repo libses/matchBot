@@ -2,6 +2,9 @@ package ru.urfu.discord;
 
 import java.util.Map;
 
+/**
+ * Клавиатура, используемая в дискорде
+ */
 public class DiscordKeyboard implements IDiscordKeyboard {
     private final String keyboard;
     private final Map<String, String> commands;

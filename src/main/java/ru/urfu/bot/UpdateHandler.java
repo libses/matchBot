@@ -17,6 +17,34 @@ public class UpdateHandler {
         registrar = new Registrar();
     }
 
+    /**
+     * Обрабатывает апдейт
+     * @param innerUpdate апдейт
+     */
+    public void handleUpdate(IUpdate innerUpdate) {
+        if (innerUpdate.getMessage().hasText()) {
+            try {
+                handleText(innerUpdate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        if (innerUpdate.getMessage().hasPhoto()) {
+            try {
+                handlePhoto(innerUpdate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    /**
+     * Обрабатывает апдейт
+     * @param update апдейт
+     */
     public void handleLocation(IUpdate update) {
         getProfileFromUpdate(update).setLocation(update.getLocation());
         ProfileData.getLocationData().addProfile(getProfileFromUpdate(update));
@@ -27,7 +55,6 @@ public class UpdateHandler {
      * Метод, принимающий и обрабатывающий полученный текст
      *
      * @param update апдейт от бота
-     * @throws Exception бросает при ошибках регистрации
      */
     public void handleText(IUpdate update) {
         long id = getIdFromUpdate(update);
@@ -273,6 +300,11 @@ public class UpdateHandler {
                 nextProfile.getTelegramUserName());
     }
 
+    /**
+     * Метод, генерирующий подпись к фотографии
+     * @param nextProfile профиль, для которого генерируется подпись
+     * @return возвращает саму подпись
+     */
     private String getCaption(Profile nextProfile) {
 
         return String.format("%s\n%s\n%s\n@%s",
@@ -287,7 +319,6 @@ public class UpdateHandler {
      * Метод, принимающий фото
      *
      * @param update апдейт от бота
-     * @throws Exception бросает внутренний метод
      */
     public void handlePhoto(IUpdate update) {
         registrar.registerFromUpdate(update);

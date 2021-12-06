@@ -11,6 +11,10 @@ import ru.urfu.bot.UpdateHandler;
 
 import javax.security.auth.login.LoginException;
 
+/**
+ * Класс дискорд бота.
+ */
+
 public class DiscordBot extends ListenerAdapter {
     private static UpdateHandler updateHandler;
 
@@ -26,6 +30,10 @@ public class DiscordBot extends ListenerAdapter {
         updateHandler = new UpdateHandler();
     }
 
+    /**
+     * Обрабатывает входящее сообщение
+     * @param event ивент от дискорда
+     */
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) {
@@ -37,25 +45,6 @@ public class DiscordBot extends ListenerAdapter {
         Message msg = event.getMessage();
         var innerUpdate = DiscordToInnerConverter.Convert(event);
 
-        handleUpdate(innerUpdate, updateHandler);
-    }
-
-    public static void handleUpdate(IUpdate innerUpdate, UpdateHandler updateHandler) {
-        if (innerUpdate.getMessage().hasText()) {
-            try {
-                updateHandler.handleText(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        if (innerUpdate.getMessage().hasPhoto()) {
-            try {
-                updateHandler.handlePhoto(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        updateHandler.handleUpdate(innerUpdate);
     }
 }

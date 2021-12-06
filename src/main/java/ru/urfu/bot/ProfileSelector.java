@@ -25,9 +25,9 @@ public class ProfileSelector {
     private Profile current;
 
     /**
-     * Метод выбирает и возвращает следующий профиль
+     * Метод выбирает и возвращает следующую обертку над профилем
      *
-     * @return профиль
+     * @return обертка над профилем
      */
     public ProfileWrapper getNextProfileWrapper() {
         if (counter >= ProfileData.Count - 1) {

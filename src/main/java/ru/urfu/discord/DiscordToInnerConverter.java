@@ -7,17 +7,36 @@ import ru.urfu.bot.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс, конвертирующий дискордовские сущности во внутренние сущности программы
+ */
+
 public class DiscordToInnerConverter {
 
+    /**
+     * Конвертирует ивент в IUpdate
+     * @param event ивент
+     * @return возвращает InnerUpdate
+     */
     public static IUpdate Convert(MessageReceivedEvent event) {
         return new InnerUpdate(Convert(event.getMessage()), false);
     }
 
+    /**
+     * Конвертирует message в IMessage
+     * @param message сообщение
+     * @return возвращает InnerMessage
+     */
     public static IMessage Convert(Message message) {
         var user = new InnerUser(message.getTextChannel().getIdLong(), message.getAuthor().getName(), false);
         return new InnerMessage(user, message.getContentRaw(), message.getTextChannel().getIdLong(), Convert(message.getAttachments()));
     }
 
+    /**
+     * конвертирует фото в List<IPhotoSize>
+     * @param photos фото дискорда
+     * @return возвращает внутренне понятную структуру
+     */
     public static List<IPhotoSize> Convert(List<Message.Attachment> photos) {
         var list = new ArrayList<IPhotoSize>();
         for (Message.Attachment att : photos) {
@@ -28,6 +47,11 @@ public class DiscordToInnerConverter {
         return list;
     }
 
+    /**
+     * Конвертирует фото дискорда во внутреннее
+     * @param photo фото дискорда
+     * @return внутреннее фото
+     */
     public static IPhotoSize Convert(Message.Attachment photo) {
         if (photo.isImage()) {
             return new InnerPhoto(photo.getUrl());

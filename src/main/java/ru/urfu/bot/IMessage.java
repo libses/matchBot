@@ -2,6 +2,10 @@ package ru.urfu.bot;
 
 import java.util.List;
 
+/**
+ * Интерфейс сообщений с необходимыми для работы методами
+ */
+
 public interface IMessage {
 
     IUser getFrom();

@@ -3,6 +3,10 @@ package ru.urfu.bot.keyboards;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.urfu.discord.IDiscordKeyboard;
 
+/**
+ * Класс, который создаёт, конвертирует и хранит клавиатуры.
+ */
+
 public class Keyboard implements IKeyboard {
     private final ReplyKeyboardMarkup telegramKeyboard;
     private final IDiscordKeyboard discordKeyboard;

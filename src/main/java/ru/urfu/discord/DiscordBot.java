@@ -6,9 +6,14 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import ru.urfu.bot.IUpdate;
 import ru.urfu.bot.UpdateHandler;
 
 import javax.security.auth.login.LoginException;
+
+/**
+ * Класс дискорд бота.
+ */
 
 public class DiscordBot extends ListenerAdapter {
     private static UpdateHandler updateHandler;
@@ -24,6 +29,10 @@ public class DiscordBot extends ListenerAdapter {
         updateHandler = new UpdateHandler();
     }
 
+    /**
+     * Обрабатывает входящее сообщение
+     * @param event ивент от дискорда
+     */
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (event.getAuthor().isBot()) {
@@ -35,21 +44,6 @@ public class DiscordBot extends ListenerAdapter {
         Message msg = event.getMessage();
         var innerUpdate = DiscordToInnerConverter.Convert(event);
 
-        if (innerUpdate.getMessage().hasText()) {
-            try {
-                updateHandler.handleText(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        if (innerUpdate.getMessage().hasPhoto()) {
-            try {
-                updateHandler.handlePhoto(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        updateHandler.handleUpdate(innerUpdate);
     }
 }

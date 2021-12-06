@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import java.util.List;
 
 /**
- * Тут храним клавиатуры, используемые в боте
+ * Тут храним клавиатуры, используемые в боте. Отличие от Keyboard в том, что здесь есть все варианты клавиатур.
  */
 public class Keyboards {
     /**
@@ -58,6 +58,9 @@ public class Keyboards {
                     .oneTimeKeyboard(true)
                     .build());
 
+    /**
+     * Кнопка ПОЕХАЛИ!
+     */
     public static final IKeyboard go = new Keyboard(
             ReplyKeyboardMarkup.builder()
                     .keyboardRow(new KeyboardRow(List.of(

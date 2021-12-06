@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Класс, хранящий локации профилей, которые имеют локацию.
+ */
+
 public class LocationData {
     private final double oneMeter = (1d / 40075000d) * 360d;
     private final double oneKiloMeter = oneMeter * 1000;
@@ -19,10 +23,21 @@ public class LocationData {
         profilesInLocationMap = new HashMap<>();
     }
 
+    /**
+     * Позволяет получить пользователей в определенной локации
+     * @param location локация
+     * @return возвращает список профилей
+     */
     public List<Profile> getProfilesIn(ILocation location) {
         return profilesInLocationMap.get(location);
     }
 
+    /**
+     * Позволяет получить пользователей в определенном радиусе от локации
+     * @param location локация
+     * @param radius радиус в километрах
+     * @return возвращает список профилей
+     */
     public List<Profile> getProfilesIn(ILocation location, int radius) {
         var list = new ArrayList<Profile>();
         for (int i = -radius; i <= radius; i++) {

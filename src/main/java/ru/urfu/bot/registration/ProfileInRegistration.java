@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Класс, который хранит прогресс регистрации
  */
-
 public class ProfileInRegistration {
     private static final List<String> registrationSteps = Arrays.asList("Имя", "Пол", "Возраст", "Город", "Фото");
 

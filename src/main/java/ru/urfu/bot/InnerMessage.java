@@ -5,7 +5,6 @@ import java.util.List;
 /**
  * Класс сообщений, используемых внутри логики самого бота
  */
-
 public class InnerMessage implements IMessage {
     private final IUser author;
     private final String text;

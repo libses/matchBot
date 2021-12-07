@@ -11,7 +11,6 @@ import java.io.IOException;
 /**
  * Класс с самим телеграм-ботом, необходимый для связи с telegram через API
  */
-
 public class TelegramBot extends TelegramLongPollingBot {
 
     private final String token;

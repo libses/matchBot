@@ -7,7 +7,6 @@ import ru.urfu.profile.Profile;
 /**
  * Класс, который принимает и обрабатывает обновления
  */
-
 public class UpdateHandler {
     final Registrar registrar;
     private boolean inAdditionalMenu = false;

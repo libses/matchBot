@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * Класс, хранящий локации профилей, которые имеют локацию.
  */
-
 public class LocationData {
     private final double oneMeter = (1d / 40075000d) * 360d;
     private final double oneKiloMeter = oneMeter * 1000;

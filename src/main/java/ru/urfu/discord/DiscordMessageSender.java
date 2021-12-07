@@ -11,7 +11,6 @@ import java.net.URL;
 /**
  * Класс, отправляющий сообщения в дискорд
  */
-
 public class DiscordMessageSender {
     public static JDA api;
 

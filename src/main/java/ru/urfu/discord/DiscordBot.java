@@ -14,7 +14,6 @@ import javax.security.auth.login.LoginException;
 /**
  * Класс дискорд бота.
  */
-
 public class DiscordBot extends ListenerAdapter {
     private static UpdateHandler updateHandler;
 

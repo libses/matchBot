@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Класс хранилище профилей, реализованный в виде Map для рандомной селекции.
  */
-
 public class ProfileData {
 
     public int Count = 0;

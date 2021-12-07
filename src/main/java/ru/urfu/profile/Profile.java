@@ -9,7 +9,6 @@ import java.util.Objects;
 /**
  * Класс профиля.
  */
-
 public class Profile {
     /**
      * создаёт профиль с определенным id

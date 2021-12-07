@@ -10,7 +10,6 @@ import java.util.Collection;
 /**
  * Селектор (выбиратель) профилей. Позволяет выбрать следующий профиль из хранилища. Реализован только вариант с рандомом
  */
-
 public class ProfileSelector {
     private int counter;
     private final double oneMeter = (1d / 40075000d) * 360d;

@@ -5,7 +5,6 @@ import ru.urfu.bot.locations.ILocation;
 /**
  * Класс Event/Update, используемый для внутренней логики бота. Представляет собой обернутое сообщение.
  */
-
 public class InnerUpdate implements IUpdate {
 
     private ILocation location;

@@ -6,7 +6,6 @@ import ru.urfu.discord.IDiscordKeyboard;
 /**
  * Класс, который создаёт, конвертирует и хранит клавиатуры.
  */
-
 public class Keyboard implements IKeyboard {
     private final ReplyKeyboardMarkup telegramKeyboard;
     private final IDiscordKeyboard discordKeyboard;

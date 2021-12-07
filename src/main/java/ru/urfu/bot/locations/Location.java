@@ -7,7 +7,6 @@ import java.util.Objects;
 /**
  * Класс локации с точностью до одного километра ста метров
  */
-
 public class Location implements ILocation{
 
     private final double longitude;

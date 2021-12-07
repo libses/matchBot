@@ -16,7 +16,6 @@ import java.util.function.Consumer;
 /**
  * Класс регистратора
  */
-
 public class Registrar {
     private ProfileData ProfileData;
     final Map<Long, ProfileInRegistration> profilesInRegistration = new ConcurrentHashMap<>();
@@ -75,7 +74,6 @@ public class Registrar {
      *
      * @param update update
      */
-
     private void cityHandler(IUpdate update) {
         profilesInRegistration.get(getId(update)).updateProgress();
         profilesInRegistration.get(getId(update)).getProfile().setCity(update.getMessage().getText());
@@ -92,7 +90,6 @@ public class Registrar {
      *
      * @param update update
      */
-
     private void photoHandler(IUpdate update) {
         try {
             var photo = update.getMessage().getPhoto().get(0);
@@ -119,7 +116,6 @@ public class Registrar {
      *
      * @param update update
      */
-
     private void ageHandler(IUpdate update) {
         try {
             var age = Integer.parseInt(update.getMessage().getText());

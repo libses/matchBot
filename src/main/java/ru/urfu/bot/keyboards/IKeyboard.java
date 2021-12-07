@@ -6,7 +6,6 @@ import ru.urfu.discord.IDiscordKeyboard;
 /**
  * Интерфейс, маркирующий клавиатуру.
  */
-
 public interface IKeyboard {
     ReplyKeyboardMarkup getTelegramKeyboard();
 

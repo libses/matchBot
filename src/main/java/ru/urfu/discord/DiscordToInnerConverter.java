@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import ru.urfu.bot.*;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class DiscordToInnerConverter {
      * @return возвращает InnerMessage
      */
     public static IMessage Convert(Message message) {
-        var user = new InnerUser(message.getTextChannel().getIdLong(), message.getAuthor().getName(), UpdateSource.Discord);
-        return new InnerMessage(user, message.getContentRaw(), message.getTextChannel().getIdLong(), Convert(message.getAttachments()));
+        var user = new InnerUser(message.getPrivateChannel().getIdLong(), message.getAuthor().getName(), UpdateSource.Discord);
+        return new InnerMessage(user, message.getContentRaw(), message.getPrivateChannel().getIdLong(), Convert(message.getAttachments()));
     }
 
     /**

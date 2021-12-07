@@ -21,7 +21,8 @@ public class DiscordMessageSender {
      * @param text что отправляем
      */
     public static void sendMessage(Long chatId, String text) {
-        api.getTextChannelById(chatId).sendMessage(text).queue();
+        api.getPrivateChannelById(chatId).sendMessage(text).queue();
+        //api.getTextChannelById(chatId).sendMessage(text).queue();
     }
 
     /**
@@ -36,7 +37,8 @@ public class DiscordMessageSender {
             BufferedImage img = ImageIO.read(url);
             File file = new File("temp.png");
             ImageIO.write(img, "png", file);
-            api.getTextChannelById(chatId).sendMessage(text).addFile(file).queue();
+            api.getPrivateChannelById(chatId).sendMessage(text).addFile(file).queue();
+            //api.getTextChannelById(chatId).sendMessage(text).addFile(file).queue();
         } catch (IOException e) {
             e.printStackTrace();
         }

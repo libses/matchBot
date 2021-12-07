@@ -51,7 +51,7 @@ public class TGToInnerConverter {
      * @return внутренний юзер
      */
     public static InnerUser Convert(User user) {
-        return new InnerUser(user.getId(), user.getUserName(), true);
+        return new InnerUser(user.getId(), user.getUserName(), UpdateSource.Telegram);
     }
 
     /**

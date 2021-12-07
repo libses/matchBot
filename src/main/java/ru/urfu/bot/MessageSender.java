@@ -10,6 +10,11 @@ import ru.urfu.telegram.TelegramMessageSender;
  */
 public class MessageSender {
     /**
+     * Поле для тестов и возможного расширения
+     */
+    public static String currentMessage;
+
+    /**
      * Отправляет простое сообщение
      * @param message текст
      * @param update апдейт куда отправлять
@@ -21,6 +26,7 @@ public class MessageSender {
         else if (update.getUpdateSource() == UpdateSource.Discord){
             DiscordMessageSender.sendMessage(update.getMessage().getChatId(), message);
         }
+        currentMessage = message;
     }
 
     /**
@@ -37,6 +43,7 @@ public class MessageSender {
             var result = text + '\n' + discordKeyboard;
             DiscordMessageSender.sendMessage(update.getMessage().getChatId(), result);
         }
+        currentMessage = text;
     }
 
     /**
@@ -51,5 +58,6 @@ public class MessageSender {
         } else if (update.getUpdateSource() == UpdateSource.Discord) {
             DiscordMessageSender.sendPhoto(update.getMessage().getChatId(), caption, profile.getPhotoLink());
         }
+        currentMessage = caption;
     }
 }

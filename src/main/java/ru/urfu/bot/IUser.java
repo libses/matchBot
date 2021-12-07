@@ -10,5 +10,5 @@ public interface IUser {
 
     String getUserName();
 
-    boolean isTelegramUser();
+    UpdateSource getSource();
 }

@@ -11,7 +11,7 @@ import ru.urfu.profile.Profile;
 public class UpdateHandler {
     final Registrar registrar;
     private boolean inAdditionalMenu = false;
-    private ProfileData ProfileData;
+    private final ProfileData ProfileData;
 
 
     public UpdateHandler() {
@@ -62,7 +62,7 @@ public class UpdateHandler {
      *
      * @param update апдейт от бота
      */
-    public void handleText(IUpdate update) {
+    private void handleText(IUpdate update) {
         long id = getIdFromUpdate(update);
         if (!isRegistered(id)) {
             registrar.registerFromUpdate(update);
@@ -327,7 +327,7 @@ public class UpdateHandler {
      *
      * @param update апдейт от бота
      */
-    public void handlePhoto(IUpdate update) {
+    private void handlePhoto(IUpdate update) {
         registrar.registerFromUpdate(update);
     }
 

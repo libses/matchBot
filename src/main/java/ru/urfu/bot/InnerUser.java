@@ -9,9 +9,9 @@ public class InnerUser implements IUser {
 
     private final Long id;
 
-    private final String userName;
+    private UpdateSource source;
 
-    private final boolean isTelegram;
+    private final String userName;
 
     public Long getId() {
         return id;
@@ -21,13 +21,13 @@ public class InnerUser implements IUser {
         return userName;
     }
 
-    public boolean isTelegramUser() {
-        return isTelegram;
+    public UpdateSource getSource() {
+        return source;
     }
 
-    public InnerUser(Long id, String userName, boolean isTelegram) {
+    public InnerUser(Long id, String userName, UpdateSource updateSource) {
         this.id = id;
         this.userName = userName;
-        this.isTelegram = isTelegram;
+        this.source = updateSource;
     }
 }

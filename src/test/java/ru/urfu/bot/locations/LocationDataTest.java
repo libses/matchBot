@@ -6,6 +6,10 @@ import ru.urfu.profile.Profile;
 
 public class LocationDataTest extends TestCase {
 
+    /**
+     * Проверяем корректность работы добавления локации и получения локации из структуры с определенным радиусом
+     * Проверяем правильность округления
+     */
     public void testGetProfilesInRadius() {
         var p1 = new Profile(0);
         p1.setLocation(new Location(10, 20));
@@ -30,6 +34,10 @@ public class LocationDataTest extends TestCase {
 
     }
 
+    /**
+     * Проверяем корректность работы добавления локации и получения локации из структуры
+     * Проверяем правильность округления
+     */
     public void testTestGetProfilesIn() {
         var p1 = new Profile(0);
         p1.setLocation(new Location(10, 20));

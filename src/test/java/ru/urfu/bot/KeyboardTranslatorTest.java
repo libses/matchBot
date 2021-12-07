@@ -15,6 +15,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class KeyboardTranslatorTest{
 
+    /**
+     * Тест, проверяющий что клавиатура телеграмма грамотно конвертируюется в дискордовскую
+     */
     @Test
     public void testTranslateTelegramKeyboardForDiscord_test1() {
         var tgKeyboard = ReplyKeyboardMarkup.builder()
@@ -30,6 +33,9 @@ public class KeyboardTranslatorTest{
         assertThat(result).isEqualTo(expected);
     }
 
+    /**
+     * Тест, проверяющий что клавиатура телеграмма грамотно конвертируюется в дискордовскую
+     */
     @Test
     public void testTranslateTelegramKeyboardForDiscord_test2() {
         var tgKeyboard =  new ReplyKeyboardMarkup(

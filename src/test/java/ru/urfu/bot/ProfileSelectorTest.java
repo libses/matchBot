@@ -7,6 +7,9 @@ import ru.urfu.profile.Profile;
 
 public class ProfileSelectorTest extends TestCase {
 
+    /**
+     * Тест того, что выбор следующего профиля-обертки работает корректно согласно логическому функционалу
+     */
     public void testGetNextProfileWrapper() {
         var ProfileData = new ProfileData();
         var owner = new Profile(0);

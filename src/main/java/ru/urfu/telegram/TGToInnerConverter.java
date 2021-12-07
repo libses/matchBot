@@ -18,10 +18,10 @@ public class TGToInnerConverter {
      */
     public static InnerUpdate Convert(Update update) {
         if (update.getMessage().getLocation() == null) {
-            return new InnerUpdate(Convert(update.getMessage()), true);
+            return new InnerUpdate(Convert(update.getMessage()), UpdateSource.Telegram);
         }
         else {
-            return new InnerUpdate(Convert(update.getMessage()), true, Convert(update.getMessage().getLocation()));
+            return new InnerUpdate(Convert(update.getMessage()),  Convert(update.getMessage().getLocation()), UpdateSource.Telegram);
         }
     }
 

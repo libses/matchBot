@@ -8,32 +8,32 @@ import ru.urfu.bot.locations.ILocation;
 
 public class InnerUpdate implements IUpdate {
 
-    ILocation location;
+    private ILocation location;
 
-    final IMessage message;
+    private final IMessage message;
 
-    final boolean isFromTelegram;
+    private boolean hasLocation;
 
-    boolean hasLocation;
+    private UpdateSource updateSource;
 
-    public InnerUpdate(IMessage message, boolean isFromTelegram) {
-        this.message = message;
-        this.isFromTelegram = isFromTelegram;
+    public UpdateSource getUpdateSource() {
+        return updateSource;
     }
 
-    public InnerUpdate(IMessage message, boolean isFromTelegram, ILocation location) {
+    public InnerUpdate(IMessage message, UpdateSource source) {
         this.message = message;
-        this.isFromTelegram = isFromTelegram;
+        this.updateSource = source;
+    }
+
+    public InnerUpdate(IMessage message, ILocation location, UpdateSource source) {
+        this.message = message;
+        this.updateSource = source;
         this.hasLocation = true;
         this.location = location;
     }
 
     public IMessage getMessage() {
         return message;
-    }
-
-    public boolean isFromTelegram() {
-        return isFromTelegram;
     }
 
     public boolean hasLocation() {

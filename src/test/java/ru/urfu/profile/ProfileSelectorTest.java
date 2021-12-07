@@ -11,6 +11,6 @@ public class ProfileSelectorTest extends TestCase {
      * Тест, проверяющий корректность работы выбора следующего профиля
      */
     public void testGetNextProfile() {
-
+        var profileData = new ProfileData();
     }
 }

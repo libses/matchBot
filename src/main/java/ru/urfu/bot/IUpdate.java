@@ -10,7 +10,7 @@ public interface IUpdate {
 
     IMessage getMessage();
 
-    boolean isFromTelegram();
+    UpdateSource getUpdateSource();
 
     boolean hasLocation();
 

@@ -19,7 +19,7 @@ public class DiscordToInnerConverter {
      * @return возвращает InnerUpdate
      */
     public static IUpdate Convert(MessageReceivedEvent event) {
-        return new InnerUpdate(Convert(event.getMessage()), false);
+        return new InnerUpdate(Convert(event.getMessage()), UpdateSource.Discord);
     }
 
     /**

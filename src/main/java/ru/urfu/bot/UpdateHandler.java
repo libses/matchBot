@@ -24,7 +24,17 @@ public class UpdateHandler {
      * @param innerUpdate апдейт
      */
     public void handleUpdate(IUpdate innerUpdate) {
-        if (innerUpdate.getMessage().hasText()) {
+        if (innerUpdate.hasLocation()) {
+            handleLocation(innerUpdate);
+        }
+        else if (innerUpdate.getMessage().hasPhoto()) {
+            try {
+                handlePhoto(innerUpdate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if (innerUpdate.getMessage().hasText()) {
             try {
                 handleText(innerUpdate);
             } catch (Exception e) {
@@ -33,13 +43,7 @@ public class UpdateHandler {
         }
 
 
-        if (innerUpdate.getMessage().hasPhoto()) {
-            try {
-                handlePhoto(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
 
@@ -47,7 +51,7 @@ public class UpdateHandler {
      * Обрабатывает апдейт
      * @param update апдейт
      */
-    public void handleLocation(IUpdate update) {
+    private void handleLocation(IUpdate update) {
         getProfileFromUpdate(update).setLocation(update.getLocation());
         ProfileData.getLocationData().addProfile(getProfileFromUpdate(update));
         MessageSender.sendMessageWithKeyboard("Позиция прикреплена!", Keyboards.main, update);

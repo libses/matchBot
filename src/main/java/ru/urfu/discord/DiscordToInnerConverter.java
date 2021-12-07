@@ -19,7 +19,7 @@ public class DiscordToInnerConverter {
      * @return возвращает InnerUpdate
      */
     public static IUpdate Convert(MessageReceivedEvent event) {
-        return new InnerUpdate(Convert(event.getMessage()), false);
+        return new InnerUpdate(Convert(event.getMessage()), UpdateSource.Discord);
     }
 
     /**
@@ -28,7 +28,7 @@ public class DiscordToInnerConverter {
      * @return возвращает InnerMessage
      */
     public static IMessage Convert(Message message) {
-        var user = new InnerUser(message.getTextChannel().getIdLong(), message.getAuthor().getName(), false);
+        var user = new InnerUser(message.getTextChannel().getIdLong(), message.getAuthor().getName(), UpdateSource.Discord);
         return new InnerMessage(user, message.getContentRaw(), message.getTextChannel().getIdLong(), Convert(message.getAttachments()));
     }
 

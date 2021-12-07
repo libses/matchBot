@@ -11,7 +11,7 @@ import ru.urfu.profile.Profile;
 public class UpdateHandler {
     final Registrar registrar;
     private boolean inAdditionalMenu = false;
-    private ProfileData ProfileData;
+    private final ProfileData ProfileData;
 
 
     public UpdateHandler() {
@@ -24,7 +24,17 @@ public class UpdateHandler {
      * @param innerUpdate апдейт
      */
     public void handleUpdate(IUpdate innerUpdate) {
-        if (innerUpdate.getMessage().hasText()) {
+        if (innerUpdate.hasLocation()) {
+            handleLocation(innerUpdate);
+        }
+        else if (innerUpdate.getMessage().hasPhoto()) {
+            try {
+                handlePhoto(innerUpdate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else if (innerUpdate.getMessage().hasText()) {
             try {
                 handleText(innerUpdate);
             } catch (Exception e) {
@@ -33,13 +43,7 @@ public class UpdateHandler {
         }
 
 
-        if (innerUpdate.getMessage().hasPhoto()) {
-            try {
-                handlePhoto(innerUpdate);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
 
@@ -47,7 +51,7 @@ public class UpdateHandler {
      * Обрабатывает апдейт
      * @param update апдейт
      */
-    public void handleLocation(IUpdate update) {
+    private void handleLocation(IUpdate update) {
         getProfileFromUpdate(update).setLocation(update.getLocation());
         ProfileData.getLocationData().addProfile(getProfileFromUpdate(update));
         MessageSender.sendMessageWithKeyboard("Позиция прикреплена!", Keyboards.main, update);
@@ -58,7 +62,7 @@ public class UpdateHandler {
      *
      * @param update апдейт от бота
      */
-    public void handleText(IUpdate update) {
+    private void handleText(IUpdate update) {
         long id = getIdFromUpdate(update);
         if (!isRegistered(id)) {
             registrar.registerFromUpdate(update);
@@ -323,7 +327,7 @@ public class UpdateHandler {
      *
      * @param update апдейт от бота
      */
-    public void handlePhoto(IUpdate update) {
+    private void handlePhoto(IUpdate update) {
         registrar.registerFromUpdate(update);
     }
 

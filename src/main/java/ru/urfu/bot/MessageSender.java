@@ -10,17 +10,23 @@ import ru.urfu.telegram.TelegramMessageSender;
  */
 public class MessageSender {
     /**
+     * Поле для тестов и возможного расширения
+     */
+    public static String currentMessage;
+
+    /**
      * Отправляет простое сообщение
      * @param message текст
      * @param update апдейт куда отправлять
      */
     public static void sendMessage(String message, IUpdate update) {
-        if (update.isFromTelegram()) {
+        if (update.getUpdateSource() == UpdateSource.Telegram) {
             TelegramMessageSender.sendMessage(update.getMessage().getChatId().toString(), message);
         }
-        else {
+        else if (update.getUpdateSource() == UpdateSource.Discord){
             DiscordMessageSender.sendMessage(update.getMessage().getChatId(), message);
         }
+        currentMessage = message;
     }
 
     /**
@@ -30,13 +36,14 @@ public class MessageSender {
      * @param update апдейт куда отправлять
      */
     public static void sendMessageWithKeyboard(String text, IKeyboard keyboard, IUpdate update) {
-        if (update.isFromTelegram()) {
+        if (update.getUpdateSource() == UpdateSource.Telegram) {
             TelegramMessageSender.sendMessageWithKeyboard(update.getMessage().getChatId().toString(), text, keyboard.getTelegramKeyboard());
-        } else {
+        } else if (update.getUpdateSource() == UpdateSource.Discord){
             var discordKeyboard = keyboard.getDiscordKeyboard().getKeyboard();
             var result = text + '\n' + discordKeyboard;
             DiscordMessageSender.sendMessage(update.getMessage().getChatId(), result);
         }
+        currentMessage = text;
     }
 
     /**
@@ -46,10 +53,11 @@ public class MessageSender {
      * @param caption подпись
      */
     public static void sendPhotoWithCaption(IUpdate update, Profile profile, String caption) {
-        if (update.isFromTelegram()) {
+        if (update.getUpdateSource() == UpdateSource.Telegram) {
             TelegramMessageSender.sendPhotoWithCaption(update, profile, caption);
-        } else {
+        } else if (update.getUpdateSource() == UpdateSource.Discord) {
             DiscordMessageSender.sendPhoto(update.getMessage().getChatId(), caption, profile.getPhotoLink());
         }
+        currentMessage = caption;
     }
 }

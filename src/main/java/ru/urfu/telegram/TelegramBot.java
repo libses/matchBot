@@ -51,10 +51,6 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         var innerUpdate = TGToInnerConverter.Convert(update);
 
-        if (innerUpdate.hasLocation()) {
-            updateHandler.handleLocation(innerUpdate);
-        }
-
         updateHandler.handleUpdate(innerUpdate);
     }
 

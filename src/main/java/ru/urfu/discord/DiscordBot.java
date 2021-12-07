@@ -42,7 +42,6 @@ public class DiscordBot extends ListenerAdapter {
         DiscordMessageSender.api = event.getJDA();
 
         event.getChannel();
-        Message msg = event.getMessage();
         var innerUpdate = DiscordToInnerConverter.Convert(event);
 
         updateHandler.handleUpdate(innerUpdate);

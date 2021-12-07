@@ -2,7 +2,7 @@ package ru.urfu.profile;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.urfu.bot.MatchHandler;
+import ru.urfu.bot.MatchData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MatchHandlerTest {
+public class MatchDataTest {
     private List<Profile> profileList;
 
     /**
@@ -19,9 +19,6 @@ public class MatchHandlerTest {
     @Before
     public void setUp() {
         profileList = new ArrayList<>();
-
-        MatchHandler.likesTo.clear();
-        MatchHandler.likedBy.clear();
     }
 
     /**
@@ -33,9 +30,9 @@ public class MatchHandlerTest {
         var liker = profileList.get(0);
         var liked = profileList.get(1);
 
-        MatchHandler.likeProfile(liker, liked);
+        MatchData.likeProfile(liker, liked);
 
-        assertThat(MatchHandler.likesTo.get(liker)).contains(liked);
+        assertThat(MatchData.getWhoLikedUser(liked)).contains(liker);
     }
 
     /**
@@ -47,9 +44,9 @@ public class MatchHandlerTest {
         var liker = profileList.get(0);
         var liked = profileList.get(1);
 
-        MatchHandler.likeProfile(liker, liked);
+        MatchData.likeProfile(liker, liked);
 
-        assertThat(MatchHandler.likedBy.get(liked)).contains(liker);
+        assertThat(MatchData.getWhoLikedUser(liked)).contains(liker);
     }
 
 
@@ -62,38 +59,15 @@ public class MatchHandlerTest {
         var liker = new Profile(1234);
         var expected = Set.of(profileList.get(0), profileList.get(2), profileList.get(6));
 
-        MatchHandler.likeProfile(liker, profileList.get(0));
-        MatchHandler.likeProfile(liker, profileList.get(2));
-        MatchHandler.likeProfile(liker, profileList.get(6));
+        MatchData.likeProfile(liker, profileList.get(0));
+        MatchData.likeProfile(liker, profileList.get(2));
+        MatchData.likeProfile(liker, profileList.get(6));
 
-        var result = MatchHandler.getLikesByUser(liker);
+        var result = MatchData.getLikesByUser(liker);
 
         assertThat(result).containsExactlyInAnyOrderElementsOf(expected);
     }
 
-    /**
-     * addUser должен добавлять профиль в likesTo
-     */
-    @Test
-    public void addUser_should_addUserToLikesTo() {
-        var user = new Profile(1);
-
-        MatchHandler.addUser(user);
-
-        assertThat(MatchHandler.likesTo).containsKey(user);
-    }
-
-    /**
-     * addUser должен добавлять профиль в  likedBy
-     */
-    @Test
-    public void addUser_should_addUserToLikedBy() {
-        var user = new Profile(1);
-
-        MatchHandler.addUser(user);
-
-        assertThat(MatchHandler.likedBy).containsKey(user);
-    }
 
     /**
      * проверяем чтобы полученные лайки корректо отражались у юзера
@@ -104,9 +78,9 @@ public class MatchHandlerTest {
         var user = new Profile(1234);
 
         for (var profile : profileList)
-            MatchHandler.likeProfile(profile, user);
+            MatchData.likeProfile(profile, user);
 
-        var whoLikedUser = MatchHandler.getWhoLikedUser(user);
+        var whoLikedUser = MatchData.getWhoLikedUser(user);
 
         assertThat(whoLikedUser).containsExactlyInAnyOrderElementsOf(profileList);
     }
@@ -121,11 +95,11 @@ public class MatchHandlerTest {
         var user = new Profile(1123);
         for (var profile :
                 profileList) {
-            MatchHandler.likeProfile(profile, user);
-            MatchHandler.likeProfile(user,profile);
+            MatchData.likeProfile(profile, user);
+            MatchData.likeProfile(user,profile);
         }
 
-        var mutualLikes = MatchHandler.getMutualLikes(user);
+        var mutualLikes = MatchData.getMutualLikes(user);
 
         assertThat(mutualLikes).containsExactlyInAnyOrderElementsOf(profileList);
     }
@@ -134,6 +108,7 @@ public class MatchHandlerTest {
      * Генерируем пользователей
      */
     private void generateProfiles() {
+        profileList.clear();
         for (var i = 0; i < 10; i++)
             profileList.add(new Profile(i));
     }

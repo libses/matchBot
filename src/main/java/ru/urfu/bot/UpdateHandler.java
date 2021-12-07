@@ -143,7 +143,7 @@ public class UpdateHandler {
      */
     private void getWhoLikedMe(IUpdate update) {
         var owner = getProfileFromUpdate(update);
-        var whoLikedUser = MatchHandler.getWhoLikedUser(owner);
+        var whoLikedUser = MatchData.getWhoLikedUser(owner);
         if (whoLikedUser.isEmpty()) {
             MessageSender.sendMessageWithKeyboard("Ты никому не нравишься. Совсем.", Keyboards.additionalMenu, update);
         }
@@ -159,7 +159,7 @@ public class UpdateHandler {
      */
     private void getMutualSympathy(IUpdate update) {
         var owner = getProfileFromUpdate(update);
-        var mutual = MatchHandler.getMutualLikes(owner);
+        var mutual = MatchData.getMutualLikes(owner);
         if (mutual.isEmpty()) {
             MessageSender.sendMessageWithKeyboard("Нет никакой взаимности...", Keyboards.additionalMenu, update);
         }
@@ -175,7 +175,7 @@ public class UpdateHandler {
      */
     private void getLikedByMe(IUpdate update) {
         var owner = getProfileFromUpdate(update);
-        var likes = MatchHandler.getLikesByUser(owner);
+        var likes = MatchData.getLikesByUser(owner);
         if (likes.isEmpty()) {
             MessageSender.sendMessageWithKeyboard(
                     "Ты же прекрасно знаешь, что не ставил никому лайки. Не ломай бота",
@@ -209,7 +209,7 @@ public class UpdateHandler {
         var selector = this.ProfileData.getProfileSelector(owner);
         var other = selector.getCurrent();
         if (other.getID() != -1) {
-            MatchHandler.likeProfile(owner, selector.getCurrent());
+            MatchData.likeProfile(owner, selector.getCurrent());
         }
         handleNextCase(update);
     }
@@ -233,7 +233,7 @@ public class UpdateHandler {
         }
         var caption = getCaption(nextProfile);
 
-        if (MatchHandler.isFirstLikesSecond(nextProfile.getProfile(), owner)) {
+        if (MatchData.isFirstLikesSecond(nextProfile.getProfile(), owner)) {
             caption = "Ты понравился одному человеку!\n" + caption;
         }
 

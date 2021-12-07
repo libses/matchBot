@@ -7,9 +7,9 @@ import java.util.*;
 /**
  * Тут хранится информация о симпатиях
  */
-public class MatchHandler {
-    public static final Map<Profile, Set<Profile>> likesTo = new HashMap<>();
-    public static final Map<Profile, Set<Profile>> likedBy = new HashMap<>();
+public class MatchData {
+    private static final Map<Profile, Set<Profile>> likesTo = new HashMap<>();
+    private static final Map<Profile, Set<Profile>> likedBy = new HashMap<>();
 
     /**
      * Получаем профили, которые понравились юзеру

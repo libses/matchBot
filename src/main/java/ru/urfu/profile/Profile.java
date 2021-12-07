@@ -2,8 +2,7 @@ package ru.urfu.profile;
 
 import ru.urfu.bot.keyboards.IKeyboard;
 import ru.urfu.bot.locations.ILocation;
-import ru.urfu.bot.MatchHandler;
-import ru.urfu.bot.ProfileSelector;
+import ru.urfu.bot.MatchData;
 
 import java.util.Objects;
 
@@ -19,7 +18,7 @@ public class Profile {
      */
     public Profile(long id) {
         this.ID = id;
-        MatchHandler.addUser(this);
+        MatchData.addUser(this);
     }
 
     private ILocation location;

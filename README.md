@@ -25,7 +25,7 @@
    ![altText](https://sun9-33.userapi.com/impg/Twhy-kgXuc17zGX3DELlDAvILWWBorMlWjAgsg/I2ca7N_Z9rc.jpg?size=1879x601&quality=96&sign=712dbd1b7a3c61ac1fad82f697f53898&type=album)
 7. В поле Connect to GitHub ищем репозитори, который в начале форкнули  и нажимаем __Connect__
    ![altText](https://sun9-19.userapi.com/impg/VmY5eiDrYrvyGuFKwE6FrIwkYA3s2lSUmm9jqg/9w73B5-5x_o.jpg?size=1590x281&quality=96&sign=2414cde728f8417c7d3ebb72e1094989&type=album)
-8. В Manual Deploy выбираем master и нажимаем __Deploy Branch__
+8. В Manual Deploy выбираем "Deploy" и нажимаем __Deploy Branch__
    ![altText](https://sun9-74.userapi.com/impg/Iiz1oCqFUEoZVB3mvly_hnr7blWCQDOfMEOpGw/4k8yNU_br8g.jpg?size=1883x232&quality=96&sign=67744eea17a35e7fc23b38cb85ff9247&type=album)
 9. Перходим на вкладку Resources нажимаем на карандашик возле ползунка, передвигаем ползунок вправо и нажимаем __Confirm__
 ![altText](https://sun9-49.userapi.com/impg/Sk4yFNIGMCUqqWfBbhdI5yIWOIvk9kJRsfVU2Q/FjhGU_HMgXE.jpg?size=1666x241&quality=96&sign=4553fefbce8f395105e050d01d74d5f9&type=album)

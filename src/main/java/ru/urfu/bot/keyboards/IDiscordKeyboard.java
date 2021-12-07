@@ -1,4 +1,4 @@
-package ru.urfu.discord;
+package ru.urfu.bot.keyboards;
 
 /**
  * Интерфейс клавиатуры дискорда

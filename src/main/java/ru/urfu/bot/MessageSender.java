@@ -1,7 +1,6 @@
 package ru.urfu.bot;
 
 import ru.urfu.bot.keyboards.IKeyboard;
-import ru.urfu.discord.DiscordMessageSender;
 import ru.urfu.profile.Profile;
 import ru.urfu.telegram.TelegramMessageSender;
 
@@ -18,9 +17,6 @@ public class MessageSender {
         if (update.isFromTelegram()) {
             TelegramMessageSender.sendMessage(update.getMessage().getChatId().toString(), message);
         }
-        else {
-            DiscordMessageSender.sendMessage(update.getMessage().getChatId(), message);
-        }
     }
 
     /**
@@ -35,7 +31,6 @@ public class MessageSender {
         } else {
             var discordKeyboard = keyboard.getDiscordKeyboard().getKeyboard();
             var result = text + '\n' + discordKeyboard;
-            DiscordMessageSender.sendMessage(update.getMessage().getChatId(), result);
         }
     }
 
@@ -47,9 +42,6 @@ public class MessageSender {
      */
     public static void sendPhotoWithCaption(IUpdate update, Profile profile, String caption) {
         if (update.isFromTelegram()) {
-            TelegramMessageSender.sendPhotoWithCaption(update, profile, caption);
-        } else {
-            DiscordMessageSender.sendPhoto(update.getMessage().getChatId(), caption, profile.getPhotoLink());
-        }
+            TelegramMessageSender.sendPhotoWithCaption(update, profile, caption);}
     }
 }

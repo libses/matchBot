@@ -57,6 +57,9 @@ public class MessageSender {
             TelegramMessageSender.sendPhotoWithCaption(update, profile, caption);
         } else if (update.getUpdateSource() == UpdateSource.Discord) {
             DiscordMessageSender.sendPhoto(update.getMessage().getChatId(), caption, profile.getPhotoLink());
+
+            DiscordMessageSender.sendMessage(update.getMessage().getChatId(),
+                    profile.getCurrentKeyboard().getDiscordKeyboard().getKeyboard());
         }
         currentMessage = caption;
     }

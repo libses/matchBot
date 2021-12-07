@@ -38,7 +38,6 @@ public class DiscordMessageSender {
             File file = new File("temp.png");
             ImageIO.write(img, "png", file);
             api.getPrivateChannelById(chatId).sendMessage(text).addFile(file).queue();
-            //api.getTextChannelById(chatId).sendMessage(text).addFile(file).queue();
         } catch (IOException e) {
             e.printStackTrace();
         }
